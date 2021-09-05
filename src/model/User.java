@@ -25,6 +25,11 @@ public class User {
 	
 	private UserType type;
 	
+	public User()
+	{
+		// Generic prazan konstruktor
+	}
+	
 	public User(String username, String password, String firstName, String lastName, Gender gender, Date birthday, Role role,
 				List<Order> orders, Cart cart, Restaurant restaurant, List<Order> deliveryOrders, int points, UserType type) {
 		this.username = username;
