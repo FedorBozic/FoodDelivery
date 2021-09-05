@@ -5,13 +5,15 @@ Vue.component('registration', {
 			currentUser: {}
 		}
     },
-    template: ` 
-	<div>
-		<h1>TEST2</h1>
-		<input type="text" v-model="user.username" >
-		<input type="text" v-model="user.firstName" >
-		<input type="text" v-model="user.lastName" >
-		<input  type="button" value="Register" v-on:click="register()"/>
+    template: `
+	<div class="bg">
+		<div>
+		<!–– <h1>TEST2</h1>
+			<input type="text" v-model="user.username" >
+			<input type="text" v-model="user.firstName" >
+			<input type="text" v-model="user.lastName" >
+			<input  type="button" value="Register" v-on:click="register()"/>
+		</div> -->
 	</div>
 	`,
 
