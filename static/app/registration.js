@@ -45,6 +45,7 @@ Vue.component('registration', {
                     alert(response.data);
                     axios.get('users/currentUser')
                         .then(res => {
+                        	self.$root.$emit('login', res.data);
                             window.location.href = "#/";
                         })
                         .catch(err => {
