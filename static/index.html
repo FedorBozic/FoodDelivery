@@ -164,6 +164,77 @@
 		    letter-spacing: 1px;
 		    z-index: 99;
 		}
+		
+		.navMenu {
+		 	align-content: right;
+		  	padding-left:20px !important;
+		  	padding-right:20px !important;
+		  	padding-top:3px !important;
+		  	padding-bottom:5px !important;
+		  	text-align: right;
+		  	width: 100%;
+		}
+		
+		.navMenu a {
+			color: #f6f4e6;
+			text-decoration: none;
+			font-size: 1.2em;
+			text-transform: uppercase;
+			font-weight: 500;
+			display: inline-block;
+			width: 80px;
+			-webkit-transition: all 0.2s ease-in-out;
+			transition: all 0.2s ease-in-out;
+		}
+		
+		.navMenu a:hover {
+		  	color: rgba(236, 48, 20);
+		}
+		
+		.navMenu .dot {
+			left: 50%;
+			width: 6px;
+			height: 6px;
+			background: rgba(236, 48, 20);
+			border-radius: 50%;
+			opacity: 0;
+			-webkit-transform: translateX(30px);
+			transform: translateX(30px);
+			-webkit-transition: all 0.2s ease-in-out;
+			transition: all 0.2s ease-in-out;
+		}
+		
+		.navMenu a:nth-child(1):hover ~ .dot {
+		  -webkit-transform: translateX(30px);
+		  transform: translateX(30px);
+		  -webkit-transition: all 0.2s ease-in-out;
+		  transition: all 0.2s ease-in-out;
+		  opacity: 1;
+		}
+		
+		.navMenu a:nth-child(2):hover ~ .dot {
+		  -webkit-transform: translateX(110px);
+		  transform: translateX(110px);
+		  -webkit-transition: all 0.2s ease-in-out;
+		  transition: all 0.2s ease-in-out;
+		  opacity: 1;
+		}
+		
+		.navMenu a:nth-child(3):hover ~ .dot {
+		  -webkit-transform: translateX(200px);
+		  transform: translateX(200px);
+		  -webkit-transition: all 0.2s ease-in-out;
+		  transition: all 0.2s ease-in-out;
+		  opacity: 1;
+		}
+		
+		.navMenu a:nth-child(4):hover ~ .dot {
+		  -webkit-transform: translateX(285px);
+		  transform: translateX(285px);
+		  -webkit-transition: all 0.2s ease-in-out;
+		  transition: all 0.2s ease-in-out;
+		  opacity: 1;
+		}
 	</style>
 </head>
 
