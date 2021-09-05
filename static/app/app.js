@@ -14,5 +14,11 @@ const router = new VueRouter({
 
 var app = new Vue({
     router,
-    el: '#application'
+    el: '#application',
+    data: {
+        currentUser: null
+    },
+    mounted() {
+        axios.get('users/currentUser')
+    }
 });

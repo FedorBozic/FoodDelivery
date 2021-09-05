@@ -240,9 +240,13 @@
 
 <body>
 
-
-
 <div id="application">
+	<nav class="navMenu navbar-dark bg-dark">
+		<a href="#" v-if="currentUser == null">Login</a>
+		<a href="#" v-if="currentUser != null">Basket</a>
+		<a href="#" v-if="currentUser != null">Profile</a>
+		<a href="#" v-if="currentUser != null">Logout</a>
+	</nav>
     <router-view></router-view>
 </div>
 
