@@ -10,11 +10,14 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
+import controller.UserController;
+import dao.UserDao;
 import model.User;
 
 public class DostavaMain {
 	
 	public static Gson gson = new Gson();
+	public static UserDao userDao = new UserDao();
 	
 	public static void main(String[] args) {
 		port(8080);
@@ -25,18 +28,15 @@ public class DostavaMain {
             e.printStackTrace();
         }
 		
-		List<User> users = new ArrayList<>();
 		User testUser = new User();
 		testUser.setUsername("Test");
 		testUser.setFirstName("Test");
 		testUser.setLastName("Test");
-		users.add(testUser);
+		userDao.newBuyer(testUser);
 		
-		get("/api/getUsers", (request, response) -> gson.toJson(
-                users.stream()
-                        .distinct().collect(Collectors.toList())));
-		
-		System.out.println("fdsf");
+		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
+		get("/api/users/currentUser", UserController.currentUserRoute);
+		post("/api/users/newBuyer", UserController.newBuyer);
 	}
 
 }
