@@ -6,15 +6,31 @@ Vue.component('registration', {
 		}
     },
     template: `
-	<div class="bg">
-		<div>
-		<!–– <h1>TEST2</h1>
-			<input type="text" v-model="user.username" >
-			<input type="text" v-model="user.firstName" >
-			<input type="text" v-model="user.lastName" >
-			<input  type="button" value="Register" v-on:click="register()"/>
-		</div> -->
-	</div>
+		<div class="login-reg-panel">			
+			<div class="register-info-box">
+				<h2>Have an account?</h2>
+				<p>Click here to log in instead</p>
+				<label id="label-login" for="log-login-show">Log in</label>
+				<input type="radio" name="active-log-panel" id="log-login-show">
+			</div>
+								
+			<div class="white-panel">
+				<div class="register-show">
+					<h2>REGISTER</h2>
+					<input type="text" placeholder="Username" v-model="user.username" >
+					<input type="password" placeholder="Password" v-model="user.password" >
+					<div class="form-row">
+						<div class="col">
+						  <input type="text" placeholder="First Name" v-model="user.firstName" >
+						</div>
+						<div class="col">
+						  <input type="text" class="form_control" placeholder="Last Name" v-model="user.lastName" >
+						</div>
+					</div>
+					<input type="button" value="Register" v-on:click="register()"/>
+				</div>
+			</div>
+		</div>
 	`,
 
 
