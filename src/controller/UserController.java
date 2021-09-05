@@ -19,7 +19,7 @@ public class UserController {
             .create();
     
     public static Route newBuyer = (Request request, Response response) -> {
-
+    	
         if (currentUser != null) {
             response.body("Cannot register when already logged in !");
             response.status(400);
@@ -27,33 +27,27 @@ public class UserController {
         }
         
         var body = gson.fromJson((request.body()), HashMap.class);
-
+        
         User user = new User();
         try {
         	user.setUsername((String) body.get("username"));
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
+            
+            User addedUser = DostavaMain.userDao.newBuyer(user);
+
+            if (addedUser != null) {
+                response.body("Registration successful!");
+                response.status(200);
+                request.session().attribute("currentUser", addedUser);
+                currentUser = addedUser;
+            }
         } catch (Exception e) {
             response.body("Not all fields have been filled!");
             response.status(400);
             return response;
         }
-        User addedUser = DostavaMain.userDao.newBuyer(user);
-
-        if (addedUser != null) {
-            response.body("Registration successful!");
-            response.status(200);
-            request.session().attribute("currentUser", addedUser);
-            currentUser = addedUser;
-        }
         
-        return response;
-    };
-    
-    public static Route currentUserRoute = (Request request, Response response)
-            ->
-    {
-        response.body(gson.toJson(currentUser));
         return response;
     };
 }

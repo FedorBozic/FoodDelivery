@@ -4,9 +4,6 @@ import static spark.Spark.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
@@ -28,6 +25,11 @@ public class DostavaMain {
             e.printStackTrace();
         }
 		
+		after((request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods", "*");
+        });
+		
 		User testUser = new User();
 		testUser.setUsername("Test");
 		testUser.setFirstName("Test");
@@ -35,7 +37,7 @@ public class DostavaMain {
 		userDao.newBuyer(testUser);
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
-		get("/api/users/currentUser", UserController.currentUserRoute);
+		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
 		post("/api/users/newBuyer", UserController.newBuyer);
 	}
 

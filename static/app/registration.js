@@ -1,12 +1,13 @@
 Vue.component('registration', {
     data: function () {
 		return {
-			user: {}
+			user: {},
+			currentUser: {}
 		}
     },
     template: ` 
 	<div>
-		<h1>TEST</h1>
+		<h1>TEST2</h1>
 		<input type="text" v-model="user.username" >
 		<input type="text" v-model="user.firstName" >
 		<input type="text" v-model="user.lastName" >
@@ -24,10 +25,18 @@ Vue.component('registration', {
             axios.post('users/newBuyer', JSON.stringify(this.user))
                 .then(function (response) {
                     alert(response.data);
+                    axios.get('users/currentUser')
+                        .then(res => {
+                            window.location.href = "#/";
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        })
                 })
                 .catch(function (error) {
                     alert(error.response.data);
                 });
+			axios.get('getUsers');
         }
     },
     mounted() {

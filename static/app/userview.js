@@ -1,18 +1,20 @@
 Vue.component('userview', {
         data: function () {
         	return{
-        		users: {}
+        		users: {},
+        		currentUser: {}
        		}
         },
         template: `
         <div>
+        	<h1 v-if="currentUser != null">{{currentUser.username}}</h1>
 			<table>
 			  	<tr>
 				    <th>Username</th>
 				    <th>Ime</th>
 				    <th>Prezime</th>
 			  	</tr>
-			  		<tr v-for="user in users">
+			  	<tr v-for="user in users">
 				    <td>{{user.username}}</td>
 				    <td>{{user.firstName}}</td>
 				    <td>{{user.lastName}}</td>
@@ -27,6 +29,10 @@ Vue.component('userview', {
         	axios.get('getUsers')
             .then(res => {
                 this.users = res.data;
+                axios.get('users/currentUser')
+                .then(res => {
+                	this.currentUser = res.data
+                })
             })
         }
     }
