@@ -31,11 +31,15 @@ public class DostavaMain {
 	public static RestaurantDao restaurantDao = new RestaurantDao();
 	
 	private static void createDummyData() {
-		User testUser = new User();
-		testUser.setUsername("Test");
-		testUser.setFirstName("Test");
-		testUser.setLastName("Test");
-		userDao.newBuyer(testUser);
+		User defaultAdmin = new User();
+		defaultAdmin.setUsername("DefaultAdmin");
+		defaultAdmin.setPassword("ftn");
+		defaultAdmin.setFirstName("Fedor");
+		defaultAdmin.setLastName("Bozic");
+		defaultAdmin.setGender(User.Gender.valueOf("MALE"));
+		defaultAdmin.setRole(User.Role.valueOf("ADMIN"));
+		defaultAdmin.setType(userTypeDao.findByName("ADMIN"));
+		userDao.newBuyer(defaultAdmin);
 		
 		Restaurant testRestaurant = new Restaurant();
 		testRestaurant.setName("Restoran 1");
@@ -70,12 +74,13 @@ public class DostavaMain {
             response.header("Access-Control-Allow-Methods", "*");
         });
 		
-		createDummyData();
-		RestaurantController.restaurantDao = restaurantDao;
-		
 		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
 		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
 		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
+		userTypeDao.addUserType(new UserType("ADMIN", -1, -1, "royalblue", "dodgerblue"));
+		
+		createDummyData();
+		RestaurantController.restaurantDao = restaurantDao;
 		
 		User testUser = new User();
 		testUser.setUsername("Test");
