@@ -3,7 +3,6 @@ const Registration = {template: '<registration></registration>'}
 const Login = {template: '<login></login>'}
 const Profile = {template: '<profile></profile>'}
 
-
 axios.defaults.baseURL = 'http://localhost:8080/api/'
 const router = new VueRouter({
     mode: 'hash',

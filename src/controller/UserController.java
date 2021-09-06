@@ -35,6 +35,7 @@ public class UserController {
         	user.setPassword((String) body.get("password"));
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
+            user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
             
             User addedUser = DostavaMain.userDao.newBuyer(user);
 

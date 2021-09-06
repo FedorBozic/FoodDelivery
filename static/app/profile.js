@@ -12,12 +12,7 @@ Vue.component('profile', {
 	            <div class="col-xl-6 col-md-12">
 	                <div class="card user-card-full">
 	                    <div class="row m-l-0 m-r-0">
-	                        <div class="col-sm-4 bg-c-lite-green user-profile">
-	                            <div class="card-block text-center text-white">
-	                                <span class="decorative_circle"></span>
-	                                <h6 class="f-w-600">{{currentUser.username}}</h6>
-	                            </div>
-	                        </div>
+	                        <user_tier_card component-type="user_tier_card" ></user_tier_card>
 	                        <div class="col-sm-8">
 	                            <div class="card-block">
 	                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
