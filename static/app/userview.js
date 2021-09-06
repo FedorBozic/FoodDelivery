@@ -25,7 +25,6 @@ Vue.component('userview', {
 		mounted() {
         	let self = this;
             let tmp = '?';
-            //Object.entries({datum: this.datum, kompanija: this.kompanija, polaziste: this.polaziste}).forEach(([key, val]) => tmp = tmp + key + '=' + val + '&');
         	axios.get('getUsers')
             .then(res => {
                 this.users = res.data;
