@@ -8,11 +8,15 @@ public class UserType {
 	private String name;
 	private int discount;
 	private int pointRequirement;
+	private String firstColor;
+	private String secondColor;
 	
-	public UserType(String name, int discount, int pointRequirement) {
+	public UserType(String name, int discount, int pointRequirement, String firstColor, String secondColor) {
 		this.name = name;
 		this.discount = discount;
 		this.pointRequirement = pointRequirement;
+		this.firstColor = firstColor;
+		this.secondColor = secondColor;
 	}
 	
 	public UUID getUuid() {

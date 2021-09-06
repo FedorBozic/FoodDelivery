@@ -35,9 +35,9 @@ public class DostavaMain {
             response.header("Access-Control-Allow-Methods", "*");
         });
 		
-		userTypeDao.addUserType(new UserType("BRONZE", 0, 0));
-		userTypeDao.addUserType(new UserType("SILVER", 10, 100));
-		userTypeDao.addUserType(new UserType("GOLD", 20, 500));
+		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
+		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
+		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
 		
 		User testUser = new User();
 		testUser.setUsername("Test");
