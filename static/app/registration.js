@@ -10,8 +10,7 @@ Vue.component('registration', {
 		<div class="register-info-box">
 			<h2>Have an account?</h2>
 			<p>Click here to log in instead</p>
-			<label for="log-login-show">Log in</label>
-			<input type="radio" name="active-log-panel">
+			<a href="#/login"><label id="label-login" for="log-login-show">Login</label></a>
 		</div>
 							
 		<div class="white-panel">
