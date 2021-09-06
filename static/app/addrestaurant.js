@@ -26,17 +26,17 @@ Vue.component('addrestaurant', {
 				      <header class="card-header">
 				        <h2><input type="text" class="discrete-textbox" placeholder="Naziv" v-model="name"></h2>
 				
-				        <address>
-				          <span class="icon-pin" aria-hidden="true"></span>
-				          TEST
-				        </address>
-				
 				        <select v-model="type">
 							<option value="ITALIAN">Italijanski</option>
 							<option value="CHINESE">Kineski</option>
 							<option value="GRILL">Gril</option>
 							<option value="PIZZERIA">Picerija</option>
 						</select>
+						
+						<address style="margin-top:10px">
+				          <span class="icon-pin" aria-hidden="true"></span>
+				          TEST
+				        </address>
 				      </header>
 				    </div>
 				
@@ -52,17 +52,16 @@ Vue.component('addrestaurant', {
 				    <div class="card-content">
 				      <header class="card-header">
 				        <h2>{{r.name}}</h2>
-				
-				        <address>
+				        <span>{{r.type}}</span>
+				        
+				        <address style="margin-top:10px">
 				          <span class="icon-pin" aria-hidden="true"></span>
 				          {{r.locationLabel}}
 				        </address>
-				
-				        <span>Average check: $100</span>
 				      </header>
 				    </div>
 				
-				    <button class="card-button">Book table</button>
+				    <button class="card-button">View</button>
 				  </article>
 				</div>
 			</div>
