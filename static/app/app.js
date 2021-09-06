@@ -44,10 +44,12 @@ var app = new Vue({
             	if(this.currentUser != null)
             	{
             		this.isSignedIn = true;
+            		this.role = this.currentUser.role;
             	}
             	else
             	{
             		this.isSignedIn = false;
+            		this.role = null;
             	}
             })
         this.$root.$on('login', (user) => {
@@ -55,10 +57,12 @@ var app = new Vue({
             if(user != null)
             {
             	this.isSignedIn = true;
+            	this.role = this.currentUser.role;
             }
             else
             {
             	this.isSignedIn = false;
+            	this.role = null;
             }
         })
     },
@@ -69,10 +73,12 @@ var app = new Vue({
             	if(this.currentUser != null)
             	{
             		this.isSignedIn = true;
+            		this.role = this.currentUser.role;
             	}
             	else
             	{
             		this.isSignedIn = false;
+            		this.role = null;
             	}
             })
     }
