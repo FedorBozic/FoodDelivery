@@ -14,7 +14,7 @@ Vue.component('profile', {
 	                    <div class="row m-l-0 m-r-0">
 	                        <div class="col-sm-4 bg-c-lite-green user-profile">
 	                            <div class="card-block text-center text-white">
-	                                <div class="m-b-25"> <img src="Bronze_Icon.png" class="img-radius" alt="User-Profile-Image"> </div>
+	                                <span class="decorative_circle"></span>
 	                                <h6 class="f-w-600">{{currentUser.username}}</h6>
 	                            </div>
 	                        </div>
