@@ -242,10 +242,10 @@
 
 <div id="application">
 	<nav class="navMenu navbar-dark bg-dark">
-		<a href="#" v-if="!isSignedIn">Login</a>
+		<a href="#/registration" v-if="!isSignedIn">Login</a>
 		<a href="#" v-if="isSignedIn">Basket</a>
 		<a href="#" v-if="isSignedIn">Profile</a>
-		<a href="#" v-if="isSignedIn">Logout</a>
+		<a href="#/" v-on:click="logout" v-if="isSignedIn">Logout</a>
 	</nav>
     <router-view></router-view>
 </div>

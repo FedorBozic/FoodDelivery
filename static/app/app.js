@@ -19,6 +19,18 @@ var app = new Vue({
         currentUser: null,
         isSignedIn: false
     },
+    methods: {
+        logout: function () {
+            let self = this;
+            this.$root.$emit('login', null);
+            axios
+                .get("users/logout")
+                .then(function (resp) {
+                });
+
+            window.location.href = "#/";
+        }
+    },
     mounted() {
         axios.get('users/currentUser')
         	.then(res => {
@@ -34,7 +46,14 @@ var app = new Vue({
             })
         this.$root.$on('login', (user) => {
             this.currentUser = user;
-            this.isSignedIn = true;
+            if(user != null)
+            {
+            	this.isSignedIn = true;
+            }
+            else
+            {
+            	this.isSignedIn = false;
+            }
         })
     },
     created() {

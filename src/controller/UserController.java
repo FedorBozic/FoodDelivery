@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.SystemColor;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -48,6 +49,14 @@ public class UserController {
             return response;
         }
         
+        return response;
+    };
+
+    public static Route logOut = (Request request, Response response)
+            ->
+    {
+        request.session().invalidate();
+        currentUser = null;
         return response;
     };
 }

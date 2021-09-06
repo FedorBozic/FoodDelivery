@@ -61,6 +61,7 @@ Vue.component('registration', {
     mounted() {
         axios.get('users/currentUser')
             .then(res => {
+            	this.currentUser = res.data;
                 console.log(res);
             })
             .catch(err => {
