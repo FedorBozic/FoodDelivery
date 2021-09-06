@@ -37,8 +37,13 @@ public class UserController {
             user.setLastName((String) body.get("lastName"));
             user.setGender(User.Gender.valueOf((String) body.get("gender")));
             user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
+            if(body.get("role") != null && !((String) body.get("role")).isEmpty())
+            {
+            	user.setRole(User.Role.valueOf((String) body.get("role")));
+            }
+            user.setRole(User.Role.valueOf("CUSTOMER"));
             
-            User addedUser = DostavaMain.userDao.newBuyer(user);
+            User addedUser = DostavaMain.userDao.addUser(user);
 
             if (addedUser != null) {
                 response.body("Registration successful!");
@@ -46,6 +51,37 @@ public class UserController {
                 request.session().attribute("currentUser", addedUser);
                 currentUser = addedUser;
             }
+        } catch (Exception e) {
+            response.body("Not all fields have been filled!");
+            response.status(400);
+            return response;
+        }
+        
+        return response;
+    };
+    
+    public static Route addUser = (Request request, Response response) -> {
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        
+        User user = new User();
+        try {
+        	user.setUsername((String) body.get("username"));
+        	user.setPassword((String) body.get("password"));
+            user.setFirstName((String) body.get("firstName"));
+            user.setLastName((String) body.get("lastName"));
+            user.setGender(User.Gender.valueOf((String) body.get("gender")));
+            user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
+            if(body.get("role") != null && !((String) body.get("role")).isEmpty())
+            {
+            	user.setRole(User.Role.valueOf((String) body.get("role")));
+            }
+            else
+            {
+            	user.setRole(User.Role.valueOf("CUSTOMER"));
+            }
+            
+            User addedUser = DostavaMain.userDao.addUser(user);
         } catch (Exception e) {
             response.body("Not all fields have been filled!");
             response.status(400);

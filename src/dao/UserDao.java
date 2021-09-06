@@ -27,7 +27,7 @@ public class UserDao {
         this.users = users;
     }
     
-    public User newBuyer(User user) {
+    public User addUser(User user) {
         var alreadyExisting = users.values()
                 .stream()
                 .filter(userInBase -> userInBase.getUsername().equals(user.getUsername()))

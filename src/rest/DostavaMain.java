@@ -32,14 +32,14 @@ public class DostavaMain {
 	
 	private static void createDummyData() {
 		User defaultAdmin = new User();
-		defaultAdmin.setUsername("DefaultAdmin");
+		defaultAdmin.setUsername("ftn");
 		defaultAdmin.setPassword("ftn");
 		defaultAdmin.setFirstName("Fedor");
 		defaultAdmin.setLastName("Bozic");
 		defaultAdmin.setGender(User.Gender.valueOf("MALE"));
 		defaultAdmin.setRole(User.Role.valueOf("ADMIN"));
 		defaultAdmin.setType(userTypeDao.findByName("ADMIN"));
-		userDao.newBuyer(defaultAdmin);
+		userDao.addUser(defaultAdmin);
 		
 		/*Restaurant testRestaurant = new Restaurant();
 		testRestaurant.setName("Restoran 1");
@@ -82,18 +82,12 @@ public class DostavaMain {
 		createDummyData();
 		RestaurantController.restaurantDao = restaurantDao;
 		
-		User testUser = new User();
-		testUser.setUsername("Test");
-		testUser.setFirstName("Test");
-		testUser.setLastName("Test");
-		userDao.newBuyer(testUser);
-		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
-		
         get("/api/users/logout", UserController.logOut);
         post("/api/users/login", UserController.logIn);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
 		post("/api/users/newBuyer", UserController.newBuyer);
+		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));

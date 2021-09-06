@@ -24,12 +24,24 @@
 			font-family: 'Open Sans', sans-serif;
 		}
 		
-		table, th, td {
-		  	border: 1px solid black;
-		  	border-collapse: collapse;
+		table {
+		    border-collapse:separate;
+		    border:solid black 1px;
+		    border-radius:6px;
+		    -moz-border-radius:6px;
 		}
+		
+		td, th {
+		    border-left:solid black 1px;
+		    border-top:solid black 1px;
+		}
+		
 		th {
-			font-weight: strong;
+		    border-top: none;
+		}
+		
+		td:first-child, th:first-child {
+		     border-left: none;
 		}
 		a{
 			text-decoration:none;
@@ -474,6 +486,8 @@
 		 .card-header {
 			 padding-bottom: 1.3125em;
 			 text-align: center;
+			 background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%);
+			 color: white
 		}
 		 .card-header h2 {
 			 margin-top: 0;
@@ -689,6 +703,37 @@
 		.hidden_label {
 			display: none;
 			height: 0px
+		}
+		
+		/* USER LIST */
+		
+		.timeline {
+		    list-style-type: none;
+		    position: relative
+		}
+		
+		.timeline:before {
+		    background: #dee2e6;
+		    left: 9px;
+		    width: 2px;
+		    height: 100%
+		}
+		
+		.timeline-item:before,
+		.timeline:before {
+		    content: " ";
+		    display: inline-block;
+		    position: absolute;
+		    z-index: 1
+		}
+		
+		.timeline-item:before {
+		    background: #fff;
+		    border-radius: 50%;
+		    border: 3px solid #3b7ddd;
+		    left: 0;
+		    width: 20px;
+		    height: 20px
 		}
 	</style>
 </head>
