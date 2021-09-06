@@ -26,7 +26,29 @@ Vue.component('registration', {
 					  <input type="text" class="form_control" placeholder="Last Name" v-model="user.lastName" >
 					</div>
 				</div>
-				<input type="button" value="Register" v-on:click="register()"/>
+				<div class="form-row">
+					<div class="col">
+					  <details>
+						<summary>Test Dropdown</summary>
+						<ul>
+							<li>Item 1</li>
+							<li>Item 2</li>
+							<li>Item 3</li>
+							<li>Item 4</li>
+							<li>Item 5</li>
+							<li>Item 1</li>
+							<li>Item 2</li>
+							<li>Item 3</li>
+							<li>Item 4</li>
+							<li>Item 5</li>
+						</ul>
+					</details>
+					</div>
+					<div class="col">
+					  <input type="date" class="dateOfBirthPicker">
+					</div>
+				</div>
+				<input type="button" value="Register" class="generic_button" v-on:click="register()"/>
 			</div>
 		</div>
 	</div>
