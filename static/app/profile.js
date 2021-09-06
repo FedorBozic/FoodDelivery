@@ -64,7 +64,13 @@ Vue.component('profile', {
         axios.get('users/currentUser')
             .then(res => {
             	this.currentUser = res.data;
-                console.log(res);
+            	if(this.currentUser == null)
+		    	{
+		    		window.location.href = "#/registration";
+		    	}
+		    	else {
+                	console.log(res);
+                }
             })
             .catch(err => {
                 console.error(err);
