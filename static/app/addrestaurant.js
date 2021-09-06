@@ -133,5 +133,23 @@ Vue.component('addrestaurant', {
     },
     mounted() {
         this.getRestaurants();
+        axios.get('users/currentUser')
+            .then(res => {
+            	this.currentUser = res.data;
+            	if(this.currentUser == null)
+		    	{
+		    		window.location.href = "#/registration";
+		    	}
+		    	else if(this.currentUser.role != 'ADMIN')
+		    	{
+		    		window.location.href = "#/registration";
+		    	}
+		    	else {
+                	console.log(res);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
     }
 });

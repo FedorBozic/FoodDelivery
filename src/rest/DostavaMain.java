@@ -41,7 +41,7 @@ public class DostavaMain {
 		defaultAdmin.setType(userTypeDao.findByName("ADMIN"));
 		userDao.newBuyer(defaultAdmin);
 		
-		Restaurant testRestaurant = new Restaurant();
+		/*Restaurant testRestaurant = new Restaurant();
 		testRestaurant.setName("Restoran 1");
 		testRestaurant.setStatus(RestaurantStatus.OPEN);
 		testRestaurant.setType(RestaurantType.CHINESE);
@@ -57,7 +57,7 @@ public class DostavaMain {
 		tmpAdd = new Address("Nikole Tesle 14", "Novi Sad", "21000");
 		tmpLoc = new Location(0, 0, tmpAdd);
 		testRestaurant.setLocation(tmpLoc);
-		restaurantDao.newRestaurant(testRestaurant);
+		restaurantDao.newRestaurant(testRestaurant);*/
 	}
 	
 	public static void main(String[] args) {
