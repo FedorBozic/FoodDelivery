@@ -19,14 +19,15 @@ Vue.component('profile', {
 	                                <div class="row">
 	                                    <div class="col-sm-6">
 	                                        <p class="m-b-10 f-w-600">First Name</p>
-	                                        <h6 class="text-muted f-w-400">{{currentUser.firstName}}</h6>
+	                                        <h6 class="text-muted f-w-400"><input type="text" class="discrete-textbox" v-model="currentUser.firstName" ></h6>
 	                                    </div>
 	                                    <div class="col-sm-6">
 	                                        <p class="m-b-10 f-w-600">Last Name</p>
-	                                        <h6 class="text-muted f-w-400">{{currentUser.lastName}}</h6>
+	                                        <h6 class="text-muted f-w-400"><input type="text" class="discrete-textbox" v-model="currentUser.lastName" ></h6>
 	                                    </div>
 	                                </div>
 	                            </div>
+	                            <input type="button" class="generic_button" value="Edit" v-on:click="edit()"/>
 	                        </div>
 	                    </div>
 	                </div>
@@ -35,6 +36,18 @@ Vue.component('profile', {
 	    </div>
 	</div>
 	`,
+	methods: {
+        edit: function () {
+            axios.put('users/edit', JSON.stringify(this.currentUser))
+                .then(res => {
+                    alert("Successfully updated profile!");
+                })
+                .catch(err => {
+                    alert(err.response.data);
+                })
+        }
+
+    },
     mounted() {
         axios.get('users/currentUser')
             .then(res => {

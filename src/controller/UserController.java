@@ -88,4 +88,38 @@ public class UserController {
 
         return response;
     };
+    
+    public static Route editUser = (Request request, Response response) ->
+    {
+        if (currentUser == null) {
+            response.status(400);
+            return response;
+        }
+        var body = gson.fromJson((request.body()), HashMap.class);
+        User user = DostavaMain.userDao.findById((String) body.get("uuid"));
+        if (user == null) {
+            response.status(400);
+            response.body("User does not exist");
+            return response;
+        }
+        var message = "Profile updated!";
+        try {
+        	if (body.get("firstName") == null || body.get("firstName").equals("")) message = "First name can't be empty!";
+            if (body.get("lastName") == null || body.get("lastName").equals("")) message = "Last name can't be empty!";
+            if (!message.equals("Profile updated!")) {
+                response.status(400);
+                response.body(message);
+                return response;
+            }
+            user.setFirstName((String) body.get("firstName"));
+            user.setLastName((String) body.get("lastName"));
+
+        } catch (Exception e) {
+            message = "An error has occurred!";
+            response.body(message);
+            response.status(400);
+            return response;
+        }
+        return response;
+    };
 }

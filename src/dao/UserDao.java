@@ -47,4 +47,8 @@ public class UserDao {
                 .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
                 .findFirst().orElse(null);
     }
+    
+    public User findById(String uuid) {
+        return users.getOrDefault(UUID.fromString(uuid), null);
+    }
 }
