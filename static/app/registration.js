@@ -1,7 +1,9 @@
 Vue.component('registration', {
     data: function () {
 		return {
-			user: {},
+			user: {
+                gender: 'MALE'
+            },
 			currentUser: {}
 		}
     },
@@ -28,24 +30,14 @@ Vue.component('registration', {
 				</div>
 				<div class="form-row">
 					<div class="col">
-					  <details>
-						<summary>Test Dropdown</summary>
-						<ul>
-							<li>Item 1</li>
-							<li>Item 2</li>
-							<li>Item 3</li>
-							<li>Item 4</li>
-							<li>Item 5</li>
-							<li>Item 1</li>
-							<li>Item 2</li>
-							<li>Item 3</li>
-							<li>Item 4</li>
-							<li>Item 5</li>
-						</ul>
+					  <select name="gender" v-model="user.gender" >
+						  <option value="FEMALE">Female</option>
+						  <option value="MALE">Male</option>
+					  </select>
 					</details>
 					</div>
 					<div class="col">
-					  <input type="date" class="dateOfBirthPicker">
+					  <input type="date" class="dateOfBirthPicker" v-model="user.birthday">
 					</div>
 				</div>
 				<input type="button" value="Register" class="generic_button" v-on:click="register()"/>

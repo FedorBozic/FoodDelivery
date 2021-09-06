@@ -35,6 +35,7 @@ public class UserController {
         	user.setPassword((String) body.get("password"));
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
+            user.setGender(User.Gender.valueOf((String) body.get("gender")));
             user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
             
             User addedUser = DostavaMain.userDao.newBuyer(user);
@@ -113,6 +114,7 @@ public class UserController {
             }
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
+            user.setGender(User.Gender.valueOf((String) body.get("gender")));
 
         } catch (Exception e) {
             message = "An error has occurred!";

@@ -27,6 +27,18 @@ Vue.component('profile', {
 	                                    </div>
 	                                </div>
 	                            </div>
+	                            <div class="card-block">
+	                                <div class="row">
+	                                    <div class="col-sm-6">
+	                                        <p class="m-b-10 f-w-600">Gender</p>
+	                                        <h6 class="text-muted f-w-400">
+	                                        <select name="gender" v-model="currentUser.gender" >
+												  <option value="FEMALE">Female</option>
+												  <option value="MALE">Male</option>
+											</select></h6>
+	                                    </div>
+	                                </div>
+	                            </div>
 	                            <input type="button" class="generic_button" value="Edit" v-on:click="edit()"/>
 	                        </div>
 	                    </div>
