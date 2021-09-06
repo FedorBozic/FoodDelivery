@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public class User {
 	
-	enum Gender {MALE, FEMALE};
-	enum Role {ADMIN, MANAGER, DELIVERY, CUSTOMER};
+	public enum Gender {MALE, FEMALE};
+	public enum Role {ADMIN, MANAGER, DELIVERY, CUSTOMER};
 	
 	private UUID uuid;
 	private String username;

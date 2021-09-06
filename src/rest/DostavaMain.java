@@ -5,6 +5,8 @@ import static spark.Spark.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 
@@ -17,12 +19,15 @@ import model.Location;
 import model.Restaurant;
 import model.RestaurantStatus;
 import model.RestaurantType;
+import dao.UserTypeDao;
 import model.User;
+import model.UserType;
 
 public class DostavaMain {
 	
 	public static Gson gson = new Gson();
 	public static UserDao userDao = new UserDao();
+	public static UserTypeDao userTypeDao = new UserTypeDao();
 	public static RestaurantDao restaurantDao = new RestaurantDao();
 	
 	private static void createDummyData() {
@@ -68,11 +73,23 @@ public class DostavaMain {
 		createDummyData();
 		RestaurantController.restaurantDao = restaurantDao;
 		
+		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
+		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
+		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
+		
+		User testUser = new User();
+		testUser.setUsername("Test");
+		testUser.setFirstName("Test");
+		testUser.setLastName("Test");
+		userDao.newBuyer(testUser);
+		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
+		
         get("/api/users/logout", UserController.logOut);
         post("/api/users/login", UserController.logIn);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
 		post("/api/users/newBuyer", UserController.newBuyer);
+		put("api/users/edit", "application/json", UserController.editUser);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		post("/api/restaurants/newRestaurant", RestaurantController.newRestaurant);
