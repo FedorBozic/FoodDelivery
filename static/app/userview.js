@@ -28,10 +28,10 @@ Vue.component('userview', {
             //Object.entries({datum: this.datum, kompanija: this.kompanija, polaziste: this.polaziste}).forEach(([key, val]) => tmp = tmp + key + '=' + val + '&');
         	axios.get('getUsers')
             .then(res => {
-                this.users = res.data;
+                self.users = res.data;
                 axios.get('users/currentUser')
                 .then(res => {
-                	this.currentUser = res.data
+                	self.currentUser = res.data
                 })
             })
         }

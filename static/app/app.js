@@ -1,6 +1,7 @@
 const UserView = {template: '<userview></userview>'}
 const Registration = {template: '<registration></registration>'}
 const Login = {template: '<login></login>'}
+const AddRestaurant = {template: '<addrestaurant></addrestaurant>'}
 
 
 axios.defaults.baseURL = 'http://localhost:8080/api/'
@@ -10,6 +11,7 @@ const router = new VueRouter({
         {path: '/', component: UserView},
 		{path: '/registration', component: Registration},
 		{path: '/login', component: Login},
+		{path: '/addrestaurant', component: AddRestaurant},
     ]
 });
 
