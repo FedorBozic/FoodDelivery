@@ -19,7 +19,6 @@
 			background-size:cover;
 			background-position:center;
 			position:relative;
-		    overflow-y: hidden;
 			
 			font-family: 'Open Sans', sans-serif;
 		}
@@ -442,6 +441,253 @@
 		    border-radius: 2px;
 		    float:right;
 		    cursor:pointer;
+		}
+		
+		/* RESTAURANT CARD */
+		
+		.restaurant_card {
+			 position: relative;
+			 max-width: 360px;
+			 padding-bottom: 1.3125em;
+			 margin-bottom: 60px;
+			 color: #424242;
+			 font-size: 1rem;
+			 background-color: #fff;
+			 border-radius: .3125em;
+			 box-shadow: 0 .625em 2em 0 #000000;
+		}
+		 .card-image {
+			 border-radius: .3125em .3125em 0 0;
+			 width: 360px;
+			 height: 202px;
+			 margin: 0;
+			 overflow: hidden;
+		}
+		 .card-image img {
+			 display: block;
+			 width: 100%;
+		}
+		 .card-content {
+			 padding: 1.3125em;
+		}
+		 .card-header {
+			 padding-bottom: 1.3125em;
+			 text-align: center;
+		}
+		 .card-header h2 {
+			 margin-top: 0;
+		}
+		 .card-header address {
+			 margin-bottom: 1em;
+			 font-style: normal;
+		}
+		 .card-header address .icon-pin {
+			 color: #d77bfc;
+		}
+		 .card-header span {
+			 font-size: .8em;
+		}
+		 .card-header + .card-stats {
+			 border-top: 1px solid #f2f2f2;
+		}
+		 .card-stats {
+			 padding-top: 1.3125em;
+			 padding-left: 0;
+			 margin: 0;
+			 text-align: center;
+		}
+		 .card-stats li {
+			 display: inline-block;
+			 margin: 0 1em;
+			 font-size: .75em;
+			 vertical-align: middle;
+		}
+		 .card-stats [class^="icon-"] {
+			 display: block;
+			 margin: 0 auto;
+			 color: #aaa;
+			 font-size: 2em;
+		}
+		 .card-stats strong {
+			 display: block;
+			 font-size: 2.5em;
+			 margin: .3em 0 .1em;
+		}
+		 .card-button {
+			 position: absolute;
+			 bottom: -1.3125em;
+			 left: 50%;
+			 transform: translateX(-50%);
+			 border: 0;
+			 padding: .75em 3em;
+			 color: #fff;
+			 font-size: 1em;
+			 font-weight: 700;
+			 white-space: nowrap;
+			 background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%);
+			 border-radius: 1.5em;
+			 box-shadow: 0 .5em 1em 0 #000000;
+			 cursor: pointer;
+		}
+		 .card-button:hover, .card-button:focus {
+			 background: red;
+		}
+		 .card-button:active {
+			 background: red;
+		}
+		 .form {
+			 position: fixed;
+			 top: 0;
+			 left: 0;
+			 padding: 1rem;
+			 background-color: #fff;
+			 border-bottom-right-radius: .5rem;
+			 box-shadow: 0 0 .5rem #000000;
+		}
+		 .form label {
+			 font-size: 1;
+			 font-weight: bold;
+			 display: block;
+			 margin-bottom: .5em;
+		}
+		 .form input {
+			 width: 100%;
+		}
+		 .center {
+			 position: absolute;
+			 top: 50%;
+			 left: 50%;
+			 transform: translateX(-50%) translateY(-50%);
+		}
+		 .icon-pin {
+			 color: inherit;
+			 font-size: 1em;
+			 position: relative;
+			 display: inline-block;
+			 margin-left: .33333em;
+			 margin-top: .16666em;
+			 width: 1em;
+			 height: 1em;
+			 border: solid .08333em currentColor;
+			 border-radius: .58333em .58333em .58333em 0;
+			 background-color: currentColor;
+			 transform: rotate(-45deg);
+		}
+		 .icon-pin:before {
+			 content: '';
+			 position: absolute;
+			 left: .25em;
+			 top: .25em;
+			 width: .33333em;
+			 height: .33333em;
+			 color: white;
+			 border: solid .08333em currentColor;
+			 border-radius: .25em;
+			 background-color: currentColor;
+		}
+		 .icon-chat {
+			 color: inherit;
+			 font-size: 1em;
+			 position: relative;
+			 display: inline-block;
+			 margin-left: .2em;
+			 margin-top: .4em;
+			 width: 1.5em;
+			 height: 1em;
+			 border: solid .1em currentColor;
+			 border-radius: .2em;
+		}
+		 .icon-chat:before {
+			 content: '';
+			 position: absolute;
+			 left: .3em;
+			 top: .8em;
+			 width: .4em;
+			 height: .4em;
+			 background-color: white;
+			 border-bottom: solid .1em currentColor;
+			 border-right: solid .1em currentColor;
+			 transform: rotate(45deg);
+		}
+		 .icon-camera {
+			 color: inherit;
+			 font-size: 1em;
+			 position: relative;
+			 display: inline-block;
+			 margin-left: .2em;
+			 margin-top: .5em;
+			 width: 1.6em;
+			 height: 1em;
+			 border-radius: .1em;
+			 border: solid .1em currentColor;
+		}
+		 .icon-camera:before {
+			 content: '';
+			 position: absolute;
+			 left: .5em;
+			 top: .2em;
+			 width: .4em;
+			 height: .4em;
+			 border-radius: .3em;
+			 border: solid .1em currentColor;
+		}
+		 .icon-camera:after {
+			 content: '';
+			 position: absolute;
+			 right: .2em;
+			 top: -0.2em;
+			 width: .4em;
+			 height: .1em;
+			 border-radius: .1em .1em 0 0;
+			 background-color: currentColor;
+		}
+		 .icon-audio {
+			 color: inherit;
+			 font-size: 1em;
+			 position: relative;
+			 display: inline-block;
+			 margin-left: .5em;
+			 margin-top: .8em;
+			 width: .9em;
+			 height: .7em;
+			 border-left: solid .1em currentColor;
+			 border-right: solid .1em currentColor;
+			 border-bottom: solid .1em currentColor;
+			 border-radius: 0 0 50% 50%;
+		}
+		 .icon-audio:before {
+			 content: '';
+			 position: absolute;
+			 left: .1em;
+			 top: -0.6em;
+			 width: .5em;
+			 height: 1em;
+			 border: solid .1em currentColor;
+			 border-radius: .4em;
+		}
+		 .icon-audio:after {
+			 content: '';
+			 position: absolute;
+			 left: .4em;
+			 bottom: -0.4em;
+			 width: .1em;
+			 height: .4em;
+			 background-color: currentColor;
+		}
+		
+		.restaurant-grid {
+			 display: flex;
+			 flex-direction: row;
+			 flex-wrap: wrap;
+			 justify-content: space-evenly;
+		}
+		 .restaurant-grid__item {
+			 width: 100%;
+		}
+		
+		.hidden_label {
+			display: none;
+			height: 0px
 		}
 	</style>
 </head>

@@ -5,46 +5,69 @@ Vue.component('addrestaurant', {
 			currentUser: null,
 			name: '',
 			type: '',
-			status: '',
+			status: 'OPEN',
 			image: ''
 		}
     },
     template: `
-<div>
-	<table style="background-color: white">
-		<tr>
-			<th>UIID</th>
-			<th>Naziv</th>
-			<th>Tip</th>
-			<th>Status</th>
-			<th>Lokacija</th>
-		</tr>
-		<tr v-for="r in restaurants">
-		    <td>{{r.uuid}}</td>
-		    <td>{{r.name}}</td>
-		    <td>{{r.type}}</td>
-		    <td>{{r.status}}</td>
-		    <td>{{r.locationLabel}}</td>
-		    <td><img :src="r.logo" width="90" height="90"></td>
-		  </tr>
-		</tr>
-	</table>
 	<div>
-		<input type="text" placeholder="Naziv" v-model="name">
-		<select v-model="type">
-			<option value="ITALIAN">Italijanski</option>
-			<option value="CHINESE">Kineski</option>
-			<option value="GRILL">Gril</option>
-			<option value="PIZZERIA">Picerija</option>
-		</select>
-		<select v-model="status">
-			<option value="OPEN">Otvoren</option>
-			<option value="CLOSED">Zatvoren</option>
-		</select>
-	 	<input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*">
-		<button type="button" v-on:click="addRestaurant">Dodaj</button>
+		<div class="d-flex justify-content-center" style="margin-top:20px">
+	    	<div class="row row-cols-1 row-cols-md-2" style = "width: 85%;">
+	    	   <div class="col">
+	    		<article class="restaurant_card">
+				    <figure class="card-image" style="margin: 0px; padding: 0;">
+				    	<label for="image" style="margin: 0px; padding: 0; width:640px; height:360px;">
+						   <img src="r.logo" alt="" />
+						 </label>
+						 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*">
+				    </figure>
+				
+				    <div class="card-content">
+				      <header class="card-header">
+				        <h2><input type="text" class="discrete-textbox" placeholder="Naziv" v-model="name"></h2>
+				
+				        <address>
+				          <span class="icon-pin" aria-hidden="true"></span>
+				          TEST
+				        </address>
+				
+				        <select v-model="type">
+							<option value="ITALIAN">Italijanski</option>
+							<option value="CHINESE">Kineski</option>
+							<option value="GRILL">Gril</option>
+							<option value="PIZZERIA">Picerija</option>
+						</select>
+				      </header>
+				    </div>
+				
+				    <button class="card-button" v-on:click="addRestaurant">+</button>
+				  </article>
+				</div>
+		    	<div class="col" v-for="r in restaurants" :key="r.uuid">
+				  <article class="restaurant_card">
+				    <figure class="card-image">
+				      <img :src="r.logo" alt="" />
+				    </figure>
+				
+				    <div class="card-content">
+				      <header class="card-header">
+				        <h2>{{r.name}}</h2>
+				
+				        <address>
+				          <span class="icon-pin" aria-hidden="true"></span>
+				          {{r.locationLabel}}
+				        </address>
+				
+				        <span>Average check: $100</span>
+				      </header>
+				    </div>
+				
+				    <button class="card-button">Book table</button>
+				  </article>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 	`,
 
 
