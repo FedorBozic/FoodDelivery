@@ -39,4 +39,12 @@ public class UserDao {
         }
         return null;
     }
+    
+    public User findByUsernameAndPassword(String username, String password) {
+        return users.values()
+                .stream()
+                .filter(user -> user.getUsername() != null && user.getPassword() != null)
+                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .findFirst().orElse(null);
+    }
 }

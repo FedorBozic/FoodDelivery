@@ -32,6 +32,7 @@ public class UserController {
         User user = new User();
         try {
         	user.setUsername((String) body.get("username"));
+        	user.setPassword((String) body.get("password"));
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
             
@@ -57,6 +58,33 @@ public class UserController {
     {
         request.session().invalidate();
         currentUser = null;
+        return response;
+    };
+    
+    public static Route logIn = (Request request, Response response)
+            ->
+    {
+        if (currentUser != null) {
+            response.body("You are already logged in!");
+            response.status(400);
+            return response;
+        }
+
+        var body = gson.fromJson((request.body()), HashMap.class);
+
+        User user = DostavaMain.userDao.findByUsernameAndPassword(body.getOrDefault("username", "-1").toString(),
+                body.getOrDefault("password", "-1").toString());
+
+        if (user != null) {
+            request.session().attribute("currentUser", user);
+            currentUser = user;
+            response.body(gson.toJson(user));
+            response.status(200);
+        } else {
+            response.body("Username or password incorrect!");
+            response.status(400);
+        }
+
         return response;
     };
 }

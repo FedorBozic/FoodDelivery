@@ -111,7 +111,6 @@
 		    padding: 15px;
 		    border: 1px solid #b5b5b5;
 		    outline: none;
-		    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 		}
 		.login-show input[type="button"] {
 		    max-width: 150px;
@@ -242,7 +241,8 @@
 
 <div id="application">
 	<nav class="navMenu navbar-dark bg-dark">
-		<a href="#/registration" v-if="!isSignedIn">Login</a>
+		<a href="#/registration" v-if="!isSignedIn">Register</a>
+		<a href="#/login" v-if="!isSignedIn">Login</a>
 		<a href="#" v-if="isSignedIn">Basket</a>
 		<a href="#" v-if="isSignedIn">Profile</a>
 		<a href="#/" v-on:click="logout" v-if="isSignedIn">Logout</a>
@@ -260,6 +260,7 @@
 <script src="js/toast.js"></script>
 <script src="app/userview.js"></script>
 <script src="app/registration.js"></script>
+<script src="app/login.js"></script>
 <script src="app/app.js"></script>
 <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 

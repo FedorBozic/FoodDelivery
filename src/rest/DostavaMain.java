@@ -38,6 +38,7 @@ public class DostavaMain {
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
         get("/api/users/logout", UserController.logOut);
+        post("/api/users/login", UserController.logIn);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
 		post("/api/users/newBuyer", UserController.newBuyer);
 	}

@@ -1,4 +1,4 @@
-Vue.component('registration', {
+Vue.component('login', {
     data: function () {
 		return {
 			user: {},
@@ -8,26 +8,18 @@ Vue.component('registration', {
     template: `
 	<div class="login-reg-panel">			
 		<div class="register-info-box">
-			<h2>Have an account?</h2>
-			<p>Click here to log in instead</p>
-			<label for="log-login-show">Log in</label>
-			<input type="radio" name="active-log-panel">
+			<h2>Don't have an account'?</h2>
+			<p>Click here to register</p>
+			<label id="label-register" for="log-register-show">Register</label>
+			<input type="radio" name="active-log-panel" id="log-register-show">
 		</div>
 							
 		<div class="white-panel">
 			<div class="register-show">
-				<h2>REGISTER</h2>
+				<h2>LOGIN</h2>
 				<input type="text" placeholder="Username" v-model="user.username" >
 				<input type="password" placeholder="Password" v-model="user.password" >
-				<div class="form-row">
-					<div class="col">
-					  <input type="text" placeholder="First Name" v-model="user.firstName" >
-					</div>
-					<div class="col">
-					  <input type="text" class="form_control" placeholder="Last Name" v-model="user.lastName" >
-					</div>
-				</div>
-				<input type="button" value="Register" v-on:click="register()"/>
+				<input type="button" value="Login" v-on:click="login()"/>
 			</div>
 		</div>
 	</div>
@@ -38,9 +30,9 @@ Vue.component('registration', {
         init: function () {
 
         },
-        register: function () {
+        login: function () {
             let self = this;
-            axios.post('users/newBuyer', JSON.stringify(this.user))
+            axios.post('users/login', JSON.stringify(this.user))
                 .then(function (response) {
                     alert(response.data);
                     axios.get('users/currentUser')
