@@ -12,6 +12,15 @@ Vue.component('restaurant', {
 			},
 			image: '',
 			currentUser: null,
+			itemBorderStyle: {
+				margin: '10px', 
+				padding: '10px',
+				'border-bottom': '2px dotted rgba(250, 30, 20)'
+			},
+			itemBorderStyleNoBorder: {
+				margin: '10px', 
+				padding: '10px'
+			}
 		}
     },
     template: `
@@ -51,12 +60,8 @@ Vue.component('restaurant', {
 		            <div class="profile-card-inf__txt">Comments</div>
 		          </div>
 		        </div>
-                
-			    <div class="profile-card-inf">
-		          <div class="profile-card__txt"><strong>MENU</strong></div>
-		        </div>
 			    
-			    <table class="table table-striped" style="width:100%">
+			    <table class="table table-striped" style="width:100%" v-if="$root.isSignedIn && $root.currentUser.role == 'ADMIN'">
 			    	<tbody>
 			    		<tr>
 			  			<td><button type="button" v-on:click="addItem">Dodaj</button></td>
@@ -84,7 +89,7 @@ Vue.component('restaurant', {
 					<div class="row">
 						<div style="float:left; margin-left: 30px; margin-top: -15px; padding:3px 10px 3px 10px; border-radius:5px; background-color: rgba(250, 30, 20); color:white"><h3>FOOD</h3></div>
 					</div>
-				    <div class="row" v-for="item in restaurant.items" style="border-bottom: 2px dotted rgba(250, 30, 20); margin:10px; padding:10px">
+				    <div class="row" v-for="(item,index) in restaurant.items" v-bind:style="[(index < restaurant.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
 					    <div class="col-sm-7 mr-auto">
 							<div class="row"><h4><strong>{{item.name}}</strong></h4></div>
 							<div class="row" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
