@@ -123,8 +123,24 @@ Vue.component('addrestaurant', {
         	};
             axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
                 .then(function (response) {
-					this.getRestaurants();
-					window.location.href = "#/addrestaurant";
+					axios.get('getRestaurants')
+		            .then(res => {
+		            	self.restaurants = res.data;
+		            	for(let rId in self.restaurants){
+		            		let r = self.restaurants[rId];
+		            		if(r.location != null && r.location.address != null){
+		            			let address = r.location.address;
+		            			r.locationLabel = address.streetAddress + ' ' + address.townName + ' ' + address.zipCode;
+		            		}
+		            		else
+		            			r.location = '';
+		            			
+		            		if(r.logo != null){
+		            			r.logo = 'data:image/png;base64,' + r.logo;
+		            		}
+		            	}
+		            	window.location.href = "#/addrestaurant";
+		            })
                 })
                 .catch(function (error) {
                     alert(error.response.data);
