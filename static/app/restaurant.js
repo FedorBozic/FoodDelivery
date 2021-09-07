@@ -22,69 +22,78 @@ Vue.component('restaurant', {
 		    </div>
 		
 		    <div class="profile-card__cnt js-profile-cnt">
-		      <div class="profile-card__name">{{restaurant.name}}</div>
-		      <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
-		      <div class="profile-card-loc">
-		        <span class="profile-card-loc__icon">
-		          <svg class="icon"><use xlink:href="#icon-location"></use></svg>
-		        </span>
-		
-		        <span class="profile-card-loc__txt">
-		          {{restaurant.location.address.streetAddress}}
-		        </span>
-		      </div>
-		
-		      <div class="profile-card-inf">
-		        <div class="profile-card-inf__item">
-		          <div class="profile-card-inf__title">0</div>
-		          <div class="profile-card-inf__txt">Articles</div>
+		        <div class="profile-card__name">{{restaurant.name}}</div>
+		        <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
+		        <div class="profile-card-loc">
+		          <span class="profile-card-loc__icon">
+		            <svg class="icon"><use xlink:href="#icon-location"></use></svg>
+		          </span>
+		        
+		          <span class="profile-card-loc__txt">
+		            {{restaurant.location.address.streetAddress}}
+		          </span>
 		        </div>
-		
-		        <div class="profile-card-inf__item">
-		          <div class="profile-card-inf__title">0</div>
-		          <div class="profile-card-inf__txt">Rating</div>
+		        
+		        <div class="profile-card-inf">
+		          <div class="profile-card-inf__item">
+		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__txt">Articles</div>
+		          </div>
+		        
+		          <div class="profile-card-inf__item">
+		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__txt">Rating</div>
+		          </div>
+		        
+		          <div class="profile-card-inf__item">
+		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__txt">Comments</div>
+		          </div>
 		        </div>
-		
-		        <div class="profile-card-inf__item">
-		          <div class="profile-card-inf__title">0</div>
-		          <div class="profile-card-inf__txt">Comments</div>
+                
+			    <div class="profile-card-inf">
+		          <div class="profile-card__txt"><strong>MENU</strong></div>
 		        </div>
-		      </div>
-
-			  <div class="profile-card-inf">
-		        <div class="profile-card__txt"><strong>MENU</strong></div>
-		      </div>
-			  
-			  <table class="table table-striped" style="width:100%">
-			  	<tbody>
-			  		<tr>
-						<td><button type="button" v-on:click="addItem">Dodaj</button></td>
-			  			<td><input type="text" placeholder="Name" v-model="itemBeingAdded.name"></td>
-						<td>
-							<select v-model="itemBeingAdded.type">
-								<option value="FOOD">Food</option>
-								<option value="DRINK">Drink</option>
-							</select>
-						</td>
-						<td><input type="text" placeholder="Description" v-model="itemBeingAdded.description"></td>
-						<td><input type="text" placeholder="Cena" v-model="itemBeingAdded.price" style="width:30px"></td>
-						<td>
-							 <label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
-					    		<img v-if="image" :src="'data:image/png;base64,' + image" style="width:60px; height: 60px"/>
-								<img v-else src="/Add_Image.jpg" alt="" style="max-width:60px; max-height:60px;" />
-							 </label>
-							 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
-						</td>
-			  		</tr>
-			  	</tbody>
-			  </table>
-			  <table class="table table-striped" style="width:100%">
-			  	<tbody v-for="item in restaurant.items">
-			  		<tr>
-			  			<td>{{item.name}}</td>
-			  		</tr>
-			  	</tbody>
-			  </table>
+			    
+			    <table class="table table-striped" style="width:100%">
+			    	<tbody>
+			    		<tr>
+			  			<td><button type="button" v-on:click="addItem">Dodaj</button></td>
+			    			<td><input type="text" placeholder="Name" v-model="itemBeingAdded.name"></td>
+			  			<td>
+			  				<select v-model="itemBeingAdded.type">
+			  					<option value="FOOD">Food</option>
+			  					<option value="DRINK">Drink</option>
+			  				</select>
+			  			</td>
+			  			<td><input type="text" placeholder="Description" v-model="itemBeingAdded.description"></td>
+			  			<td><input type="text" placeholder="Cena" v-model="itemBeingAdded.price" style="width:30px"></td>
+			  			<td>
+			  				 <label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
+			  		    		<img v-if="image" :src="'data:image/png;base64,' + image" style="width:60px; height: 60px"/>
+			  					<img v-else src="/Add_Image.jpg" alt="" style="max-width:60px; max-height:60px;" />
+			  				 </label>
+			  				 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
+			  			</td>
+			    		</tr>
+			    	</tbody>
+			    </table>
+			    
+				<div style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
+					<div class="row">
+						<div style="float:left; margin-left: 30px; margin-top: -15px; padding:3px 10px 3px 10px; border-radius:5px; background-color: rgba(250, 30, 20); color:white"><h3>FOOD</h3></div>
+					</div>
+				    <div class="row" v-for="item in restaurant.items" style="border-bottom: 2px dotted rgba(250, 30, 20); margin:10px; padding:10px">
+					    <div class="col-sm-7 mr-auto">
+							<div class="row"><h4><strong>{{item.name}}</strong></h4></div>
+							<div class="row" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
+						</div>
+					    <div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-3">
+							<img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/>
+						</div>
+				    </div>
+				</div>
 		    </div>
 			
 			
@@ -138,6 +147,11 @@ Vue.component('restaurant', {
 			if(this.restaurant != null && this.restaurant.logo != null){
             	this.restaurant.logo = 'data:image/png;base64,' + this.restaurant.logo;
             }
+			for(let i in this.restaurant.items){
+		    	if(this.restaurant.items[i].image != null){
+		    		this.restaurant.items[i].image = 'data:image/png;base64,' + this.restaurant.items[i].image;
+		    	}
+		    }
         })
         .catch(err => {
             console.error(err);
