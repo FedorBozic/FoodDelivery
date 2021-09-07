@@ -33,7 +33,6 @@ Vue.component('login', {
             let self = this;
             axios.post('users/login', JSON.stringify(this.user))
                 .then(function (response) {
-                    alert(response.data);
                     axios.get('users/currentUser')
                         .then(res => {
                         	self.$root.$emit('login', res.data);

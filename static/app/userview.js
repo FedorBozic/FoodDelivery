@@ -104,8 +104,9 @@ Vue.component('userview', {
 	            let self = this;
 	            axios.post('users/adduser', JSON.stringify(this.user))
 	                .then(function (response) {
-	                    axios.get('users/currentUser')
+	                    axios.get('getUsers')
 	                        .then(res => {
+								self.users = res.data;
 	                            window.location.href = "#/userview";
 	                        })
 	                        .catch(err => {

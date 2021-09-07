@@ -23,7 +23,7 @@ Vue.component('addrestaurant', {
 				    </figure>
 				
 				    <div class="card-content">
-				      <header class="card-header">
+				      <header class="card-header-restaurant">
 				        <h2><input type="text" class="discrete-textbox" placeholder="Naziv" v-model="name"></h2>
 				
 				        <select v-model="type">
@@ -50,7 +50,7 @@ Vue.component('addrestaurant', {
 				    </figure>
 				
 				    <div class="card-content">
-				      <header class="card-header">
+				      <header class="card-header-restaurant">
 				        <h2>{{r.name}}</h2>
 				        <span>{{r.type}}</span>
 				        
@@ -100,14 +100,12 @@ Vue.component('addrestaurant', {
         },
         
         convertImage: function() {
-        	alert("CONVERTING");
         	let file = document.querySelector('#image').files[0];
             let reader = new FileReader();
             reader.readAsDataURL(file);
             let self = this;
             reader.onload = function () {
                 self.image = reader.result.split(',')[1];
-                alert(self.image);
             };
             reader.onerror = function (error) {
                 console.log('Error: ', error);
@@ -115,6 +113,7 @@ Vue.component('addrestaurant', {
         },
         
         addRestaurant: function() {
+        	let self = this;
         	let newRestaurant = {
         		name: this.name,
         		type: this.type,
@@ -123,8 +122,8 @@ Vue.component('addrestaurant', {
         	};
             axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
                 .then(function (response) {
-                	alert("Uspesno dodato");
 					this.getRestaurants();
+					window.location.href = "#/addrestaurant";
                 })
                 .catch(function (error) {
                     alert(error.response.data);
