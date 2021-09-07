@@ -192,15 +192,14 @@ Vue.component('addrestaurant', {
 		    	}
 		    	else {
                 	console.log(res);
+	                axios.get('users/managers')
+		        	.then(res => {
+		            	this.managers = res.data;
+		            })
+		            .catch(err => {
+		                console.error(err);
+		            });
                 }
-                
-                axios.get('users/managers')
-	        	.then(res => {
-	            	this.managers = res.data;
-	            })
-	            .catch(err => {
-	                console.error(err);
-	            });
             })
             .catch(err => {
                 console.error(err);
