@@ -3,8 +3,10 @@ Vue.component('addrestaurant', {
 		return {
 			restaurants: {},
 			currentUser: null,
+			managers: [],
 			name: '',
 			type: '',
+			manager: '',
 			status: 'OPEN',
 			image: ''
 		}
@@ -147,6 +149,18 @@ Vue.component('addrestaurant', {
                 });
         },
     },
+    computed:{
+	    options(){
+	      let manager_list = [];
+	      console.log("TEST");
+	      console.log(this.managers.length);
+		  for(let m in this.managers){
+	      	manager_list.push(m.username);
+	      	return manager_list;
+	      }
+	      return manager_list;
+	    }
+  	},
     mounted() {
         this.getRestaurants();
         axios.get('users/currentUser')
@@ -163,9 +177,17 @@ Vue.component('addrestaurant', {
 		    	else {
                 	console.log(res);
                 }
+                
+                axios.get('users/managers')
+	        	.then(res => {
+	            	self.managers = res.data;
+	            })
+	            .catch(err => {
+	                console.error(err);
+	            });
             })
             .catch(err => {
                 console.error(err);
-            })
+            });
     }
 });

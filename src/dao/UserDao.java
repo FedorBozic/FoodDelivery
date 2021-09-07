@@ -1,10 +1,12 @@
 package dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import model.User;
+import rest.DostavaMain;
 
 public class UserDao {
 	private HashMap<UUID, User> users = new HashMap<>();
@@ -25,6 +27,13 @@ public class UserDao {
 
     public void setUsers(HashMap<UUID, User> users) {
         this.users = users;
+    }
+    
+    public List<User> getManagers() {
+    	return users.values()
+                .stream()
+                .filter(user -> user.getRole() != null && user.getRole() == User.Role.MANAGER)
+                .collect(Collectors.toList());
     }
     
     public User addUser(User user) {
