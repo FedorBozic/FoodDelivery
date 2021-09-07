@@ -30,10 +30,14 @@ public class UserDao {
     }
     
     public List<User> getManagers() {
-    	return users.values()
+    	List<User> tmpStep = users.values()
                 .stream()
                 .filter(user -> user.getRole() != null && user.getRole() == User.Role.MANAGER)
                 .collect(Collectors.toList());
+    	for (User u : tmpStep) {
+			System.out.println(u.getFirstName() + " " + u.getLastName());
+		}
+    	return tmpStep;
     }
     
     public User addUser(User user) {

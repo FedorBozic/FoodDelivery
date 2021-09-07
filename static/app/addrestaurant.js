@@ -36,6 +36,10 @@ Vue.component('addrestaurant', {
 							<option value="PIZZERIA">Picerija</option>
 						</select>
 						
+						<select v-model="manager">
+							<option v-for="m of managers" :value="m">{{m.firstName}} {{m.lastName}}</option>
+						</select>
+						
 						<address style="margin-top:10px">
 				          <span class="icon-pin" aria-hidden="true"></span>
 				          TEST
@@ -121,7 +125,8 @@ Vue.component('addrestaurant', {
         		name: this.name,
         		type: this.type,
         		status: this.status,
-        		image: this.image
+        		manager: this.manager.uuid,
+        		image: this.image,
         	};
             axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
                 .then(function (response) {
@@ -148,18 +153,29 @@ Vue.component('addrestaurant', {
                     alert(error.response.data);
                 });
         },
+        
+		options() {
+			let manager_list = [];
+			//alert("TEST");
+			console.log(this.managers.length);
+			for(let m in this.managers){
+				manager_list.push(m.username);
+				return manager_list;
+			}
+			return manager_list;
+		}
     },
     computed:{
-	    options(){
-	      let manager_list = [];
-	      console.log("TEST");
-	      console.log(this.managers.length);
-		  for(let m in this.managers){
-	      	manager_list.push(m.username);
-	      	return manager_list;
-	      }
-	      return manager_list;
-	    }
+		/*options(){
+			let manager_list = [];
+			console.log("TEST");
+			console.log(this.managers.length);
+			for(let m in this.managers){
+				manager_list.push(m.username);
+				return manager_list;
+			}
+			return manager_list;
+		}*/
   	},
     mounted() {
         this.getRestaurants();
@@ -180,7 +196,7 @@ Vue.component('addrestaurant', {
                 
                 axios.get('users/managers')
 	        	.then(res => {
-	            	self.managers = res.data;
+	            	this.managers = res.data;
 	            })
 	            .catch(err => {
 	                console.error(err);

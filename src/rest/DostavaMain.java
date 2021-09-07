@@ -41,6 +41,16 @@ public class DostavaMain {
 		defaultAdmin.setType(userTypeDao.findByName("ADMIN"));
 		userDao.addUser(defaultAdmin);
 		
+		User defaultManager = new User();
+		defaultManager.setUsername("mng");
+		defaultManager.setPassword("mng");
+		defaultManager.setFirstName("Marko");
+		defaultManager.setLastName("Markovic");
+		defaultManager.setGender(User.Gender.valueOf("MALE"));
+		defaultManager.setRole(User.Role.MANAGER);
+		defaultManager.setType(userTypeDao.findByName("ADMIN"));
+		userDao.addUser(defaultManager);
+		
 		/*Restaurant testRestaurant = new Restaurant();
 		testRestaurant.setName("Restoran 1");
 		testRestaurant.setStatus(RestaurantStatus.OPEN);
@@ -49,15 +59,7 @@ public class DostavaMain {
 		Location tmpLoc = new Location(0, 0, tmpAdd);
 		testRestaurant.setLocation(tmpLoc);
 		restaurantDao.newRestaurant(testRestaurant);
-		
-		testRestaurant = new Restaurant();
-		testRestaurant.setName("Restoran 2");
-		testRestaurant.setStatus(RestaurantStatus.CLOSED);
-		testRestaurant.setType(RestaurantType.GRILL);
-		tmpAdd = new Address("Nikole Tesle 14", "Novi Sad", "21000");
-		tmpLoc = new Location(0, 0, tmpAdd);
-		testRestaurant.setLocation(tmpLoc);
-		restaurantDao.newRestaurant(testRestaurant);*/
+	 	*/
 	}
 	
 	public static void main(String[] args) {
@@ -82,6 +84,7 @@ public class DostavaMain {
 		
 		createDummyData();
 		RestaurantController.restaurantDao = restaurantDao;
+		RestaurantController.userDao = userDao;
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
 		get("/api/users/managers", (request,response) -> gson.toJson(userDao.getManagers()));
