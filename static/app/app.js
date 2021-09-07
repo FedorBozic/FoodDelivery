@@ -3,6 +3,7 @@ const UserView = {template: '<userview></userview>'}
 const Registration = {template: '<registration></registration>'}
 const Login = {template: '<login></login>'}
 const AddRestaurant = {template: '<addrestaurant></addrestaurant>'}
+const Restaurant = {template: '<restaurant></restaurant>'}
 const Profile = {template: '<profile></profile>'}
 const Basket = {template: '<basket></basket>'}
 const AddItem = {template: '<additem></additem>'}
@@ -16,6 +17,7 @@ const router = new VueRouter({
 		{path: '/login', component: Login},
 		{path: '/userview', component: UserView},
 		{path: '/addrestaurant', component: AddRestaurant},
+		{path: '/restaurant/:id', name: 'Restaurant', component: Restaurant},
 		{path: '/profile', component: Profile},
 		{path: '/basket', component: Basket},
 		{path: '/additem', component: AddItem},

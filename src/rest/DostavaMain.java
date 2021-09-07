@@ -78,15 +78,14 @@ public class DostavaMain {
 		defaultCustomer.setCart(tmpCart);
 		
 		userDao.addUser(defaultCustomer);
-		/*Restaurant testRestaurant = new Restaurant();
-		testRestaurant.setName("Restoran 1");
-		testRestaurant.setStatus(RestaurantStatus.OPEN);
-		testRestaurant.setType(RestaurantType.CHINESE);
+		Restaurant defaultRestaurant = new Restaurant();
+		defaultRestaurant.setName("ftnE Grill");
+		defaultRestaurant.setStatus(RestaurantStatus.OPEN);
+		defaultRestaurant.setType(RestaurantType.GRILL);
 		Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
 		Location tmpLoc = new Location(0, 0, tmpAdd);
-		testRestaurant.setLocation(tmpLoc);
-		restaurantDao.newRestaurant(testRestaurant);
-	 	*/
+		defaultRestaurant.setLocation(tmpLoc);
+		restaurantDao.newRestaurant(defaultRestaurant);
 	}
 	
 	public static void main(String[] args) {
@@ -127,6 +126,7 @@ public class DostavaMain {
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		post("/api/restaurants/newRestaurant", RestaurantController.newRestaurant);
+		get("api/restaurants/:id", RestaurantController.findById);
 	}
 
 }

@@ -27,7 +27,7 @@ Vue.component('homepage', {
 				      </header>
 				    </div>
 				
-				    <button class="card-button">View</button>
+				    <button class="card-button" v-on:click="showRestaurant(r.uuid)">View</button>
 				  </article>
 				</div>
 			</div>
@@ -40,7 +40,10 @@ Vue.component('homepage', {
         init: function () {
 
         },
-        
+        showRestaurant: function (id) {
+            let self = this;
+            this.$router.push({name: 'Restaurant', params: {'id': id}});
+        },
         getRestaurants: function() {
             axios.get('getRestaurants')
             .then(res => {

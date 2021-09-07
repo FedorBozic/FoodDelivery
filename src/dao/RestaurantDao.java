@@ -39,4 +39,8 @@ public class RestaurantDao {
         }
         return null;
     }
+    
+    public Restaurant findById(String id) {
+        return restaurants.getOrDefault(UUID.fromString(id), null);
+    }
 }
