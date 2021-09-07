@@ -90,7 +90,7 @@ public class DostavaMain {
 	}
 	
 	public static void main(String[] args) {
-		port(18080);
+		port(8080);
 		
 		try {
             staticFiles.externalLocation(new File("./static").getCanonicalPath());
@@ -122,8 +122,10 @@ public class DostavaMain {
 		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
 		get("/api/users/getCart", UserController.getCart);
+		post("/api/users/newItem", UserController.newItemToRestaurant);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
+		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		post("/api/restaurants/newRestaurant", RestaurantController.newRestaurant);
 	}
 

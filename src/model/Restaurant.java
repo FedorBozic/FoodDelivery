@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class Restaurant {
 	private String logo;
 	
 	public Restaurant() {
-		
+		items = new ArrayList<Item>();
 	}
 	
 	public Restaurant(UUID uuid, String name, RestaurantType type, List<Item> items, RestaurantStatus status, Location location, String logo) {

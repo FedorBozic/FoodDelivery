@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import model.CartItem;
+import model.Item;
 import model.Restaurant;
 import model.RestaurantStatus;
 import model.RestaurantType;
@@ -171,6 +172,59 @@ public class UserController {
     
     public static Route getCart = (Request request, Response response) -> {
     	response.status(200);
-    	return gson.toJson(currentUser.getCart());
+    	response.body(gson.toJson(currentUser.getCart()));
+    	return response;
+    };
+    
+    public static Route newItemToRestaurant = (Request request, Response response) -> {
+    	response.status(200);
+    	
+    	var body = gson.fromJson((request.body()), HashMap.class);
+    	
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        
+        }
+        
+    	System.out.println((String) body.get("name"));
+    	System.out.println((String) body.get("type"));
+    	System.out.println((String) body.get("description"));
+    	System.out.println((String) body.get("amount"));
+    	System.out.println((String) body.get("price"));
+    	System.out.println("Image: " + ((String) body.get("image")).substring(0, 100));
+    	
+    	String name = (String) body.get("name");
+    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
+    	String description = (String) body.get("description");
+    	float price = Float.parseFloat(((String) body.get("price")));
+    	int amount = Integer.parseInt((String) body.get("amount"));
+    	String image = (String) body.get("image");
+    	
+    	Item item = new Item();
+    	item.setName(name);
+    	item.setType(type);
+    	item.setAmount(amount);
+    	item.setDescription(description);
+    	item.setPrice(price);
+    	item.setImage(image);
+    	
+    	currentUser.getRestaurant().getItems().add(item);
+    	
+    	/*Restaurant restaurant = new Restaurant();
+    	restaurant.setName((String) body.get("name"));
+    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
+    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
+    	restaurant.setLogo((String) body.get("image"));
+    	
+    	restaurantDao.newRestaurant(restaurant);
+    	
+    	User user = userDao.findById((String) body.get("manager"));
+    	user.setRestaurant(restaurant);
+
+    	System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getRestaurant().getName());*/
+    	
+        return response;
     };
 }

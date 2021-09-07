@@ -5,8 +5,9 @@ const Login = {template: '<login></login>'}
 const AddRestaurant = {template: '<addrestaurant></addrestaurant>'}
 const Profile = {template: '<profile></profile>'}
 const Basket = {template: '<basket></basket>'}
+const AddItem = {template: '<additem></additem>'}
 
-axios.defaults.baseURL = 'http://localhost:18080/api/'
+axios.defaults.baseURL = 'http://localhost:8080/api/'
 const router = new VueRouter({
     mode: 'hash',
     routes: [
@@ -17,6 +18,7 @@ const router = new VueRouter({
 		{path: '/addrestaurant', component: AddRestaurant},
 		{path: '/profile', component: Profile},
 		{path: '/basket', component: Basket},
+		{path: '/additem', component: AddItem},
     ]
 });
 
