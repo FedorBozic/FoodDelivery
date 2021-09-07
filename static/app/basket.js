@@ -16,6 +16,7 @@ Vue.component('basket', {
 				  	<th>Opis</th>
 				  	<th>Tip</th>
 				  	<th>Kolicina</th>
+				  	<th>Slika</th>
 				  </tr>
 				  <tr>
 				  </tr>
@@ -24,6 +25,7 @@ Vue.component('basket', {
 				  	<td>{{i.item.description}}</td>
 				  	<td>{{i.item.type}}</td>
 				  	<td>{{i.count}}</td>
+				  	<td><img :src="i.item.image" alt="" /></td>
 				  </tr>
 				</table>
 			</div>
@@ -41,6 +43,16 @@ Vue.component('basket', {
         	axios.get('users/getCart')
             .then(res => {
             	this.cart = res.data;
+				
+            	for(let ciId in this.cart.cartItems){
+            		let ci = this.cart.cartItems[ciId];
+            		if(ci.image != null){
+            			ci.image = 'data:image/png;base64,' + ci.image;
+            		}
+            		else{
+            			ci.image = '';
+            		}
+            	}
                 console.log(res);
             })
             .catch(err => {
