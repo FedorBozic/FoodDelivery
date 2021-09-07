@@ -19,7 +19,7 @@ Vue.component('addrestaurant', {
 				    	<label for="image" style="margin: 0px; padding: 0; width:360px; height:202px;">
 						   <img src="/Add_Image.jpg" alt="" style="max-width:100%; max-height:100%;" />
 						 </label>
-						 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*">
+						 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
 				    </figure>
 				
 				    <div class="card-content">
