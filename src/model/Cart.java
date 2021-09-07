@@ -8,16 +8,23 @@ public class Cart {
 	private User user;
 	private float price;
 	
-	public Cart(List<CartItem> cartItems, User user, float price) {
-		this.cartItems = cartItems;
-		this.user = user;
-		this.price = price;
+	public Cart() {
+		
 	}
 	
-	public Cart(User user, float price) {
+	public Cart(List<CartItem> cartItems, User user) {
+		this.cartItems = cartItems;
+		this.user = user;
+		this.price = 0;
+		for (CartItem ci : cartItems) {
+			this.price += ci.getItem().getPrice();
+		}
+	}
+	
+	public Cart(User user) {
 		this.cartItems = new ArrayList<CartItem>();
 		this.user = user;
-		this.price = price;
+		this.price = 0;
 	}
 	
 	public List<CartItem> getCartItems() {

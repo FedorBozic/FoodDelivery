@@ -6,6 +6,10 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import model.CartItem;
+import model.Restaurant;
+import model.RestaurantStatus;
+import model.RestaurantType;
 import model.User;
 import rest.DostavaMain;
 import spark.Request;
@@ -163,5 +167,10 @@ public class UserController {
             return response;
         }
         return response;
+    };
+    
+    public static Route getCart = (Request request, Response response) -> {
+    	response.status(200);
+    	return gson.toJson(currentUser.getCart());
     };
 }

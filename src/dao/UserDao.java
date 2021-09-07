@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import model.Cart;
+import model.Order;
 import model.User;
 import rest.DostavaMain;
 
@@ -38,6 +40,11 @@ public class UserDao {
 			System.out.println(u.getFirstName() + " " + u.getLastName());
 		}
     	return tmpStep;
+    }
+    
+    public Cart getCartByUserId(String uuid) {
+    	User user = findById(uuid);
+    	return user.getCart();
     }
     
     public User addUser(User user) {

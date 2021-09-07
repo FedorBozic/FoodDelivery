@@ -747,7 +747,7 @@
 	<nav class="navMenu navbar-dark bg-dark">
 		<a href="#/registration" v-if="!isSignedIn">Register</a>
 		<a href="#/login" v-if="!isSignedIn">Login</a>
-		<a href="#" v-if="isSignedIn && role == 'CUSTOMER'">Basket</a>
+		<a href="#/basket" v-if="isSignedIn && role == 'CUSTOMER'">Basket</a>
 		<a href="#/userview" v-if="isSignedIn && role == 'ADMIN'">Users</a>
 		<a href="#/addrestaurant" v-if="isSignedIn && role == 'ADMIN'" style="width:120px">Restaurants</a>
 		<a href="#/profile" v-if="isSignedIn">Profile</a>
@@ -771,6 +771,7 @@
 <script src="app/addrestaurant.js"></script>
 <script src="app/profile.js"></script>
 <script src="app/user_tier_card.js"></script>
+<script src="app/basket.js"></script>
 <script src="app/app.js"></script>
 <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 

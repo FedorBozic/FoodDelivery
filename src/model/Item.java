@@ -2,7 +2,7 @@ package model;
 
 public class Item {
 	
-	enum ItemType {FOOD, DRINK};
+	public enum ItemType {FOOD, DRINK};
 	
 	private String name;
 	private float price;
@@ -11,6 +11,10 @@ public class Item {
 	private int amount;
 	private String description;
 	private String image; //slika string za sada
+	
+	public Item() {
+		
+	}
 	
 	public Item(String name, float price, ItemType type, Restaurant restaurant, int amount, String description, String image) {
 		this.name = name;

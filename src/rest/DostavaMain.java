@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.gson.Gson;
 
@@ -15,6 +16,9 @@ import controller.UserController;
 import dao.UserDao;
 import dao.RestaurantDao;
 import model.Address;
+import model.Cart;
+import model.CartItem;
+import model.Item;
 import model.Location;
 import model.Restaurant;
 import model.RestaurantStatus;
@@ -48,9 +52,32 @@ public class DostavaMain {
 		defaultManager.setLastName("Markovic");
 		defaultManager.setGender(User.Gender.valueOf("MALE"));
 		defaultManager.setRole(User.Role.MANAGER);
-		defaultManager.setType(userTypeDao.findByName("ADMIN"));
+		defaultManager.setType(userTypeDao.findByName("STAFF"));
 		userDao.addUser(defaultManager);
 		
+		User defaultCustomer = new User();
+		defaultCustomer.setUsername("cus");
+		defaultCustomer.setPassword("cus");
+		defaultCustomer.setFirstName("Branko");
+		defaultCustomer.setLastName("Brankovic");
+		defaultCustomer.setGender(User.Gender.valueOf("MALE"));
+		defaultCustomer.setRole(User.Role.CUSTOMER);
+		defaultCustomer.setType(userTypeDao.findByName("BRONZE"));
+		
+		Item tmpItem = new Item();
+		tmpItem.setName("Sladoled");
+		tmpItem.setDescription("Lep sladoled");
+		tmpItem.setPrice(300);
+		tmpItem.setType(Item.ItemType.FOOD);
+		CartItem tmpCartItem = new CartItem(tmpItem, 4);
+		List<CartItem> tmpCartItemList = new ArrayList<CartItem>();
+		tmpCartItemList.add(tmpCartItem);
+		Cart tmpCart = new Cart();
+		tmpCart.setCartItems(tmpCartItemList);
+		
+		defaultCustomer.setCart(tmpCart);
+		
+		userDao.addUser(defaultCustomer);
 		/*Restaurant testRestaurant = new Restaurant();
 		testRestaurant.setName("Restoran 1");
 		testRestaurant.setStatus(RestaurantStatus.OPEN);
@@ -63,7 +90,7 @@ public class DostavaMain {
 	}
 	
 	public static void main(String[] args) {
-		port(8080);
+		port(18080);
 		
 		try {
             staticFiles.externalLocation(new File("./static").getCanonicalPath());
@@ -94,6 +121,7 @@ public class DostavaMain {
 		post("/api/users/newBuyer", UserController.newBuyer);
 		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
+		get("/api/users/getCart", UserController.getCart);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		post("/api/restaurants/newRestaurant", RestaurantController.newRestaurant);
