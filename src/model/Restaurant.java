@@ -75,4 +75,14 @@ public class Restaurant {
 	public void addItem(Item item) {
 		this.items.add(item);
 	}
+	
+	public Item findItemByName(String name) {
+		Item foundItem = null;
+		for(Item i : this.items)
+		{
+			if(i.getName().equals(name))
+				foundItem = i;
+		}
+        return foundItem;
+    }
 }

@@ -8,6 +8,7 @@ Vue.component('restaurant', {
 				restaurant: '',
 				type: 'FOOD',
 				amount: '1',
+				purchase_amount: 1,
 				description: '',
 			},
 			image: '',
@@ -100,10 +101,10 @@ Vue.component('restaurant', {
 							<div class="row"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'">
 								<div class="col-sm-4 mr-auto">
-									<input type="text" class="discrete-textbox" style="vertical-align: center; height: 100%; margin-top:4px" placeholder="" v-model="item.amount">
+									<input type="text" class="discrete-textbox" style="vertical-align: center; height: 100%; margin-top:4px" placeholder="" v-model="item.purchase_amount">
 								</div>
 								<div class="col-sm-4">
-									<button class="addtocart" style="margin-top:10px">
+									<button class="addtocart" style="margin-top:10px" v-on:click="addItemToCart(item)">
 									  	<div class="pretext">
 									    	<h5 style="padding-bottom:0px; margin-bottom:0px">+</h5>
 									  	</div>
@@ -148,8 +149,6 @@ Vue.component('restaurant', {
         	let newItem = this.itemBeingAdded
 			newItem.image = this.image
 			newItem.restaurant = this.restaurant.uuid
-			console.log("TEST")
-			console.log(this.restaurant.id)
             axios.post('users/newItem', JSON.stringify(newItem))
                 .then(function (response) {
 					axios.get('users/currentUser')
@@ -157,6 +156,21 @@ Vue.component('restaurant', {
                 .catch(function (error) {
                     alert(error.response.data);
                 });
+			window.location.href = "#/restaurant/" + this.$route.params.id;
+        },
+
+		addItemToCart: function(item) {
+        	let self = this;
+        	let itemToCart = item
+			itemToCart.restaurant = this.restaurant.uuid
+            axios.post('users/itemToCart', JSON.stringify(itemToCart))
+                .then(function (response) {
+					axios.get('users/currentUser')
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
+			window.location.href = "#/";
         },
 	},
     mounted() {

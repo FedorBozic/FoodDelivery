@@ -45,4 +45,8 @@ public class Cart {
 	public void setPrice(float price) {
 		this.price = price;
 	}
+	public void addCartItem(CartItem item)
+	{
+		this.cartItems.add(item);
+	}
 }

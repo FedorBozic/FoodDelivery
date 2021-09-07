@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import model.Cart;
 import model.CartItem;
 import model.Item;
 import model.Restaurant;
@@ -212,6 +213,50 @@ public class UserController {
     	{
     		currentUser.getRestaurant().getItems().add(item);
     	}
+    	
+    	/*Restaurant restaurant = new Restaurant();
+    	restaurant.setName((String) body.get("name"));
+    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
+    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
+    	restaurant.setLogo((String) body.get("image"));
+    	
+    	restaurantDao.newRestaurant(restaurant);
+    	
+    	User user = userDao.findById((String) body.get("manager"));
+    	user.setRestaurant(restaurant);
+
+    	System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getRestaurant().getName());*/
+    	
+        return response;
+    };
+    
+    public static Route itemToCart = (Request request, Response response) -> {
+    	response.status(200);
+    	
+    	var body = gson.fromJson((request.body()), HashMap.class);
+    	
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+    	
+    	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
+    	Item itemToAdd = r.findItemByName((String) body.get("name"));
+    	int amount = Integer.parseInt((String) body.get("purchase_amount"));
+    	if(amount < 1)
+    		amount = 1;
+    	String image = (String) body.get("image");
+    	
+    	CartItem cartItem = new CartItem(itemToAdd, amount);
+    	
+    	if(currentUser.getCart() == null)
+    	{
+    		currentUser.setCart(new Cart());
+    		currentUser.getCart().setUser(currentUser);
+    	}
+    	
+    	currentUser.getCart().addCartItem(cartItem);
     	
     	/*Restaurant restaurant = new Restaurant();
     	restaurant.setName((String) body.get("name"));
