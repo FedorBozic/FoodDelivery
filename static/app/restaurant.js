@@ -7,6 +7,7 @@ Vue.component('restaurant', {
 				price: '',
 				restaurant: '',
 				type: 'FOOD',
+				amount: '1',
 				description: '',
 			},
 			image: '',
@@ -90,7 +91,19 @@ Vue.component('restaurant', {
 						</div>
 					    <div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
 					    <div class="col-sm-3">
-							<img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/>
+							<div class="row"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+							<div class="row">
+								<div class="col-sm-4 mr-auto">
+									<input type="text" class="discrete-textbox" style="vertical-align: center; height: 100%; margin-top:4px" placeholder="" v-model="item.amount">
+								</div>
+								<div class="col-sm-4">
+									<button class="addtocart" style="margin-top:10px">
+									  	<div class="pretext">
+									    	<h5 style="padding-bottom:0px; margin-bottom:0px">+</h5>
+									  	</div>
+									</button>
+								</div>
+							</div>
 						</div>
 				    </div>
 				</div>
