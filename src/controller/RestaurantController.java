@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import dao.RestaurantDao;
 import dao.UserDao;
 import model.Address;
+import model.Item;
 import model.Location;
 import model.Restaurant;
 import model.RestaurantStatus;
@@ -47,6 +48,13 @@ public class RestaurantController {
     	Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
 		Location tmpLoc = new Location(0, 0, tmpAdd);
     	restaurant.setLocation(tmpLoc);
+    	
+    	Item tmpItem = new Item();
+		tmpItem.setName("Sladoled");
+		tmpItem.setDescription("Lep sladoled");
+		tmpItem.setPrice(300);
+		tmpItem.setType(Item.ItemType.FOOD);
+		restaurant.addItem(tmpItem);
     	
     	restaurantDao.newRestaurant(restaurant);
     	

@@ -71,4 +71,8 @@ public class Restaurant {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
+	
+	public void addItem(Item item) {
+		this.items.add(item);
+	}
 }
