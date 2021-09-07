@@ -187,19 +187,13 @@ public class UserController {
             return response;
         
         }
-        
-    	System.out.println((String) body.get("name"));
-    	System.out.println((String) body.get("type"));
-    	System.out.println((String) body.get("description"));
-    	System.out.println((String) body.get("amount"));
-    	System.out.println((String) body.get("price"));
-    	System.out.println("Image: " + ((String) body.get("image")).substring(0, 100));
     	
     	String name = (String) body.get("name");
     	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
     	String description = (String) body.get("description");
     	float price = Float.parseFloat(((String) body.get("price")));
-    	int amount = Integer.parseInt((String) body.get("amount"));
+    	//int amount = Integer.parseInt((String) body.get("amount"));
+    	int amount = 0;
     	String image = (String) body.get("image");
     	
     	Item item = new Item();
@@ -210,7 +204,14 @@ public class UserController {
     	item.setPrice(price);
     	item.setImage(image);
     	
-    	currentUser.getRestaurant().getItems().add(item);
+    	if(body.get("restaurant") != null && DostavaMain.restaurantDao.findById((String) body.get("restaurant")) != null)
+    	{
+    		DostavaMain.restaurantDao.findById((String) body.get("restaurant")).addItem(item);
+    	}
+    	else
+    	{
+    		currentUser.getRestaurant().getItems().add(item);
+    	}
     	
     	/*Restaurant restaurant = new Restaurant();
     	restaurant.setName((String) body.get("name"));

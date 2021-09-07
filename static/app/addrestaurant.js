@@ -27,7 +27,7 @@ Vue.component('addrestaurant', {
 				
 				    <div class="card-content">
 				      <header class="card-header-restaurant">
-				        <h2><input type="text" class="discrete-textbox" placeholder="Naziv" v-model="name"></h2>
+				        <h2><input type="text" class="discrete-textbox" placeholder="Name" v-model="name"></h2>
 				
 				        <select v-model="type">
 							<option value="ITALIAN">Italijanski</option>

@@ -2,6 +2,14 @@ Vue.component('restaurant', {
     data: function () {
 		return {
 			restaurant: {},
+			itemBeingAdded: {
+				name: '',
+				price: '',
+				restaurant: '',
+				type: 'FOOD',
+				description: '',
+			},
+			image: '',
 			currentUser: null,
 		}
     },
@@ -46,7 +54,30 @@ Vue.component('restaurant', {
 			  <div class="profile-card-inf">
 		        <div class="profile-card__txt"><strong>MENU</strong></div>
 		      </div>
-
+			  
+			  <table class="table table-striped" style="width:100%">
+			  	<tbody>
+			  		<tr>
+						<td><button type="button" v-on:click="addItem">Dodaj</button></td>
+			  			<td><input type="text" placeholder="Name" v-model="itemBeingAdded.name"></td>
+						<td>
+							<select v-model="itemBeingAdded.type">
+								<option value="FOOD">Food</option>
+								<option value="DRINK">Drink</option>
+							</select>
+						</td>
+						<td><input type="text" placeholder="Description" v-model="itemBeingAdded.description"></td>
+						<td><input type="text" placeholder="Cena" v-model="itemBeingAdded.price" style="width:30px"></td>
+						<td>
+							 <label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
+					    		<img v-if="image" :src="'data:image/png;base64,' + image" style="width:60px; height: 60px"/>
+								<img v-else src="/Add_Image.jpg" alt="" style="max-width:60px; max-height:60px;" />
+							 </label>
+							 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
+						</td>
+			  		</tr>
+			  	</tbody>
+			  </table>
 			  <table class="table table-striped" style="width:100%">
 			  	<tbody v-for="item in restaurant.items">
 			  		<tr>
@@ -70,6 +101,36 @@ Vue.component('restaurant', {
 		</div>
 	</div>
 	`,
+	methods : {
+		convertImage: function() {
+        	let file = document.querySelector('#image').files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            let self = this;
+            reader.onload = function () {
+                self.image = reader.result.split(',')[1];
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        },
+
+		addItem: function() {
+        	let self = this;
+        	let newItem = this.itemBeingAdded
+			newItem.image = this.image
+			newItem.restaurant = this.restaurant.uuid
+			console.log("TEST")
+			console.log(this.restaurant.id)
+            axios.post('users/newItem', JSON.stringify(newItem))
+                .then(function (response) {
+					axios.get('users/currentUser')
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
+        },
+	},
     mounted() {
         axios.get('restaurants/' + this.$route.params.id)
         .then(res => {
