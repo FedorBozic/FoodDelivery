@@ -16,7 +16,7 @@ Vue.component('homepage', {
 				    </figure>
 				
 				    <div class="card-content">
-				      <header class="card-header">
+				      <header class="card-header-restaurant">
 				        <h2>{{r.name}}</h2>
 				        <span>{{r.type}}</span>
 				        
