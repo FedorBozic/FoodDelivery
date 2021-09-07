@@ -17,33 +17,26 @@ Vue.component('userview', {
 				<h1 class="h3 mb-3">Users</h1>
 				<div class="row">
 					<div class="col-xl-8">
-						<div class="card">
-							<div class="card-header pb-0">
-								<h5 class="card-title mb-0">Users</h5>
-							</div>
-							<div class="card-body">
-								<table class="table table-striped" style="width:100%">
-									<thead>
-										<tr>
-											<th>Username</th>
-											<th>First Name</th>
-											<th>Last Name</th>
-											<th>Tier</th>
-											<th>Role</th>
-										</tr>
-									</thead>
-									<tbody v-for="user in users">
-										<tr>
-											<td>{{user.username}}</td>
-											<td>{{user.firstName}}</td>
-											<td>{{user.lastName}}</td>
-											<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(user) }">{{user.type.name}}</span></td>
-											<td>{{user.role}}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+						<table class="table table-striped" style="width:100%">
+							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
+								<tr>
+									<th>Username</th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Tier</th>
+									<th>Role</th>
+								</tr>
+							</thead>
+							<tbody v-for="user in users">
+								<tr>
+									<td>{{user.username}}</td>
+									<td>{{user.firstName}}</td>
+									<td>{{user.lastName}}</td>
+									<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(user) }">{{user.type.name}}</span></td>
+									<td>{{user.role}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 		
 					<div class="col-xl-4">
