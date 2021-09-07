@@ -75,6 +75,10 @@ public class UserController {
             if(body.get("role") != null && !((String) body.get("role")).isEmpty())
             {
             	user.setRole(User.Role.valueOf((String) body.get("role")));
+            	if(!((String) body.get("role")).equals("CUSTOMER"))
+            	{
+            		user.setType(DostavaMain.userTypeDao.findByName("STAFF"));
+            	}
             }
             else
             {

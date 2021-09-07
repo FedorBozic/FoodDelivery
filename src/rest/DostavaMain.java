@@ -77,6 +77,7 @@ public class DostavaMain {
 		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
 		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
 		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
+		userTypeDao.addUserType(new UserType("STAFF", -1, -1, "darkgreen", "forestgreen"));
 		userTypeDao.addUserType(new UserType("ADMIN", -1, -1, "royalblue", "dodgerblue"));
 		
 		createDummyData();
