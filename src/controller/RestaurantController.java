@@ -49,13 +49,6 @@ public class RestaurantController {
 		Location tmpLoc = new Location(0, 0, tmpAdd);
     	restaurant.setLocation(tmpLoc);
     	
-    	Item tmpItem = new Item();
-		tmpItem.setName("Sladoled");
-		tmpItem.setDescription("Lep sladoled");
-		tmpItem.setPrice(300);
-		tmpItem.setType(Item.ItemType.FOOD);
-		restaurant.addItem(tmpItem);
-    	
     	restaurantDao.newRestaurant(restaurant);
     	
     	User user = userDao.findById((String) body.get("manager"));
