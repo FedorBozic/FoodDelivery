@@ -20,7 +20,8 @@ Vue.component('restaurant', {
 			itemBorderStyleNoBorder: {
 				margin: '10px', 
 				padding: '10px'
-			}
+			},
+			articlenumber: 0
 		}
     },
     template: `
@@ -46,7 +47,7 @@ Vue.component('restaurant', {
 		        
 		        <div class="profile-card-inf">
 		          <div class="profile-card-inf__item">
-		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__title">{{this.articlenumber}}</div>
 		            <div class="profile-card-inf__txt">Articles</div>
 		          </div>
 		        
@@ -169,6 +170,7 @@ Vue.component('restaurant', {
 		    	if(this.restaurant.items[i].image != null){
 		    		this.restaurant.items[i].image = 'data:image/png;base64,' + this.restaurant.items[i].image;
 		    	}
+				this.articlenumber++;
 		    }
         })
         .catch(err => {
