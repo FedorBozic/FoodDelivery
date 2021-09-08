@@ -87,12 +87,13 @@ public class DostavaMain {
 		tmpItem.setType(Item.ItemType.FOOD);
 		
 		userDao.addUser(defaultCustomer);
+		
 		Restaurant defaultRestaurant = new Restaurant();
 		defaultRestaurant.setName("ftnE Grill");
 		defaultRestaurant.setStatus(RestaurantStatus.OPEN);
 		defaultRestaurant.setType(RestaurantType.GRILL);
 		Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
-		Location tmpLoc = new Location(0, 0, tmpAdd);
+		Location tmpLoc = new Location(45.267136f, 19.833549f, tmpAdd);
 		defaultRestaurant.setLocation(tmpLoc);
 		defaultRestaurant.setManager(defaultManager);
 		defaultManager.setRestaurant(defaultRestaurant);
