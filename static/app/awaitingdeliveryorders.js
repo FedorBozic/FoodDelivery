@@ -16,14 +16,14 @@ Vue.component('awaitingdeliveryorders', {
 								<tr>
 									<th>Username</th>
 									<th>Status</th>
-									<th>Upgrade</th>
+									<th>Request</th>
 								</tr>
 							</thead>
 							<tbody v-for="order in orders">
 								<tr>
 									<td>{{order.customerName}}</td>
 									<td>{{order.status}}</td>
-									<td><button v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
+									<td><button v-on:click="requestDelivery(order)">Request</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -34,15 +34,12 @@ Vue.component('awaitingdeliveryorders', {
 		</div>
     	`,
     	methods: {
-        	upgradeOrderStatus: function (order) {
+        	requestDelivery: function (order) {
         		let self = this;
-	        	axios.put('orders/upgradestatus', JSON.stringify(order))
+        		console.log("here")
+        		axios.post('delivery/requestdelivery/' + self.currentUser.uuid, JSON.stringify(order))
 	                .then(res => {
-	                    axios.get('orders/' + this.$route.params.id)
-		                .then(res => {
-		                	self.orders = res.data;
-		                	window.location.href = "#/orders/" + self.$route.params.id;
-		                })
+	                    window.location.href = "#/awaitingdeliveryorders";
 	                })
 	                .catch(err => {
 	                    alert(err.response.data);
