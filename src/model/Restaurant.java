@@ -29,7 +29,6 @@ public class Restaurant {
 		this.items = items;
 		this.status = status;
 		this.location = location;
-		this.location = location;
 	}
 	
 	public String getName() {

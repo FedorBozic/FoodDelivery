@@ -143,7 +143,7 @@ public class DostavaMain {
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);
 		
-		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
+		get("/api/getRestaurants", RestaurantController.getRestaurants);
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		post("/api/restaurants/newRestaurant", RestaurantController.newRestaurant);
 		get("api/restaurants/:id", RestaurantController.findById);

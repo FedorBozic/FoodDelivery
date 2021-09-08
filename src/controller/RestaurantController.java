@@ -1,8 +1,11 @@
 package controller;
 
 import java.awt.SystemColor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,4 +64,51 @@ public class RestaurantController {
     	
     	return response;
     };
+    
+    public static Route getRestaurants = (Request request, Response response) -> {
+		List<Restaurant> filtered = new ArrayList<Restaurant>();
+		String name = request.queryParams("name");
+		String type = request.queryParams("type");
+		String location = request.queryParams("location");
+		String rating = request.queryParams("rating");
+		
+		//CHECK CAST
+		List<Restaurant> restaurants = new ArrayList<Restaurant>(restaurantDao.getRestaurants().values());
+		
+		for (Restaurant r : restaurants) {
+			filtered.add(r);
+		}
+		
+		System.out.println(type);
+		if(type != null && !type.equals("ALL") && !type.equals("")) {
+			filtered = filtered.stream().filter(r -> r.getType().equals(RestaurantType.valueOf(type))).collect(Collectors.toList());
+		}
+		
+		System.out.println("Name: " + name);
+		if(name != null && !name.equals("")) {
+			filtered = filtered.stream().filter(r -> r.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
+		}
+		
+		System.out.println("Rating: " + rating);
+		//Ignore za sada, treba komentare prvo implementirati
+		/*
+		int ratingVal = Integer.parseInt(rating);
+		if(rating != null && !rating.equals("") && ratingVal <= 5 && ratingVal >= 0) {
+			filtered = filtered.stream().filter(r -> r.getRating().equals(name)).collect(Collectors.toList());
+		}
+		*/
+		
+		//Ne za sada
+		/*
+		if(location != null && !location.equals("")) {
+		}
+		*/
+		
+		return gson.toJson(filtered);
+    };
+
+	public static Route getRestaurants() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

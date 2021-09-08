@@ -2,32 +2,55 @@ Vue.component('homepage', {
     data: function () {
 		return {
 			restaurants: {},
-			currentUser: null
+			currentUser: null,
+			name: '',
+			type: '',
+			location: '',
+			rating: ''
 		}
     },
     template: `
 	<div>
+		<div>
+			<input type="text" placeholder="Naziv" v-model="name">
+			<select v-model="type">
+				<option value="ALL">All</option>
+				<option value="ITALIAN">Italijanski</option>
+				<option value="CHINESE">Kineski</option>
+				<option value="GRILL">Gril</option>
+				<option value="PIZZERIA">Picerija</option>
+			</select>
+			<input type="text" placeholder="Lokacija" v-model="location">
+			<select v-model="rating">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+			<button type="button" v-on:click="getRestaurants">Search</button>
+		</div>
 		<div class="d-flex justify-content-center" style="margin-top:20px">
-	    	<div class="row row-cols-1 row-cols-md-2" style = "width: 85%;">
-		    	<div class="col" v-for="r in restaurants" :key="r.uuid">
+			<div class="row row-cols-1 row-cols-md-2" style = "width: 85%;">
+				<div class="col" v-for="r in restaurants" :key="r.uuid">
 				  <article class="restaurant_card">
-				    <figure class="card-image">
-				      <img :src="r.logo" alt="" />
-				    </figure>
+					<figure class="card-image">
+					  <img :src="r.logo" alt="" />
+					</figure>
 				
-				    <div class="card-content">
-				      <header class="card-header-restaurant">
-				        <h2>{{r.name}}</h2>
-				        <span>{{r.type}}</span>
-				        
-				        <address style="margin-top:10px">
-				          <span class="icon-pin" aria-hidden="true"></span>
-				          {{r.locationLabel}}
-				        </address>
-				      </header>
-				    </div>
+					<div class="card-content">
+					  <header class="card-header-restaurant">
+						<h2>{{r.name}}</h2>
+						<span>{{r.type}}</span>
+						
+						<address style="margin-top:10px">
+						  <span class="icon-pin" aria-hidden="true"></span>
+						  {{r.locationLabel}}
+						</address>
+					  </header>
+					</div>
 				
-				    <button class="card-button" v-on:click="showRestaurant(r.uuid)">View</button>
+					<button class="card-button" v-on:click="showRestaurant(r.uuid)">View</button>
 				  </article>
 				</div>
 			</div>
@@ -45,7 +68,8 @@ Vue.component('homepage', {
             this.$router.push({name: 'Restaurant', params: {'id': id}});
         },
         getRestaurants: function() {
-            axios.get('getRestaurants')
+        	let params = '?' + 'name=' + this.name + '&type=' + this.type + '&location=' + this.location + '&rating=' + this.rating;
+            axios.get('getRestaurants' + params)
             .then(res => {
             	this.restaurants = res.data;
             	for(let rId in this.restaurants){
