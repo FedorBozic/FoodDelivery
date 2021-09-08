@@ -4,11 +4,20 @@ Vue.component('orders', {
         		currentUser: {},
 				restaurant: {},
 				orders: [],
-				requests: []
+				requests: [],
+				restaurantName: '',
+				priceFrom: '',
+				priceTo: ''
        		}
         },
         template: `
         <div class="container">
+		<div>
+			<input type="text" placeholder="Restaurant Name" v-model="restaurantName">
+			<input type="text" placeholder="Price Lower" v-model="priceFrom">
+			<input type="text" placeholder="Price Upper" v-model="priceTo">
+			<button type="button" v-on:click="getOrders">Search</button>
+		</div>
 		    <div class="container-fluid p-0" style="margin-top:100px">
 				<div class="row">
 					<div class="col-xl-8">
@@ -69,6 +78,14 @@ Vue.component('orders', {
 	                .catch(err => {
 	                    alert(err.response.data);
 	                })
+	        },
+	        
+	        getOrders: function() {
+        		let params = '?' + 'restaurantName=' + this.restaurantName + '&priceFrom=' + this.priceFrom + '&priceTo=' + this.priceTo;
+        		axios.get('orders/getorders/' + this.$route.params.id)
+                .then(res => {
+                	self.orders = res.data;
+                })
 	        },
 	        
 	        approveDeliveryRequest: function (deliveryRequest) {
