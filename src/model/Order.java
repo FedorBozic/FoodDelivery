@@ -9,7 +9,7 @@ import rest.DostavaMain;
 
 public class Order {
 	
-	enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELED};
+	public enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELED};
 	
 	private UUID uuid;
 	private List<CartItem> items;

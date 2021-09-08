@@ -1,10 +1,12 @@
 package dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import model.Order;
+import model.Restaurant;
 
 public class OrderDao {
 	private HashMap<UUID, Order> orders = new HashMap<>();
@@ -28,6 +30,30 @@ public class OrderDao {
 	
 	public Order findById(String uuid) {
         return orders.getOrDefault(UUID.fromString(uuid), null);
+    }
+	
+	public List<Order> findByRestaurant(Restaurant r) {
+    	List<Order> tmpStep = orders.values()
+                .stream()
+                .filter(order -> order.getRestaurant().getUuid() == r.getUuid())
+                .collect(Collectors.toList());
+    	return tmpStep;
+    }
+	
+	public List<Order> findByRestaurant(UUID r) {
+    	List<Order> tmpStep = orders.values()
+                .stream()
+                .filter(order -> order.getRestaurant().getUuid() == r)
+                .collect(Collectors.toList());
+    	return tmpStep;
+    }
+	
+	public List<Order> findByRestaurant(String r) {
+    	List<Order> tmpStep = orders.values()
+                .stream()
+                .filter(order -> order.getRestaurant().getUuid().equals(UUID.fromString(r)))
+                .collect(Collectors.toList());
+    	return tmpStep;
     }
 	
 	// ADD

@@ -4,6 +4,7 @@ const Registration = {template: '<registration></registration>'}
 const Login = {template: '<login></login>'}
 const AddRestaurant = {template: '<addrestaurant></addrestaurant>'}
 const Restaurant = {template: '<restaurant></restaurant>'}
+const Orders = {template: '<orders></orders>'}
 const Profile = {template: '<profile></profile>'}
 const Basket = {template: '<basket></basket>'}
 const AddItem = {template: '<additem></additem>'}
@@ -18,6 +19,7 @@ const router = new VueRouter({
 		{path: '/userview', component: UserView},
 		{path: '/addrestaurant', component: AddRestaurant},
 		{path: '/restaurant/:id', name: 'Restaurant', component: Restaurant},
+		{path: '/orders/:id/', name: 'Orders', component: Orders},
 		{path: '/profile', component: Profile},
 		{path: '/basket', component: Basket},
 		{path: '/additem', component: AddItem},
@@ -42,7 +44,11 @@ var app = new Vue({
                 });
 
             window.location.href = "#/";
-        }
+        },
+        showRestaurant: function (id) {
+            let self = this;
+            this.$router.push({name: 'Orders', params: {'id': this.currentUser.restaurant.uuid}});
+        },
     },
     mounted() {
         axios.get('users/currentUser')

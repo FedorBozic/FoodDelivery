@@ -24,6 +24,9 @@ public class OrderController {
             .setPrettyPrinting()
             .create();
 	
+	public static Route findByRestaurant = (Request request, Response response) ->
+		gson.toJson(DostavaMain.orderDao.findByRestaurant(request.params(":id")));
+	
 	public static Route addOrder = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
@@ -48,6 +51,7 @@ public class OrderController {
         newOrder.setUuid(UUID.randomUUID());
         newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
         newOrder.setCustomerName(user.getUsername());
+        newOrder.setStatus(Order.OrderStatus.PROCESSING);
         
         for(CartItem ci : user.getCart().getCartItems())
         {
@@ -55,6 +59,25 @@ public class OrderController {
         }
         DostavaMain.orderDao.addOrder(newOrder);
         user.setCart(null);
+        
+        return response;
+    };
+    
+    public static Route upgradeStatus = (Request request, Response response) -> {
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        response.body("Successful upgrade!");
+        response.status(200);
+        
+        Order order = DostavaMain.orderDao.findById((String) body.get("uuid"));
+        if(order.getStatus().equals(Order.OrderStatus.PROCESSING))
+        	order.setStatus(Order.OrderStatus.PREPARATION);
+        else if(order.getStatus().equals(Order.OrderStatus.PREPARATION))
+        	order.setStatus(Order.OrderStatus.AWAITING_DELIVERY);
+        else if(order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
+        	order.setStatus(Order.OrderStatus.IN_TRANSPORT);
+        else if(order.getStatus().equals(Order.OrderStatus.IN_TRANSPORT))
+        	order.setStatus(Order.OrderStatus.DELIVERED);
         
         return response;
     };

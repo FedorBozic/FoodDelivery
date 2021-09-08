@@ -81,6 +81,8 @@ public class DostavaMain {
 		Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
 		Location tmpLoc = new Location(0, 0, tmpAdd);
 		defaultRestaurant.setLocation(tmpLoc);
+		defaultRestaurant.setManager(defaultManager);
+		defaultManager.setRestaurant(defaultRestaurant);
 		restaurantDao.newRestaurant(defaultRestaurant);
 		
 		tmpItem.setRestaurant(defaultRestaurant);
@@ -127,6 +129,8 @@ public class DostavaMain {
 		
 		get("/api/orders/getorders", (request,response) -> gson.toJson(orderDao.getOrders()));
 		post("/api/orders/checkout", OrderController.addOrder);
+		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
+		get("api/orders/:id", OrderController.findByRestaurant);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
