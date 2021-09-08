@@ -7,7 +7,7 @@ Vue.component('restaurant', {
 				price: '',
 				restaurant: '',
 				type: 'FOOD',
-				amount: '1',
+				amount: 1,
 				purchase_amount: 1,
 				description: '',
 			},

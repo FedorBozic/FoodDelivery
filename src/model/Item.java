@@ -1,5 +1,9 @@
 package model;
 
+import java.util.UUID;
+
+import rest.DostavaMain;
+
 public class Item {
 	
 	public enum ItemType {FOOD, DRINK};
@@ -7,7 +11,7 @@ public class Item {
 	private String name;
 	private float price;
 	private ItemType type;
-	private Restaurant restaurant;
+	private UUID restaurant;
 	private int amount;
 	private String description;
 	private String image; //slika string za sada
@@ -20,7 +24,7 @@ public class Item {
 		this.name = name;
 		this.price = price;
 		this.type = type;
-		this.restaurant = restaurant;
+		this.restaurant = restaurant.getUuid();
 		this.amount = amount;
 		this.description = description;
 		this.image = image;
@@ -51,10 +55,10 @@ public class Item {
 		this.amount = amount;
 	}
 	public Restaurant getRestaurant() {
-		return restaurant;
+		return DostavaMain.restaurantDao.findById(restaurant);
 	}
 	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
+		this.restaurant = restaurant.getUuid();
 	}
 	public String getDescription() {
 		return description;

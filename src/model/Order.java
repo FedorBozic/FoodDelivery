@@ -2,13 +2,13 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 public class Order {
 	
 	enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELED};
 	
-	private String id;
+	private UUID uuid;
 	private List<Item> items;
 	private Restaurant restaurant;
 	private LocalDateTime dateTime;
@@ -16,10 +16,8 @@ public class Order {
 	private String customerName;
 	private OrderStatus status;
 	
-	private static String idChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	
-	public Order(String id, List<Item> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
-		this.id = id;
+	public Order(UUID uuid, List<Item> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
+		this.uuid = uuid;
 		this.items = items;
 		this.restaurant = restaurant;
 		this.dateTime = dateTime;
@@ -29,7 +27,7 @@ public class Order {
 	}
 	
 	public Order(List<Item> items, Restaurant restaurant, LocalDateTime dateTime, String customerName, OrderStatus status) {
-		this.id = generateId(); //za sada random?
+		this.uuid = UUID.randomUUID(); //za sada random?
 		this.items = items;
 		this.restaurant = restaurant;
 		this.dateTime = dateTime;
@@ -42,21 +40,15 @@ public class Order {
 		this.status = status;
 	}
 	
-	private String generateId() {
-		String id = "";
-		int idSize = 10;
-		for(int i = 0; i < idSize; i++) {
-			int index = ThreadLocalRandom.current().nextInt(0, 62);
-			id += idChars.charAt(index);
-		}
-		return id;
+	public Order() {
+		// TODO Auto-generated constructor stub
 	}
-	
-	public String getId() {
-		return id;
+
+	public UUID getUuid() {
+		return uuid;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 	public Restaurant getRestaurant() {
 		return restaurant;

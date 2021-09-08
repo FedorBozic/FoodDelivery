@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import controller.OrderController;
 import controller.RestaurantController;
 import controller.UserController;
 import dao.UserDao;
@@ -69,13 +70,6 @@ public class DostavaMain {
 		tmpItem.setDescription("Lep sladoled");
 		tmpItem.setPrice(300);
 		tmpItem.setType(Item.ItemType.FOOD);
-		CartItem tmpCartItem = new CartItem(tmpItem, 4);
-		List<CartItem> tmpCartItemList = new ArrayList<CartItem>();
-		tmpCartItemList.add(tmpCartItem);
-		Cart tmpCart = new Cart();
-		tmpCart.setCartItems(tmpCartItemList);
-		
-		defaultCustomer.setCart(tmpCart);
 		
 		userDao.addUser(defaultCustomer);
 		Restaurant defaultRestaurant = new Restaurant();
@@ -86,6 +80,11 @@ public class DostavaMain {
 		Location tmpLoc = new Location(0, 0, tmpAdd);
 		defaultRestaurant.setLocation(tmpLoc);
 		restaurantDao.newRestaurant(defaultRestaurant);
+		
+		tmpItem.setRestaurant(defaultRestaurant);
+		defaultRestaurant.addItem(tmpItem);
+		
+		defaultCustomer.addCartItem(tmpItem, 4);
 	}
 	
 	public static void main(String[] args) {
@@ -123,6 +122,8 @@ public class DostavaMain {
 		get("/api/users/getCart", UserController.getCart);
 		post("/api/users/newItem", UserController.newItemToRestaurant);
 		post("/api/users/itemToCart", UserController.itemToCart);
+		
+		post("/api/orders/checkout", OrderController.addOrder);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));

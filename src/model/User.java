@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -235,4 +236,19 @@ public class User {
 		this.type = type;
 	}
 	
+	public void addCartItem(Item item) {
+		CartItem tmpCartItem = new CartItem(item, 1);
+		if(cart == null)
+			cart = new Cart();
+		
+		cart.addCartItem(tmpCartItem);
+	}
+	
+	public void addCartItem(Item item, int amount) {
+		CartItem tmpCartItem = new CartItem(item, amount);
+		if(cart == null)
+			cart = new Cart();
+		
+		cart.addCartItem(tmpCartItem);
+	}
 }

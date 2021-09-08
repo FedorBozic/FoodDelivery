@@ -9,7 +9,7 @@ public class Cart {
 	private float price;
 	
 	public Cart() {
-		
+		cartItems = new ArrayList<>();
 	}
 	
 	public Cart(List<CartItem> cartItems, User user) {

@@ -38,6 +38,7 @@ Vue.component('basket', {
 							</div>
 							<div class="card-body" style="background: -webkit-gradient(linear, left top, right top, from(darkgreen), to(forestgreen)); background: linear-gradient(to right, darkgreen, forestgreen); color:white">
 								<h4><strong>CHECKOUT</strong></h4>
+								<input type="button" value="Register" class="generic_button" v-on:click="checkout()"/>
 							</div>
 						</div>
 					</div>
@@ -88,6 +89,17 @@ Vue.component('basket', {
                 console.log('Error: ', error);
             };
         },
+        
+        checkout: function () {
+            let self = this;
+            axios.post('orders/checkout', JSON.stringify(this.currentUser))
+                .then(function (response) {
+                
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
+        }
     },
     mounted() {
         axios.get('users/currentUser')

@@ -43,4 +43,8 @@ public class RestaurantDao {
     public Restaurant findById(String id) {
         return restaurants.getOrDefault(UUID.fromString(id), null);
     }
+
+	public Restaurant findById(UUID id) {
+		return restaurants.getOrDefault(id, null);
+	}
 }
