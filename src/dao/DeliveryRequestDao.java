@@ -35,11 +35,31 @@ public class DeliveryRequestDao {
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
                 .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(UUID.fromString(u)))
+                .filter(deliveryRequest -> !deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}
 	
 	public List<DeliveryRequest> getDeliveryRequestsByDeliverer(UUID u)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(u))
+                .filter(deliveryRequest -> !deliveryRequest.isApproved())
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
+	
+	public List<DeliveryRequest> getDeliveriesByDeliverer(String u)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(UUID.fromString(u)))
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
+	
+	public List<DeliveryRequest> getDeliveriesByDeliverer(UUID u)
 	{
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()

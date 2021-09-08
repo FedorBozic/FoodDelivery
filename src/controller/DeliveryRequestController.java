@@ -44,6 +44,25 @@ public class DeliveryRequestController {
     	return gson.toJson(userDeliveries);
     };
     
+    public static Route getDeliveriesByUser = (Request request, Response response) -> {
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        response.body("Successfully received deliveries!");
+        response.status(200);
+        
+        User user = DostavaMain.userDao.findById(request.params(":id"));
+        if(user == null)
+        {
+        	response.body("You are not logged in!");
+            response.status(400);
+            return response;
+        }
+        
+        List<DeliveryRequest> userDeliveries = DostavaMain.deliveryRequestDao.getDeliveriesByDeliverer(user.getUuid());
+        
+    	return gson.toJson(userDeliveries);
+    };
+    
     public static Route getDeliveryRequestsByRestaurant = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
