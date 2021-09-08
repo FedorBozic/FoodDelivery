@@ -22,11 +22,7 @@ Vue.component('orders', {
 							<tbody v-for="order in orders">
 								<tr>
 									<td>{{order.customerName}}</td>
-								</tr>
-								<tr>
 									<td>{{order.status}}</td>
-								</tr>
-								<tr>
 									<td><button v-if="currentUser.role && (((order.status === 'PROCESSING' || order.status === 'PREPARATION') && currentUser.role === 'MANAGER') || ((order.status === 'AWAITING_DELIVERY' || order.status === 'IN_TRANSPORT') && currentUser.role === 'DELIVERY'))" v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
 								</tr>
 							</tbody>

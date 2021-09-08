@@ -35,7 +35,7 @@ public class OrderDao {
 	public List<Order> findByRestaurant(Restaurant r) {
     	List<Order> tmpStep = orders.values()
                 .stream()
-                .filter(order -> order.getRestaurant().getUuid() == r.getUuid())
+                .filter(order -> order.getRestaurant().getUuid().equals(r.getUuid()))
                 .collect(Collectors.toList());
     	return tmpStep;
     }

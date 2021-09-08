@@ -21,7 +21,7 @@ const router = new VueRouter({
 		{path: '/addrestaurant', component: AddRestaurant},
 		{path: '/restaurant/:id', name: 'Restaurant', component: Restaurant},
 		{path: '/orders/:id/', name: 'Orders', component: Orders},
-		{path: '/orders/awaitingdeliveryorders', component: AwaitingDeliveryOrders},
+		{path: '/awaitingdeliveryorders', component: AwaitingDeliveryOrders},
 		{path: '/profile', component: Profile},
 		{path: '/basket', component: Basket},
 		{path: '/additem', component: AddItem},

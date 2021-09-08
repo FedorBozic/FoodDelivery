@@ -22,11 +22,7 @@ Vue.component('awaitingdeliveryorders', {
 							<tbody v-for="order in orders">
 								<tr>
 									<td>{{order.customerName}}</td>
-								</tr>
-								<tr>
 									<td>{{order.status}}</td>
-								</tr>
-								<tr>
 									<td><button v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
 								</tr>
 							</tbody>
@@ -60,8 +56,7 @@ Vue.component('awaitingdeliveryorders', {
         	axios.get('users/currentUser')
             .then(res => {
 				self.currentUser = res.data
-                axios.get('orders/gettransitorders')
-				console.log("got here")
+                axios.get('orders/awaitingdeliveryorders')
                 .then(res => {
                 	self.orders = res.data;
                 })
