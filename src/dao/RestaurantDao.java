@@ -33,7 +33,8 @@ public class RestaurantDao {
                 .filter(userInBase -> userInBase.getName().equals(restaurant.getName()))
                 .collect(Collectors.toList());
         if (alreadyExisting.size() == 0) {
-        	restaurant.setUuid(UUID.randomUUID());
+        	if(restaurant.getUuid() == null)
+        		restaurant.setUuid(UUID.randomUUID());
         	restaurants.put(restaurant.getUuid(), restaurant);
             return restaurant;
         }

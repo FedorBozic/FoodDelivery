@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import rest.DostavaMain;
+
 public class Restaurant {
 	
 	private UUID uuid;
@@ -13,12 +15,15 @@ public class Restaurant {
 	private RestaurantStatus status;
 	private Location location;
 	private String logo;
+	private UUID manager;
 	
 	public Restaurant() {
+		this.uuid = UUID.randomUUID();
 		items = new ArrayList<Item>();
 	}
 	
 	public Restaurant(UUID uuid, String name, RestaurantType type, List<Item> items, RestaurantStatus status, Location location, String logo) {
+		this.uuid = UUID.randomUUID();
 		this.name = name;
 		this.type = type;
 		this.items = items;
@@ -72,6 +77,22 @@ public class Restaurant {
 		this.uuid = uuid;
 	}
 	
+	public User getManager() {
+		return DostavaMain.userDao.findById(manager);
+	}
+
+	public void setManager(UUID manager) {
+		this.manager = manager;
+	}
+	
+	public void setManager(String manager) {
+		this.manager = UUID.fromString(manager);
+	}
+	
+	public void setManager(User manager) {
+		this.manager = manager.getUuid();
+	}
+
 	public void addItem(Item item) {
 		this.items.add(item);
 	}

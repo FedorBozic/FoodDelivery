@@ -47,6 +47,7 @@ public class OrderController {
         Order newOrder = new Order();
         newOrder.setUuid(UUID.randomUUID());
         newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
+        newOrder.setCustomerName(user.getUsername());
         
         for(CartItem ci : user.getCart().getCartItems())
         {

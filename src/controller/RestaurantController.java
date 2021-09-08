@@ -43,6 +43,8 @@ public class RestaurantController {
     	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
     	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
     	restaurant.setLogo((String) body.get("image"));
+    	restaurant.setManager((String) body.get("manager"));
+    	DostavaMain.userDao.findById((String) body.get("manager")).setRestaurant(restaurant);
     	
     	// TEMPORARNO, UKLONITI POSLE
     	Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
@@ -51,10 +53,11 @@ public class RestaurantController {
     	
     	restaurantDao.newRestaurant(restaurant);
     	
-    	User user = userDao.findById((String) body.get("manager"));
-    	user.setRestaurant(restaurant);
-
-    	System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getRestaurant().getName());
+    	System.out.println(restaurant.getUuid());
+    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getRestaurant().getUuid());
+    	
+    	System.out.println(restaurant.getManager().getUuid());
+    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getUuid());
     	
     	return response;
     };

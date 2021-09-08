@@ -63,7 +63,7 @@ Vue.component('restaurant', {
 		          </div>
 		        </div>
 			    
-			    <table class="table table-striped" style="width:100%" v-if="$root.isSignedIn && $root.currentUser.role == 'ADMIN'">
+			    <table class="table table-striped" style="width:100%" v-if="$root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager))">
 			    	<tbody>
 			    		<tr>
 			  			<td><button type="button" v-on:click="addItem">Dodaj</button></td>
