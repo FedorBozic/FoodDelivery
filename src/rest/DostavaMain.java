@@ -138,7 +138,7 @@ public class DostavaMain {
 		post("/api/users/newItem", UserController.newItemToRestaurant);
 		post("/api/users/itemToCart", UserController.itemToCart);
 		
-		get("/api/orders/getorders", OrderController.getOrders);
+		get("/api/orders/getorders/:id", OrderController.getOrders);
 		get("/api/orders/awaitingdeliveryorders", (request,response) -> gson.toJson(orderDao.getTransitOrders()));
 		post("/api/orders/checkout", OrderController.addOrder);
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);

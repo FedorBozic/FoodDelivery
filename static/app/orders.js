@@ -64,7 +64,7 @@ Vue.component('orders', {
 	        
         	getOrders: function() {
         		let params = '?' + 'restaurantName=' + this.restaurantName + '&priceFrom=' + this.priceFrom + '&priceTo=' + this.priceTo;
-        		axios.get('orders/getorders' + this.$route.params.id + params)
+        		axios.get('orders/getorders/' + this.$route.params.id)
                 .then(res => {
                 	self.orders = res.data;
                 })
