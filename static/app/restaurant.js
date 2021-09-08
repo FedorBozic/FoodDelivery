@@ -27,7 +27,8 @@ Vue.component('restaurant', {
 				margin: '10px', 
 				padding: '10px'
 			},
-			articlenumber: 0
+			articlenumber: 0,
+			editingItem: {}
 		}
     },
     template: `
@@ -100,10 +101,19 @@ Vue.component('restaurant', {
 					</div>
 				    <div class="row" v-for="(item,index) in restaurant.items" v-bind:style="[(index < restaurant.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
 					    <div class="col-sm-7 mr-auto">
-							<div class="row"><h4><strong>{{item.name}}</strong></h4></div>
-							<div class="row" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
+							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h4><strong>{{item.name}}</strong></h4></div>
+							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="width: 200px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="editingItem.name" ></strong></h2></div>
+							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
+							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><input type="text" class="discrete-textbox" style="width:250px; height:100px" v-model="editingItem.description" ></div>
+							<div v-if="editingItem.uuid && editingItem.uuid === item.uuid">
+								<select v-model="editingItem.type">
+				  					<option value="FOOD">Food</option>
+				  					<option value="DRINK">Drink</option>
+				  				</select>
+							</div>
 						</div>
-					    <div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-2" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.price" >$</strong></h2></div>
 					    <div class="col-sm-3">
 							<div class="row"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'">
@@ -114,6 +124,24 @@ Vue.component('restaurant', {
 									<button class="addtocart" style="margin-top:10px" v-on:click="addItemToCart(item)">
 									  	<div class="pretext">
 									    	<h5 style="padding-bottom:0px; margin-bottom:0px">+</h5>
+									  	</div>
+									</button>
+								</div>
+							</div>
+							<div class="row" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)">
+								<div class="col-sm-4">
+									<button class="generic_button" style="margin-top:10px" v-on:click="activateEditMode(item)">
+									  	<div class="pretext">
+									    	<h5 style="padding-bottom:0px; margin-bottom:0px">EDIT</h5>
+									  	</div>
+									</button>
+								</div>
+							</div>
+							<div class="row" v-if="$root.isSignedIn && editingItem && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid">
+								<div class="col-sm-4">
+									<button class="generic_button" style="margin-top:10px" v-on:click="deactivateEditMode(item)">
+									  	<div class="pretext">
+									    	<h5 style="padding-bottom:0px; margin-bottom:0px">OK</h5>
 									  	</div>
 									</button>
 								</div>
@@ -216,6 +244,14 @@ Vue.component('restaurant', {
                     alert(error.response.data);
                 });
 			window.location.href = "#/";
+        },
+        
+        activateEditMode: function(item) {
+        	this.editingItem = item
+        },
+        
+        deactivateEditMode: function(item) {
+        	this.editingItem = {}
         },
 	},
     mounted() {
