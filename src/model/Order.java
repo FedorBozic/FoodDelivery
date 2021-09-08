@@ -1,47 +1,47 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import rest.DostavaMain;
 
 public class Order {
 	
 	enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELED};
 	
 	private UUID uuid;
-	private List<Item> items;
-	private Restaurant restaurant;
+	private List<CartItem> items;
+	private UUID restaurant;
 	private LocalDateTime dateTime;
 	private float price;
 	private String customerName;
 	private OrderStatus status;
 	
-	public Order(UUID uuid, List<Item> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
+	public Order(UUID uuid, List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
 		this.uuid = uuid;
 		this.items = items;
-		this.restaurant = restaurant;
+		this.restaurant = restaurant.getUuid();
 		this.dateTime = dateTime;
 		this.price = price;
 		this.customerName = customerName;
 		this.status = status;
 	}
 	
-	public Order(List<Item> items, Restaurant restaurant, LocalDateTime dateTime, String customerName, OrderStatus status) {
+	public Order(List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, String customerName, OrderStatus status) {
 		this.uuid = UUID.randomUUID(); //za sada random?
 		this.items = items;
-		this.restaurant = restaurant;
+		this.restaurant = restaurant.getUuid();
 		this.dateTime = dateTime;
 		float totalPrice = 0;
-		for (Item i : items) {
-			totalPrice += i.getPrice();
-		}
 		this.price = totalPrice;
 		this.customerName = customerName;
 		this.status = status;
 	}
 	
 	public Order() {
-		// TODO Auto-generated constructor stub
+		items = new ArrayList<>();
 	}
 
 	public UUID getUuid() {
@@ -51,15 +51,15 @@ public class Order {
 		this.uuid = uuid;
 	}
 	public Restaurant getRestaurant() {
-		return restaurant;
+		return DostavaMain.restaurantDao.findById(restaurant);
 	}
 	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
+		this.restaurant = restaurant.getUuid();
 	}
-	public List<Item> getItems() {
+	public List<CartItem> getItems() {
 		return items;
 	}
-	public void setItems(List<Item> items) {
+	public void setItems(List<CartItem> items) {
 		this.items = items;
 	}
 	public LocalDateTime getDateTime() {
@@ -85,5 +85,16 @@ public class Order {
 	}
 	public void setStatus(OrderStatus status) {
 		this.status = status;
+	}
+	
+	public void addItem(CartItem item)
+	{
+		items.add(item);
+	}
+	
+	public void addItem(Item item, int amount)
+	{
+		CartItem tmpCartItem = new CartItem(item, amount);
+		items.add(tmpCartItem);
 	}
 }

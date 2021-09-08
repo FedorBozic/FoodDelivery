@@ -84,7 +84,7 @@ public class DostavaMain {
 		tmpItem.setRestaurant(defaultRestaurant);
 		defaultRestaurant.addItem(tmpItem);
 		
-		defaultCustomer.addCartItem(tmpItem, 4);
+		//defaultCustomer.addCartItem(tmpItem, 4);
 	}
 	
 	public static void main(String[] args) {

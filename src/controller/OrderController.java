@@ -46,43 +46,13 @@ public class OrderController {
         
         Order newOrder = new Order();
         newOrder.setUuid(UUID.randomUUID());
-        //newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
-        System.out.println(newOrder.getRestaurant().getUuid());
+        newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
         
         for(CartItem ci : user.getCart().getCartItems())
         {
-        	//user.setCart(null);
-        	
+        	newOrder.addItem(ci);
         }
-        
-        /*User user = new User();
-        List<Order> createdOrders = new ArrayList();
-        try {
-        	user.setUsername((String) body.get("username"));
-        	user.setPassword((String) body.get("password"));
-            user.setFirstName((String) body.get("firstName"));
-            user.setLastName((String) body.get("lastName"));
-            user.setGender(User.Gender.valueOf((String) body.get("gender")));
-            user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
-            if(body.get("role") != null && !((String) body.get("role")).isEmpty())
-            {
-            	user.setRole(User.Role.valueOf((String) body.get("role")));
-            	if(!((String) body.get("role")).equals("CUSTOMER"))
-            	{
-            		user.setType(DostavaMain.userTypeDao.findByName("STAFF"));
-            	}
-            }
-            else
-            {
-            	user.setRole(User.Role.valueOf("CUSTOMER"));
-            }
-            
-            User addedUser = DostavaMain.userDao.addUser(user);
-        } catch (Exception e) {
-            response.body("Not all fields have been filled!");
-            response.status(400);
-            return response;
-        }*/
+        user.setCart(null);
         
         return response;
     };

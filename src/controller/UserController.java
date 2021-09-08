@@ -243,7 +243,7 @@ public class UserController {
     	
     	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
     	Item itemToAdd = r.findItemByName((String) body.get("name"));
-    	int amount;
+    	/*int amount;
     	if(body.get("purchase_amount") == null || ((String) body.get("purchase_amount")).isEmpty())
     	{
     		amount = 1;
@@ -253,9 +253,9 @@ public class UserController {
     		amount = Integer.parseInt((String) body.get("purchase_amount"));
     	}
     	if(amount < 1)
-    		amount = 1;
-    	String image = (String) body.get("image");
+    		amount = 1;*/
     	
+    	int amount = 1;
     	CartItem cartItem = new CartItem(itemToAdd, amount);
     	
     	if(currentUser.getCart() == null)

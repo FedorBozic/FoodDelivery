@@ -2,10 +2,13 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import rest.DostavaMain;
 
 public class Cart {
 	private List<CartItem> cartItems;
-	private User user;
+	private UUID user;
 	private float price;
 	
 	public Cart() {
@@ -14,7 +17,7 @@ public class Cart {
 	
 	public Cart(List<CartItem> cartItems, User user) {
 		this.cartItems = cartItems;
-		this.user = user;
+		this.user = user.getUuid();
 		this.price = 0;
 		for (CartItem ci : cartItems) {
 			this.price += ci.getItem().getPrice();
@@ -23,7 +26,7 @@ public class Cart {
 	
 	public Cart(User user) {
 		this.cartItems = new ArrayList<CartItem>();
-		this.user = user;
+		this.user = user.getUuid();
 		this.price = 0;
 	}
 	
@@ -34,10 +37,10 @@ public class Cart {
 		this.cartItems = cartItems;
 	}
 	public User getUser() {
-		return user;
+		return DostavaMain.userDao.findById(user);
 	}
 	public void setUser(User user) {
-		this.user = user;
+		this.user = user.getUuid();
 	}
 	public float getPrice() {
 		return price;

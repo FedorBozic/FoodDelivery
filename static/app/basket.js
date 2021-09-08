@@ -94,7 +94,7 @@ Vue.component('basket', {
             let self = this;
             axios.post('orders/checkout', JSON.stringify(this.currentUser))
                 .then(function (response) {
-                
+                	window.location.href = "#/basket";
                 })
                 .catch(function (error) {
                     alert(error.response.data);
