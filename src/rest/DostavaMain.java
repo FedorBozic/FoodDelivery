@@ -15,6 +15,7 @@ import controller.OrderController;
 import controller.RestaurantController;
 import controller.UserController;
 import dao.UserDao;
+import dao.OrderDao;
 import dao.RestaurantDao;
 import model.Address;
 import model.Cart;
@@ -34,6 +35,7 @@ public class DostavaMain {
 	public static UserDao userDao = new UserDao();
 	public static UserTypeDao userTypeDao = new UserTypeDao();
 	public static RestaurantDao restaurantDao = new RestaurantDao();
+	public static OrderDao orderDao = new OrderDao();
 	
 	private static void createDummyData() {
 		User defaultAdmin = new User();
@@ -123,6 +125,7 @@ public class DostavaMain {
 		post("/api/users/newItem", UserController.newItemToRestaurant);
 		post("/api/users/itemToCart", UserController.itemToCart);
 		
+		get("/api/orders/getorders", (request,response) -> gson.toJson(orderDao.getOrders()));
 		post("/api/orders/checkout", OrderController.addOrder);
 		
 		get("/api/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));

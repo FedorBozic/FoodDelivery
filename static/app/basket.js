@@ -79,6 +79,16 @@ Vue.component('basket', {
             })
         },
         
+        getOrders: function () {
+        	axios.get('orders/getorders')
+            .then(res => {
+            	this.orders = res.data;
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        },
+        
         convertImage: function() {
         	let file = document.querySelector('#image').files[0];
             let reader = new FileReader();
@@ -139,6 +149,7 @@ Vue.component('basket', {
 		    	}
 		    	else {
                 	this.getCart();
+                	this.getOrders();
                 }
             })
             .catch(err => {

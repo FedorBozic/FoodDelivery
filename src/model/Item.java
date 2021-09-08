@@ -5,6 +5,7 @@ import java.util.UUID;
 import rest.DostavaMain;
 
 public class Item {
+	private UUID uuid;
 	
 	public enum ItemType {FOOD, DRINK};
 	
@@ -17,10 +18,11 @@ public class Item {
 	private String image; //slika string za sada
 	
 	public Item() {
-		
+		this.uuid = UUID.randomUUID();
 	}
 	
 	public Item(String name, float price, ItemType type, Restaurant restaurant, int amount, String description, String image) {
+		this.uuid = UUID.randomUUID();
 		this.name = name;
 		this.price = price;
 		this.type = type;
@@ -30,6 +32,14 @@ public class Item {
 		this.image = image;
 	}
 	
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
 	public String getName() {
 		return name;
 	}

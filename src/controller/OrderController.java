@@ -52,6 +52,7 @@ public class OrderController {
         {
         	newOrder.addItem(ci);
         }
+        DostavaMain.orderDao.addOrder(newOrder);
         user.setCart(null);
         
         return response;

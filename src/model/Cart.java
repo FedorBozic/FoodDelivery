@@ -50,6 +50,17 @@ public class Cart {
 	}
 	public void addCartItem(CartItem item)
 	{
+		if(this.cartItems != null && this.cartItems.size() > 0)
+		{
+			for(CartItem c : this.cartItems)
+			{
+				if(c.getItem().getUuid() == item.getItem().getUuid())
+				{
+					c.setCount(c.getCount() + item.getCount());
+					return;
+				}
+			}
+		}
 		this.cartItems.add(item);
 	}
 }
