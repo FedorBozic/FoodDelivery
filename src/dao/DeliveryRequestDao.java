@@ -39,6 +39,15 @@ public class DeliveryRequestDao {
     	return tmpStep;
 	}
 	
+	public List<DeliveryRequest> getDeliveryRequestsByDeliverer(UUID u)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(u))
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
+	
 	public DeliveryRequest findById(String uuid) {
         return deliveryRequests.getOrDefault(UUID.fromString(uuid), null);
     }

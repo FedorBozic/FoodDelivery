@@ -146,6 +146,7 @@ public class DostavaMain {
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);
 		
+		get("/api/delivery/userdeliveries/:id", DeliveryRequestController.getDeliveryRequestsByUser);
 		post("/api/delivery/requestdelivery/:id", DeliveryRequestController.addDeliveryRequest);
 		
 		get("/api/getRestaurants", RestaurantController.getRestaurants);
