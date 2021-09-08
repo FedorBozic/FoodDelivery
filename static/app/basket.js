@@ -2,6 +2,7 @@ Vue.component('basket', {
     data: function () {
 		return {
 			cart: {},
+			orders: [],
 			currentUser: null,
 			totalprice: 0
 		}
@@ -11,7 +12,7 @@ Vue.component('basket', {
 		<div class="row">
 		    <div class="container-fluid p-0" style="margin-top:100px">
 				<div class="row">
-					<div class="col-xl-8">
+					<div class="col-xl-8" v-if="cart">
 						<table class="table table-striped" style="width:100%">
 							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
 								<tr>
@@ -59,17 +60,19 @@ Vue.component('basket', {
             .then(res => {
             	this.cart = res.data;
 				
-            	for(let ciId in this.cart.cartItems){
-            		let ci = this.cart.cartItems[ciId];
-            		this.totalprice += (ci.count*ci.item.price)
-            		if(ci.image != null){
-            			ci.image = 'data:image/png;base64,' + ci.image;
-            		}
-            		else{
-            			ci.image = '';
-            		}
-            	}
-                console.log(res);
+				if(this.cart != null && this.cart.cartItems != null)
+				{
+	            	for(let ciId in this.cart.cartItems){
+	            		let ci = this.cart.cartItems[ciId];
+	            		this.totalprice += (ci.count*ci.item.price)
+	            		if(ci.image != null){
+	            			ci.image = 'data:image/png;base64,' + ci.image;
+	            		}
+	            		else{
+	            			ci.image = '';
+	            		}
+	            	}
+                }
             })
             .catch(err => {
                 console.error(err);
@@ -94,7 +97,27 @@ Vue.component('basket', {
             let self = this;
             axios.post('orders/checkout', JSON.stringify(this.currentUser))
                 .then(function (response) {
-                	window.location.href = "#/basket";
+                	axios.get('users/getCart')
+		            .then(res => {
+		            	self.cart = res.data;
+						if(self.cart != null && self.cart.cartItems != null)
+						{
+			            	for(let ciId in self.cart.cartItems){
+			            		let ci = self.cart.cartItems[ciId];
+			            		self.totalprice += (ci.count*ci.item.price)
+			            		if(ci.image != null){
+			            			ci.image = 'data:image/png;base64,' + ci.image;
+			            		}
+			            		else{
+			            			ci.image = '';
+			            		}
+			            	}
+		            	}
+		                window.location.href = "#/basket";
+		            })
+		            .catch(err => {
+		                console.error(err);
+		            })
                 })
                 .catch(function (error) {
                     alert(error.response.data);
@@ -102,19 +125,19 @@ Vue.component('basket', {
         }
     },
     mounted() {
+    	let self = this
         axios.get('users/currentUser')
             .then(res => {
-            	this.currentUser = res.data;
-            	if(this.currentUser == null)
+            	self.currentUser = res.data;
+            	if(self.currentUser == null)
 		    	{
 		    		window.location.href = "#/registration";
 		    	}
-		    	else if(this.currentUser.role != 'CUSTOMER')
+		    	else if(self.currentUser.role != 'CUSTOMER')
 		    	{
 		    		window.location.href = "#/registration";
 		    	}
 		    	else {
-                	console.log(res);
                 	this.getCart();
                 }
             })
