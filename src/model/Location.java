@@ -1,27 +1,27 @@
 package model;
 
 public class Location {
-	private float hCoordinate;
-	private float vCoordinate;
+	private float latitude;
+	private float longitude;
 	private Address address;
 	
-	public Location(float hCoordinate, float vCoordinate, Address address) {
-		this.hCoordinate = hCoordinate;
-		this.vCoordinate = vCoordinate;
+	public Location(float latitude, float longitude, Address address) {
+		this.latitude = latitude;
+		this.longitude = longitude;
 		this.address = address;
 	}
 	
-	public float getvCoordinate() {
-		return vCoordinate;
+	public float getLongitude() {
+		return longitude;
 	}
-	public void setvCoordinate(float vCoordinate) {
-		this.vCoordinate = vCoordinate;
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
 	}
-	public float gethCoordinate() {
-		return hCoordinate;
+	public float getLatitude() {
+		return latitude;
 	}
-	public void sethCoordinate(float hCoordinate) {
-		this.hCoordinate = hCoordinate;
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
 	}
 	public Address getAddress() {
 		return address;

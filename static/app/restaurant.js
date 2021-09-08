@@ -1,7 +1,11 @@
 Vue.component('restaurant', {
     data: function () {
 		return {
-			restaurant: {},
+			restaurant: {
+				location: {
+					address: {}
+				}
+			},
 			itemBeingAdded: {
 				name: '',
 				price: '',
@@ -11,6 +15,7 @@ Vue.component('restaurant', {
 				purchase_amount: 1,
 				description: '',
 			},
+			mapPosition: {latitude: 45.267136, longitude: 19.833549},
 			image: '',
 			currentUser: null,
 			itemBorderStyle: {
@@ -34,6 +39,8 @@ Vue.component('restaurant', {
 		    </div>
 		
 		    <div class="profile-card__cnt js-profile-cnt">
+	    		<div class="col map" id="map">
+				</div>
 		        <div class="profile-card__name">{{restaurant.name}}</div>
 		        <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
 		        <div class="profile-card-loc">
@@ -143,6 +150,31 @@ Vue.component('restaurant', {
                 console.log('Error: ', error);
             };
         },
+        
+        showOnMap: function () {
+            let self = this;
+            self.mapPosition.latitude = parseFloat(this.restaurant.location.latitude);
+            self.mapPosition.longitude = parseFloat(this.restaurant.location.longitude);
+            self.restaurant.latitude = self.mapPosition.latitude;
+            self.restaurant.longitude = self.mapPosition.longitude;
+
+            console.log(self.mapPosition.latitude);
+            console.log(self.mapPosition.longitude);
+            let map = new ol.Map({
+                target: 'map',
+                interactions: [],
+                controls: [],
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([self.mapPosition.longitude, self.mapPosition.latitude]),
+                    zoom: 17
+                })
+            });
+        },
 
 		addItem: function() {
         	let self = this;
@@ -190,6 +222,7 @@ Vue.component('restaurant', {
         axios.get('restaurants/' + this.$route.params.id)
         .then(res => {
             this.restaurant = res.data;
+            this.showOnMap();
 			if(this.restaurant != null && this.restaurant.logo != null){
             	this.restaurant.logo = 'data:image/png;base64,' + this.restaurant.logo;
             }
