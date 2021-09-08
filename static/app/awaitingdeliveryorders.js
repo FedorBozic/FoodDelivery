@@ -53,7 +53,7 @@ Vue.component('awaitingdeliveryorders', {
         	axios.get('users/currentUser')
             .then(res => {
 				self.currentUser = res.data
-                axios.get('orders/awaitingdeliveryorders')
+                axios.get('orders/awaitingdeliveryorders/' + self.currentUser.uuid)
                 .then(res => {
                 	self.orders = res.data;
                 })

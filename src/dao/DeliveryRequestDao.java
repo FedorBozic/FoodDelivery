@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import model.DeliveryRequest;
 import model.Order;
 import model.Restaurant;
+import model.User;
 
 public class DeliveryRequestDao {
 	private HashMap<UUID, DeliveryRequest> deliveryRequests = new HashMap<>();
@@ -28,6 +29,15 @@ public class DeliveryRequestDao {
 	}
 	
 	// SEARCHES
+	
+	public List<DeliveryRequest> getDeliveryRequestsByDeliverer(String u)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(UUID.fromString(u)))
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
 	
 	public DeliveryRequest findById(String uuid) {
         return deliveryRequests.getOrDefault(UUID.fromString(uuid), null);

@@ -1,12 +1,15 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import model.DeliveryRequest;
 import model.Order;
 import model.Restaurant;
+import rest.DostavaMain;
 
 public class OrderDao {
 	private HashMap<UUID, Order> orders = new HashMap<>();
@@ -56,10 +59,17 @@ public class OrderDao {
     	return tmpStep;
     }
 	
-	public List<Order> getTransitOrders() {
+	public List<Order> getAvailableOpenDeliveries(String user) {
+		List<DeliveryRequest> userDeliveries = DostavaMain.deliveryRequestDao.getDeliveryRequestsByDeliverer(user);
+		List<Order> userDeliveriesOrderCast = new ArrayList<>();
+		for(DeliveryRequest userDelivery : userDeliveries)
+		{
+			userDeliveriesOrderCast.add(userDelivery.getOrder());
+		}
     	List<Order> tmpStep = orders.values()
                 .stream()
                 .filter(order -> order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
+                .filter(order -> userDeliveriesOrderCast.size() < 1 || !userDeliveriesOrderCast.contains(order))
                 .collect(Collectors.toList());
     	return tmpStep;
     }
