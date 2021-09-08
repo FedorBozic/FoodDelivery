@@ -71,6 +71,7 @@ public class RestaurantController {
 		String type = request.queryParams("type");
 		String location = request.queryParams("location");
 		String rating = request.queryParams("rating");
+		String open = request.queryParams("open");
 		
 		//CHECK CAST
 		List<Restaurant> restaurants = new ArrayList<Restaurant>(restaurantDao.getRestaurants().values());
@@ -103,6 +104,11 @@ public class RestaurantController {
 		if(location != null && !location.equals("")) {
 		}
 		*/
+		
+		System.out.println("Open: " + open);
+		if(open != null && open.equals("true")) {
+			filtered = filtered.stream().filter(r -> r.getStatus().equals(RestaurantStatus.OPEN)).collect(Collectors.toList());
+		}
 		
 		return gson.toJson(filtered);
     };

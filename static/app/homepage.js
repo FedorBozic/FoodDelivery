@@ -6,7 +6,8 @@ Vue.component('homepage', {
 			name: '',
 			type: '',
 			location: '',
-			rating: ''
+			rating: '',
+			open: false
 		}
     },
     template: `
@@ -28,6 +29,10 @@ Vue.component('homepage', {
 				<option value="4">4</option>
 				<option value="5">5</option>
 			</select>
+			<div>
+			  <input type="checkbox" id="open" name="open" v-model="open">
+			  <label for="open">Show open only</label>
+			</div>
 			<button type="button" v-on:click="getRestaurants">Search</button>
 		</div>
 		<div class="d-flex justify-content-center" style="margin-top:20px">
@@ -68,7 +73,7 @@ Vue.component('homepage', {
             this.$router.push({name: 'Restaurant', params: {'id': id}});
         },
         getRestaurants: function() {
-        	let params = '?' + 'name=' + this.name + '&type=' + this.type + '&location=' + this.location + '&rating=' + this.rating;
+        	let params = '?' + 'name=' + this.name + '&type=' + this.type + '&location=' + this.location + '&rating=' + this.rating + '&open=' + this.open;
             axios.get('getRestaurants' + params)
             .then(res => {
             	this.restaurants = res.data;
