@@ -43,11 +43,29 @@ public class DeliveryRequestController {
         
     	return gson.toJson(userDeliveries);
     };
+    
+    public static Route getDeliveryRequestsByRestaurant = (Request request, Response response) -> {
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        response.body("Successfully received deliveries!");
+        response.status(200);
+        
+        Restaurant r = DostavaMain.restaurantDao.findById(request.params(":id"));
+        if(r == null)
+        {
+        	response.body("You do not have permission to access this!");
+            response.status(400);
+            return response;
+        }
+        
+        List<DeliveryRequest> restaurantDeliveries = DostavaMain.deliveryRequestDao.getDeliveryRequestsByRestaurant(r.getUuid());
+        
+    	return gson.toJson(restaurantDeliveries);
+    };
 	
 	public static Route addDeliveryRequest = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
-        response.body("Successfully created delivery request!");
         response.status(200);
         
         User user = DostavaMain.userDao.findById(request.params(":id"));
@@ -65,9 +83,19 @@ public class DeliveryRequestController {
         
         DostavaMain.deliveryRequestDao.addDeliveryRequest(newDeliveryRequest);
         
-        System.out.println("Created this thing");
-        System.out.println(newDeliveryRequest.getRequester().getFirstName());
-        System.out.println(newDeliveryRequest.getOrder().getRestaurant().getName());
+        return response;
+    };
+    
+    public static Route approveDelivery = (Request request, Response response) -> {
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        response.status(200);
+        
+        DeliveryRequest deliveryRequest = DostavaMain.deliveryRequestDao.findById((String) body.get("uuid"));
+        User user = DostavaMain.userDao.findById(request.params(":id"));
+
+        deliveryRequest.setApproved(true);
+        DostavaMain.deliveryRequestDao.removeUnapprovedDeliveryRequestsForOrder(deliveryRequest.getOrder());
         
         return response;
     };

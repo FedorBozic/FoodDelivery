@@ -147,7 +147,9 @@ public class DostavaMain {
 		get("api/orders/:id", OrderController.findByRestaurant);
 		
 		get("/api/delivery/userdeliveries/:id", DeliveryRequestController.getDeliveryRequestsByUser);
+		get("/api/delivery/opendeliveryrequestsforrestaurant/:id", DeliveryRequestController.getDeliveryRequestsByRestaurant);
 		post("/api/delivery/requestdelivery/:id", DeliveryRequestController.addDeliveryRequest);
+		post("/api/delivery/approvedelivery/:id", DeliveryRequestController.approveDelivery);
 		
 		get("/api/getRestaurants", RestaurantController.getRestaurants);
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));

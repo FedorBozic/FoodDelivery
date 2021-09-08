@@ -48,6 +48,24 @@ public class DeliveryRequestDao {
     	return tmpStep;
 	}
 	
+	public List<DeliveryRequest> getDeliveryRequestsByRestaurant(String r)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getOrder().getRestaurant().getUuid().equals(UUID.fromString(r)))
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
+	
+	public List<DeliveryRequest> getDeliveryRequestsByRestaurant(UUID r)
+	{
+		List<DeliveryRequest> tmpStep = deliveryRequests.values()
+                .stream()
+                .filter(deliveryRequest -> deliveryRequest.getOrder().getRestaurant().getUuid().equals(r))
+                .collect(Collectors.toList());
+    	return tmpStep;
+	}
+	
 	public DeliveryRequest findById(String uuid) {
         return deliveryRequests.getOrDefault(UUID.fromString(uuid), null);
     }
