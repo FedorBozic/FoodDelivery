@@ -1143,6 +1143,7 @@
 		<a href="#/login" v-if="!isSignedIn">Login</a>
 		<a href="#/basket" v-if="isSignedIn && role == 'CUSTOMER'">Basket</a>
 		<a href="#/orders/awaitingdeliveryorders" v-if="isSignedIn && role == 'DELIVERY'">Orders</a>
+		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/restaurant/' + currentUser.restaurant.uuid" style="width:120px">Restaurant</a>
 		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/orders/' + currentUser.restaurant.uuid">Orders</a>
 		<a href="#/userview" v-if="isSignedIn && role == 'ADMIN'">Users</a>
 		<a href="#/addrestaurant" v-if="isSignedIn && role == 'ADMIN'" style="width:120px">Restaurants</a>
