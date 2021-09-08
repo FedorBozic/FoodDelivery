@@ -151,12 +151,25 @@ Vue.component('restaurant', {
 			newItem.restaurant = this.restaurant.uuid
             axios.post('users/newItem', JSON.stringify(newItem))
                 .then(function (response) {
-					axios.get('users/currentUser')
+					axios.get('restaurants/' + self.$route.params.id)
+			        .then(res => {
+			            self.restaurant = res.data;
+						if(self.restaurant != null && self.restaurant.logo != null){
+			            	self.restaurant.logo = 'data:image/png;base64,' + self.restaurant.logo;
+			            }
+						for(let i in self.restaurant.items){
+					    	if(self.restaurant.items[i].image != null){
+					    		this.restaurant.items[i].image = 'data:image/png;base64,' + self.restaurant.items[i].image;
+					    	}
+							self.articlenumber++;
+					    }
+					    window.location.href = "#/restaurant/" + self.$route.params.id;
+			        })
+					
                 })
                 .catch(function (error) {
                     alert(error.response.data);
                 });
-			window.location.href = "#/restaurant/" + this.$route.params.id;
         },
 
 		addItemToCart: function(item) {
