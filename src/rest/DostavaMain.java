@@ -11,10 +11,12 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import controller.DeliveryRequestController;
 import controller.OrderController;
 import controller.RestaurantController;
 import controller.UserController;
 import dao.UserDao;
+import dao.DeliveryRequestDao;
 import dao.OrderDao;
 import dao.RestaurantDao;
 import model.Address;
@@ -36,6 +38,7 @@ public class DostavaMain {
 	public static UserTypeDao userTypeDao = new UserTypeDao();
 	public static RestaurantDao restaurantDao = new RestaurantDao();
 	public static OrderDao orderDao = new OrderDao();
+	public static DeliveryRequestDao deliveryRequestDao = new DeliveryRequestDao();
 	
 	private static void createDummyData() {
 		User defaultAdmin = new User();
@@ -138,10 +141,16 @@ public class DostavaMain {
 		post("/api/users/itemToCart", UserController.itemToCart);
 		
 		get("/api/orders/getorders", (request,response) -> gson.toJson(orderDao.getOrders()));
-		get("/api/orders/awaitingdeliveryorders", (request,response) -> gson.toJson(orderDao.getTransitOrders()));
+		get("/api/orders/awaitingdeliveryorders/:id", (request,response) -> gson.toJson(orderDao.getAvailableOpenDeliveries(request.params(":id"))));
 		post("/api/orders/checkout", OrderController.addOrder);
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);
+		
+		get("/api/delivery/userdeliveries/:id", DeliveryRequestController.getDeliveryRequestsByUser);
+		get("/api/delivery/mydeliveries/:id", DeliveryRequestController.getDeliveriesByUser);
+		get("/api/delivery/opendeliveryrequestsforrestaurant/:id", DeliveryRequestController.getDeliveryRequestsByRestaurant);
+		post("/api/delivery/requestdelivery/:id", DeliveryRequestController.addDeliveryRequest);
+		post("/api/delivery/approvedelivery/:id", DeliveryRequestController.approveDelivery);
 		
 		get("/api/getRestaurants", RestaurantController.getRestaurants);
 		get("/api/restaurants/getRestaurants", (request,response) -> gson.toJson(restaurantDao.getRestaurants()));

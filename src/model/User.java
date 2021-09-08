@@ -30,7 +30,7 @@ public class User {
 	
 	public User()
 	{
-		// Generic prazan konstruktor
+		this.uuid = UUID.randomUUID();
 	}
 	
 	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday, Role role,

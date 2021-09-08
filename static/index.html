@@ -1131,12 +1131,7 @@
 		  font-family: 'Quicksand', sans-serif;
 		}
  
-		.map {
-		  height: 400px;
-		  width: 100%;
-		}
 	</style>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.6.1/css/ol.css" type="text/css">
 </head>
 
 <body>
@@ -1147,7 +1142,7 @@
 		<a href="#/registration" v-if="!isSignedIn">Register</a>
 		<a href="#/login" v-if="!isSignedIn">Login</a>
 		<a href="#/basket" v-if="isSignedIn && role == 'CUSTOMER'">Basket</a>
-		<a href="#/orders/awaitingdeliveryorders" v-if="isSignedIn && role == 'DELIVERY'">Orders</a>
+		<a href="#/awaitingdeliveryorders" v-if="isSignedIn && role == 'DELIVERY'">Orders</a>
 		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/restaurant/' + currentUser.restaurant.uuid" style="width:120px">Restaurant</a>
 		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/orders/' + currentUser.restaurant.uuid">Orders</a>
 		<a href="#/userview" v-if="isSignedIn && role == 'ADMIN'">Users</a>
@@ -1159,7 +1154,7 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+
 
 <script src="js/vue.js"></script>
 <script src="js/vue-router.js"></script>

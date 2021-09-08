@@ -3,7 +3,8 @@ Vue.component('orders', {
         	return{
         		currentUser: {},
 				restaurant: {},
-				orders: []
+				orders: [],
+				requests: []
        		}
         },
         template: `
@@ -22,12 +23,29 @@ Vue.component('orders', {
 							<tbody v-for="order in orders">
 								<tr>
 									<td>{{order.customerName}}</td>
-								</tr>
-								<tr>
 									<td>{{order.status}}</td>
-								</tr>
-								<tr>
 									<td><button v-if="currentUser.role && (((order.status === 'PROCESSING' || order.status === 'PREPARATION') && currentUser.role === 'MANAGER') || ((order.status === 'AWAITING_DELIVERY' || order.status === 'IN_TRANSPORT') && currentUser.role === 'DELIVERY'))" v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xl-8">
+						<table class="table table-striped" style="width:100%">
+							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
+								<tr>
+									<th>Customer</th>
+									<th>Requester</th>
+									<th>Approve</th>
+								</tr>
+							</thead>
+							<tbody v-for="request in requests">
+								<tr>
+									<td>{{request.order.customerName}}</td>
+									<td>{{request.requester.username}}</td>
+									<td><button v-if="currentUser.role && currentUser.role === 'MANAGER'" v-on:click="approveDeliveryRequest(request)">Approve</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -51,7 +69,26 @@ Vue.component('orders', {
 	                .catch(err => {
 	                    alert(err.response.data);
 	                })
-	        }
+	        },
+	        
+	        approveDeliveryRequest: function (deliveryRequest) {
+        		let self = this;
+	        	axios.post('delivery/approvedelivery/' + self.currentUser.uuid, JSON.stringify(deliveryRequest))
+	                .then(res => {
+	                    axios.get('orders/' + this.$route.params.id)
+		                .then(res => {
+		                	self.orders = res.data;
+		                	axios.get('delivery/opendeliveryrequestsforrestaurant/' + self.restaurant.uuid)
+		                	.then(res => {
+		                		self.requests = res.data;
+		                		window.location.href = "#/orders/" + self.$route.params.id;
+		                	})
+		                })
+	                })
+	                .catch(err => {
+	                    alert(err.response.data);
+	                })
+	        },
 	
 	    },
 		mounted() {
@@ -63,6 +100,10 @@ Vue.component('orders', {
                 axios.get('orders/' + this.$route.params.id)
                 .then(res => {
                 	self.orders = res.data;
+                	axios.get('delivery/opendeliveryrequestsforrestaurant/' + self.restaurant.uuid)
+                	.then(res => {
+                		self.requests = res.data;
+                	})
                 })
             })
         }
