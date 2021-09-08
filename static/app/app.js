@@ -46,11 +46,7 @@ var app = new Vue({
                 });
 
             window.location.href = "#/";
-        },
-        showRestaurant: function (id) {
-            let self = this;
-            this.$router.push({name: 'Orders', params: {'id': this.currentUser.restaurant.uuid}});
-        },
+        }
     },
     mounted() {
         axios.get('users/currentUser')
