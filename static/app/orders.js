@@ -4,20 +4,11 @@ Vue.component('orders', {
         		currentUser: {},
 				restaurant: {},
 				orders: [],
-				requests: [],
-				restaurantName: '',
-				priceFrom: '',
-				priceTo: ''
+				requests: []
        		}
         },
         template: `
         <div class="container">
-		<div>
-			<input type="text" placeholder="Restaurant Name" v-model="restaurantName">
-			<input type="text" placeholder="Price Lower" v-model="priceFrom">
-			<input type="text" placeholder="Price Upper" v-model="priceTo">
-			<button type="button" v-on:click="getOrders">Search</button>
-		</div>
 		    <div class="container-fluid p-0" style="margin-top:100px">
 				<div class="row">
 					<div class="col-xl-8">
@@ -98,13 +89,6 @@ Vue.component('orders', {
 	                    alert(err.response.data);
 	                })
 	        },
-        	getOrders: function() {
-        		let params = '?' + 'restaurantName=' + this.restaurantName + '&priceFrom=' + this.priceFrom + '&priceTo=' + this.priceTo;
-        		axios.get('orders/getorders')
-                .then(res => {
-                	self.orders = res.data;
-                })
-	        }
 	
 	    },
 		mounted() {
@@ -112,7 +96,7 @@ Vue.component('orders', {
         	axios.get('users/currentUser')
             .then(res => {
 				self.currentUser = res.data
-				self.restaurant = self.currentUser.restaurant;
+				self.restaurant = self.currentUser.restaurant
                 axios.get('orders/' + this.$route.params.id)
                 .then(res => {
                 	self.orders = res.data;
@@ -121,7 +105,6 @@ Vue.component('orders', {
                 		self.requests = res.data;
                 	})
                 })
-          		this.getOrders();
             })
         }
     }

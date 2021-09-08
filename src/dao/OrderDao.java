@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import model.DeliveryRequest;
-import controller.RestaurantController;
 import model.Order;
 import model.Restaurant;
 import rest.DostavaMain;
@@ -31,21 +30,12 @@ public class OrderDao {
 	}
 	
 	// SEARCHES
-	private void updateRestaurantNames() {
-		for (Order o : orders.values()) {
-			System.out.println(o.getUuid().toString());
-			Restaurant r = RestaurantController.findByid(o.getUuid());
-			o.setRestaurantName(r.getName());
-		}
-	}
 	
 	public Order findById(String uuid) {
-		updateRestaurantNames(); //Ovde update samo jednog?
         return orders.getOrDefault(UUID.fromString(uuid), null);
     }
 	
 	public List<Order> findByRestaurant(Restaurant r) {
-		updateRestaurantNames();
     	List<Order> tmpStep = orders.values()
                 .stream()
                 .filter(order -> order.getRestaurant().getUuid().equals(r.getUuid()))
@@ -54,7 +44,6 @@ public class OrderDao {
     }
 	
 	public List<Order> findByRestaurant(UUID r) {
-		updateRestaurantNames();
     	List<Order> tmpStep = orders.values()
                 .stream()
                 .filter(order -> order.getRestaurant().getUuid() == r)
@@ -63,7 +52,6 @@ public class OrderDao {
     }
 	
 	public List<Order> findByRestaurant(String r) {
-		updateRestaurantNames();
     	List<Order> tmpStep = orders.values()
                 .stream()
                 .filter(order -> order.getRestaurant().getUuid().equals(UUID.fromString(r)))
@@ -78,19 +66,10 @@ public class OrderDao {
 		{
 			userDeliveriesOrderCast.add(userDelivery.getOrder());
 		}
-		List<Order> tmpStep = orders.values()
-                .stream()
-                .filter(order -> order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
-                .filter(order -> userDeliveriesOrderCast.size() < 1 || !userDeliveriesOrderCast.contains(order))
-                .collect(Collectors.toList());
-    	return tmpStep;
-	}
-	
-	public List<Order> getTransitOrders() {
-		updateRestaurantNames();
     	List<Order> tmpStep = orders.values()
                 .stream()
                 .filter(order -> order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
+                .filter(order -> userDeliveriesOrderCast.size() < 1 || !userDeliveriesOrderCast.contains(order))
                 .collect(Collectors.toList());
     	return tmpStep;
     }

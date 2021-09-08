@@ -19,7 +19,6 @@ public class Order {
 	private float price;
 	private String customerName;
 	private OrderStatus status;
-	private String restaurantName;
 	
 	public Order(UUID uuid, List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
 		this.uuid = uuid;
@@ -98,13 +97,5 @@ public class Order {
 	{
 		CartItem tmpCartItem = new CartItem(item, amount);
 		items.add(tmpCartItem);
-	}
-
-	public String getRestaurantName() {
-		return restaurantName;
-	}
-
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
 	}
 }
