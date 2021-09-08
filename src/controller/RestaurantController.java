@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
@@ -116,5 +117,9 @@ public class RestaurantController {
 	public static Route getRestaurants() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public static Restaurant findByid(UUID id) {
+		return restaurantDao.findById(id);
 	}
 }

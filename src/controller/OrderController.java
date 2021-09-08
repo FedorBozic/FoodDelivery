@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,6 +14,8 @@ import model.Cart;
 import model.CartItem;
 import model.Item;
 import model.Restaurant;
+import model.RestaurantStatus;
+import model.RestaurantType;
 import model.User;
 import rest.DostavaMain;
 import spark.Request;
@@ -49,7 +52,9 @@ public class OrderController {
         
         Order newOrder = new Order();
         newOrder.setUuid(UUID.randomUUID());
-        newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
+        Restaurant restaurant = user.getCart().getCartItems().get(0).getItem().getRestaurant();
+        newOrder.setRestaurant(restaurant);
+        newOrder.setRestaurantName(restaurant.getName());
         newOrder.setCustomerName(user.getUsername());
         newOrder.setStatus(Order.OrderStatus.PROCESSING);
         
@@ -80,5 +85,40 @@ public class OrderController {
         	order.setStatus(Order.OrderStatus.DELIVERED);
         
         return response;
+    };
+    
+    public static Route getOrders = (Request request, Response response) -> {
+		List<Order> filtered = new ArrayList<Order>();
+		String restaurantName = request.queryParams("restaurantName");
+		String priceFromS = request.queryParams("priceFrom");
+		String priceToS = request.queryParams("priceTo");
+		
+		//CHECK CAST
+		List<Order> orders = new ArrayList<Order>(DostavaMain.orderDao.getOrders().values());
+		
+		for (Order o : orders) {
+			filtered.add(o);
+		}
+		
+		System.out.println("restaurantName: " + restaurantName);
+		if(restaurantName != null && !restaurantName.equals("")) {
+			filtered = filtered.stream().filter(o -> o.getRestaurantName().toLowerCase().contains(restaurantName.toLowerCase())).collect(Collectors.toList());
+		}
+		
+		System.out.println(priceFromS);
+		if(priceFromS != null && !priceFromS.equals("")) {
+			int priceFrom = Integer.parseInt(priceFromS);
+			filtered = filtered.stream().filter(r -> r.getPrice() >= priceFrom).collect(Collectors.toList());
+		}
+		
+		System.out.println(priceToS);
+		if(priceToS != null && !priceToS.equals("")) {
+			int priceTo = Integer.parseInt(priceToS);
+			filtered = filtered.stream().filter(r -> r.getPrice() <= priceTo).collect(Collectors.toList());
+		}
+		
+		//Treba jos datum
+		
+		return gson.toJson(filtered);
     };
 }
