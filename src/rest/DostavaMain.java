@@ -58,6 +58,16 @@ public class DostavaMain {
 		defaultManager.setType(userTypeDao.findByName("STAFF"));
 		userDao.addUser(defaultManager);
 		
+		User defaultDelivery = new User();
+		defaultDelivery.setUsername("del");
+		defaultDelivery.setPassword("del");
+		defaultDelivery.setFirstName("Marko");
+		defaultDelivery.setLastName("Markovic");
+		defaultDelivery.setGender(User.Gender.valueOf("MALE"));
+		defaultDelivery.setRole(User.Role.DELIVERY);
+		defaultDelivery.setType(userTypeDao.findByName("STAFF"));
+		userDao.addUser(defaultDelivery);
+		
 		User defaultCustomer = new User();
 		defaultCustomer.setUsername("cus");
 		defaultCustomer.setPassword("cus");
@@ -128,6 +138,7 @@ public class DostavaMain {
 		post("/api/users/itemToCart", UserController.itemToCart);
 		
 		get("/api/orders/getorders", (request,response) -> gson.toJson(orderDao.getOrders()));
+		get("/api/orders/awaitingdeliveryorders", (request,response) -> gson.toJson(orderDao.getTransitOrders()));
 		post("/api/orders/checkout", OrderController.addOrder);
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);

@@ -56,6 +56,14 @@ public class OrderDao {
     	return tmpStep;
     }
 	
+	public List<Order> getTransitOrders() {
+    	List<Order> tmpStep = orders.values()
+                .stream()
+                .filter(order -> order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
+                .collect(Collectors.toList());
+    	return tmpStep;
+    }
+	
 	// ADD
     
     public Order addOrder(Order order) {

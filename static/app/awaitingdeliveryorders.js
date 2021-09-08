@@ -1,4 +1,4 @@
-Vue.component('orders', {
+Vue.component('awaitingdeliveryorders', {
         data: function () {
         	return{
         		currentUser: {},
@@ -27,7 +27,7 @@ Vue.component('orders', {
 									<td>{{order.status}}</td>
 								</tr>
 								<tr>
-									<td><button v-if="currentUser.role && (((order.status === 'PROCESSING' || order.status === 'PREPARATION') && currentUser.role === 'MANAGER') || ((order.status === 'AWAITING_DELIVERY' || order.status === 'IN_TRANSPORT') && currentUser.role === 'DELIVERY'))" v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
+									<td><button v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -56,11 +56,12 @@ Vue.component('orders', {
 	    },
 		mounted() {
         	let self = this;
+			console.log("got here")
         	axios.get('users/currentUser')
             .then(res => {
 				self.currentUser = res.data
-				self.restaurant = self.currentUser.restaurant
-                axios.get('orders/' + this.$route.params.id)
+                axios.get('orders/gettransitorders')
+				console.log("got here")
                 .then(res => {
                 	self.orders = res.data;
                 })

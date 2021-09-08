@@ -14,6 +14,7 @@ public class Order {
 	private UUID uuid;
 	private List<CartItem> items;
 	private UUID restaurant;
+	private UUID deliverer = null;
 	private LocalDateTime dateTime;
 	private float price;
 	private String customerName;
