@@ -74,8 +74,13 @@ public class OrderDao {
 	public List<Order> getAvailableOpenDeliveries(String user) {
 		updateRestaurantNames();
 		List<DeliveryRequest> userDeliveries = DostavaMain.deliveryRequestDao.getDeliveryRequestsByDeliverer(user);
+		List<DeliveryRequest> approvedUserDeliveries = DostavaMain.deliveryRequestDao.getDeliveriesByDeliverer(user);
 		List<Order> userDeliveriesOrderCast = new ArrayList<>();
 		for(DeliveryRequest userDelivery : userDeliveries)
+		{
+			userDeliveriesOrderCast.add(userDelivery.getOrder());
+		}
+		for(DeliveryRequest userDelivery : approvedUserDeliveries)
 		{
 			userDeliveriesOrderCast.add(userDelivery.getOrder());
 		}
