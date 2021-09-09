@@ -8,7 +8,9 @@ Vue.component('userview', {
         		currentUser: {},
         		angle: '50',
 	      		defaultColor1: 'red',
-	      		defaultColor2: 'blue'
+	      		defaultColor2: 'blue',
+	      		currentSort:'username',
+  				currentSortDir:'asc'
        		}
         },
         template: `
@@ -19,14 +21,14 @@ Vue.component('userview', {
 						<table class="table table-striped" style="width:100%">
 							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
 								<tr>
-									<th>Username</th>
-									<th>First Name</th>
-									<th>Last Name</th>
+									<th @click="sort('username')">Username</th>
+									<th @click="sort('firstName')">First Name</th>
+									<th @click="sort('lastName')">Last Name</th>
 									<th>Tier</th>
 									<th>Role</th>
 								</tr>
 							</thead>
-							<tbody v-for="user in users">
+							<tbody v-for="user in sortedUsers">
 								<tr>
 									<td>{{user.username}}</td>
 									<td>{{user.firstName}}</td>
@@ -109,8 +111,26 @@ Vue.component('userview', {
 	                    alert(error.response.data);
 	                });
 				axios.get('getUsers');
-	        }
+	        },
+	        sort: function(s) {
+	        	let self = this
+				if(s === this.currentSort) {
+					self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
+				}
+			  	this.currentSort = s;
+			}
     	},
+    	computed:{
+			sortedUsers : function() {
+				return Object.values(this.users).sort((a,b) => {
+					let direction = 1;
+					if(this.currentSortDir === 'desc') direction = -1;
+					if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
+					if(a[this.currentSort] > b[this.currentSort]) return 1 * direction;
+					return 0;
+				});
+			}
+		},
 		mounted() {
         	let self = this;
             let tmp = '?';
