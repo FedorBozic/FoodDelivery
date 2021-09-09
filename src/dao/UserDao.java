@@ -87,4 +87,13 @@ public class UserDao {
 	public User findById(UUID uuid) {
 		return users.getOrDefault(uuid, null);
 	}
+	
+	public boolean deleteUser(UUID id) {
+		findById(id).setDeleted(true);
+		return true;
+	}
+	
+	public boolean deleteUser(String id) {
+		return deleteUser(UUID.fromString(id));
+	}
 }

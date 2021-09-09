@@ -25,6 +25,7 @@ public class User {
 	private Restaurant restaurant;
 	private List<Order> deliveryOrders;
 	private int points;
+	private boolean deleted = false;
 	
 	private UserType type;
 	
@@ -250,5 +251,13 @@ public class User {
 			cart = new Cart();
 		
 		cart.addCartItem(tmpCartItem);
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }
