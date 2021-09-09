@@ -8,7 +8,13 @@ Vue.component('customerorders', {
         template: `
         <div class="container">
 		    <div class="container-fluid p-0" style="margin-top:100px" v-for="order in orders">
-				<div class="row"><div class="card-header">{{order.restaurantName}}</div></div>
+				<div class="card-header">
+					<div class="row">>
+						{{order.restaurantName}}
+						{{order.status}}
+						{{order.price}}
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-xl-8">
 						<table class="table table-striped" style="width:100%">

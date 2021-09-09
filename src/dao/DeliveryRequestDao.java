@@ -44,8 +44,7 @@ public class DeliveryRequestDao {
 	{
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
-                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(u))
-                .filter(deliveryRequest -> !deliveryRequest.isApproved())
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(u) &&  !deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}
@@ -54,7 +53,7 @@ public class DeliveryRequestDao {
 	{
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
-                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(UUID.fromString(u)))
+                .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(UUID.fromString(u)) && deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}
@@ -64,6 +63,7 @@ public class DeliveryRequestDao {
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
                 .filter(deliveryRequest -> deliveryRequest.getRequester().getUuid().equals(u))
+                .filter(deliveryRequest -> deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}
