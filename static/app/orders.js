@@ -7,7 +7,9 @@ Vue.component('orders', {
 				requests: [],
 				restaurantName: '',
 				priceFrom: '',
-				priceTo: ''
+				priceTo: '',
+				dateFrom: '',
+				dateTo: ''
        		}
         },
         template: `
@@ -16,6 +18,8 @@ Vue.component('orders', {
 			<input type="text" placeholder="Restaurant Name" v-model="restaurantName">
 			<input type="text" placeholder="Price Lower" v-model="priceFrom">
 			<input type="text" placeholder="Price Upper" v-model="priceTo">
+			<input type="datetime-local" placeholder="Date From" v-model="dateFrom">
+			<input type="datetime-local" placeholder="Date To" v-model="dateTo">
 			<button type="button" v-on:click="getOrders">Search</button>
 		</div>
 		    <div class="container-fluid p-0" style="margin-top:100px">

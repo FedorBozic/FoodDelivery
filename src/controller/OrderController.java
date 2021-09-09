@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +66,7 @@ public class OrderController {
         		newOrder.setCustomer(user.getUuid());
         		newOrder.setCustomerName(user.getUsername());
         		newOrder.setStatus(Order.OrderStatus.PROCESSING);
+        		newOrder.setDateTime(LocalDateTime.now());
         		createdOrders.add(newOrder);
         	}
         }
