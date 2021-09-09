@@ -1,16 +1,26 @@
 package model;
 
+import java.util.UUID;
+
 public class Comment {
+	private UUID uuid;
 	private User customer;
 	private Restaurant restaurant;
 	private String text;
 	private int rating;
+	private boolean approved;
 	
-	public Comment(User customer, Restaurant restaurant, String text, int rating) {
+	public Comment() {
+		
+	}
+	
+	public Comment(UUID uuid, User customer, Restaurant restaurant, String text, int rating, boolean approved) {
+		this.uuid = uuid;
 		this.customer = customer;
 		this.restaurant = restaurant;
 		this.text = text;
 		this.rating = rating; //Ovde provera da li je [0, 5]?
+		this.setApproved(approved);
 	}
 	
 	public User getCustomer() {
@@ -36,5 +46,21 @@ public class Comment {
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 }

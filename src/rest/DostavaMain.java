@@ -16,6 +16,7 @@ import controller.OrderController;
 import controller.RestaurantController;
 import controller.UserController;
 import dao.UserDao;
+import dao.CommentDao;
 import dao.DeliveryRequestDao;
 import dao.OrderDao;
 import dao.RestaurantDao;
@@ -39,6 +40,7 @@ public class DostavaMain {
 	public static RestaurantDao restaurantDao = new RestaurantDao();
 	public static OrderDao orderDao = new OrderDao();
 	public static DeliveryRequestDao deliveryRequestDao = new DeliveryRequestDao();
+	public static CommentDao commentDao = new CommentDao();
 	
 	private static void createDummyData() {
 		User defaultAdmin = new User();

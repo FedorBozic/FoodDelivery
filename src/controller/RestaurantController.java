@@ -66,6 +66,36 @@ public class RestaurantController {
     	return response;
     };
     
+    public static Route updateRestaurant = (Request request, Response response) -> {
+    	
+    	var body = gson.fromJson((request.body()), HashMap.class);
+    	
+    	response.status(200);
+    	
+    	Restaurant restaurant = new Restaurant();
+    	restaurant.setName((String) body.get("name"));
+    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
+    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
+    	restaurant.setLogo((String) body.get("image"));
+    	restaurant.setManager((String) body.get("manager"));
+    	DostavaMain.userDao.findById((String) body.get("manager")).setRestaurant(restaurant);
+    	
+    	// TEMPORARNO, UKLONITI POSLE
+    	Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
+		Location tmpLoc = new Location(0, 0, tmpAdd);
+    	restaurant.setLocation(tmpLoc);
+    	
+    	restaurantDao.newRestaurant(restaurant);
+    	
+    	System.out.println(restaurant.getUuid());
+    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getRestaurant().getUuid());
+    	
+    	System.out.println(restaurant.getManager().getUuid());
+    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getUuid());
+    	
+    	return response;
+    };
+    
     public static Route getRestaurants = (Request request, Response response) -> {
 		List<Restaurant> filtered = new ArrayList<Restaurant>();
 		String name = request.queryParams("name");
