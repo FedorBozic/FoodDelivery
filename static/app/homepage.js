@@ -49,6 +49,8 @@ Vue.component('homepage', {
 					  <header class="card-header-restaurant">
 						<h2 v-html="highlightMatches(r.name)"></h2>
 						<span>{{r.type}}</span>
+						<br />
+						<span>{{r.status}}</span>
 						
 						<address style="margin-top:10px">
 						  <span class="icon-pin" aria-hidden="true"></span>

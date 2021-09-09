@@ -81,17 +81,14 @@ public class RestaurantController {
 			filtered.add(r);
 		}
 		
-		System.out.println(type);
 		if(type != null && !type.equals("ALL") && !type.equals("")) {
 			filtered = filtered.stream().filter(r -> r.getType().equals(RestaurantType.valueOf(type))).collect(Collectors.toList());
 		}
 		
-		System.out.println("Name: " + name);
 		if(name != null && !name.equals("")) {
 			filtered = filtered.stream().filter(r -> r.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
 		}
 		
-		System.out.println("Rating: " + rating);
 		//Ignore za sada, treba komentare prvo implementirati
 		/*
 		int ratingVal = Integer.parseInt(rating);
