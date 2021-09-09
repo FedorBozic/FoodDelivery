@@ -16,9 +16,25 @@ Vue.component('customerorders', {
         },
         template: `
         <div class="container">
-        	<div class="profile-card js-profile-card" style="margin-top:100px" v-for="order in orders">
+        	<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-for="order in orders">
         		<div class="profile-card__cnt js-profile-cnt">
-		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">{{order.restaurantName}}</div>
+		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
+		    			<div class="row d-flex justify-content-between">
+		    				<div class="col-sm-2">
+			    				<h4 style="min-width:100px;text-align:left; margin:10px">{{order.restaurantName}}</h4>
+			    			</div>
+			    			<div class="col-sm-2">
+			    				<h4 style="min-width:100px;text-align:center; margin:10px; margin-right:20px">
+			    					<i v-if="order.status === 'PROCESSING'" class="fa fa-times" @click="cancelOrder(order)"></i>
+			    					<i v-if="order.status === 'PREPARATION'" class="fa fa-spinner fa-spin"></i>
+			    					<i v-if="order.status === 'AWAITING_DELIVERY'" class="fa fa-truck"></i>
+			    					<i v-if="order.status === 'IN_TRANSPORT'" class="fa fa-truck"></i>
+			    					<i v-if="order.status === 'DELIVERED'" class="fa fa-check"></i>
+			    					<i v-if="order.status === 'CANCELLED'" class="fa fa-ban"></i>
+			    				</h4>
+			    			</div>
+			    		</div>
+		    		</div>
 		    	</div>
 		    	
 		    	<div class="row" v-for="(item,index) in order.items" v-bind:style="[(index < order.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
@@ -28,42 +44,10 @@ Vue.component('customerorders', {
 					</div>
 					<div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.item.price}}$</strong></h2></div>
 					<div class="col-sm-3">
-						<div class="row"><img :src="item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+						<div class="row"><img :src="'data:image/png;base64,' + item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 					</div>
 				</div>
         	</div>
-        
-        
-        
-        
-		    <div class="container-fluid p-0" style="margin-top:100px" v-for="order in orders">
-				<div class="card-header">
-					<div class="row">
-						{{order.restaurantName}}
-						{{order.status}}
-						{{order.price}}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xl-8">
-						<table class="table table-striped" style="width:100%">
-							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
-								<tr>
-									<th>Name</th>
-									<th>Count</th>
-								</tr>
-							</thead>
-							<tbody v-for="ci in order.items">
-								<tr>
-									<td>{{ci.item.name}}</td>
-									<td>{{ci.count}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			<button v-if="!order.canceled" type="button" v-on:click="cancelOrder(order)" >Cancel</button>
-			</div>
 		</div>
     	`,
     	methods: {
@@ -87,7 +71,7 @@ Vue.component('customerorders', {
         	axios.get('users/currentUser')
             .then(res => {
 				self.currentUser = res.data
-                axios.get('orders/getcustomerorders/' + this.$route.params.id)
+                axios.get('orders/getcustomerorders/' + self.currentUser.uuid)
                 .then(res => {
                 	self.orders = res.data;
                 })

@@ -123,8 +123,9 @@ public class OrderDao {
     public List<Order> cancelOrder(UUID id) {
     	Order order = findById(id);
     	try {
-    		order.setCanceled(true);
-    		order.setStatus(OrderStatus.CANCELED);
+    		System.out.println(order.getPrice());
+    		order.setCancelled(true);
+    		order.setStatus(OrderStatus.CANCELLED);
     		User customer = DostavaMain.userDao.findById(order.getCustomer());
     		customer.givePenalty(order.getPrice());
     	} catch (Exception e) {

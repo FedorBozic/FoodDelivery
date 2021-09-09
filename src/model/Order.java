@@ -9,7 +9,7 @@ import rest.DostavaMain;
 
 public class Order {
 	
-	public enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELED};
+	public enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELLED};
 	
 	private UUID uuid;
 	private List<CartItem> items;
@@ -22,7 +22,7 @@ public class Order {
 	private OrderStatus status;
 	private String restaurantName;
 	private boolean deleted = false;
-	private boolean canceled = false;
+	private boolean cancelled = false;
 	
 	public Order(UUID uuid, List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
 		this.uuid = uuid;
@@ -139,11 +139,11 @@ public class Order {
 		this.deleted = deleted;
 	}
 
-	public boolean isCanceled() {
-		return canceled;
+	public boolean isCancelled() {
+		return cancelled;
 	}
 
-	public void setCanceled(boolean canceled) {
-		this.canceled = canceled;
+	public void setCancelled(boolean canceled) {
+		this.cancelled = canceled;
 	}
 }
