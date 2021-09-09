@@ -2,11 +2,40 @@ Vue.component('customerorders', {
         data: function () {
         	return{
         		currentUser: {},
-				orders: []
+				orders: [],
+				itemBorderStyle: {
+					margin: '10px', 
+					padding: '10px',
+					'border-bottom': '2px dotted rgba(250, 30, 20)'
+				},
+				itemBorderStyleNoBorder: {
+					margin: '10px', 
+					padding: '10px'
+				}
        		}
         },
         template: `
         <div class="container">
+        	<div class="profile-card js-profile-card" style="margin-top:100px" v-for="order in orders">
+        		<div class="profile-card__cnt js-profile-cnt">
+		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">{{order.restaurantName}}</div>
+		    	</div>
+		    	
+		    	<div class="row" v-for="(item,index) in order.items" v-bind:style="[(index < order.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
+					<div class="col-sm-7 mr-auto">
+						<div class="row"><h4><strong>{{item.item.name}}</strong></h4></div>
+						<div class="row" style="margin-left: 10px; text-align: left; ">{{item.item.description}}</div>
+					</div>
+					<div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.item.price}}$</strong></h2></div>
+					<div class="col-sm-3">
+						<div class="row"><img :src="item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+					</div>
+				</div>
+        	</div>
+        
+        
+        
+        
 		    <div class="container-fluid p-0" style="margin-top:100px" v-for="order in orders">
 				<div class="card-header">
 					<div class="row">

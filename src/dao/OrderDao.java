@@ -12,6 +12,7 @@ import model.DeliveryRequest;
 import model.Order;
 import model.Restaurant;
 import model.User;
+import model.Order.OrderStatus;
 import rest.DostavaMain;
 
 public class OrderDao {
@@ -123,9 +124,9 @@ public class OrderDao {
     	Order order = findById(id);
     	try {
     		order.setCanceled(true);
+    		order.setStatus(OrderStatus.CANCELED);
     		User customer = DostavaMain.userDao.findById(order.getCustomer());
     		customer.givePenalty(order.getPrice());
-    		System.out.println("Canceled: " + order.isCanceled());
     	} catch (Exception e) {
     		
     	}
