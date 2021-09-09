@@ -18,6 +18,9 @@ Vue.component('addrestaurant', {
 			location: '',
 			townName: '',
 			address: '',
+			postalCode: '',
+			latitude: '',
+			longtitude: '',
 			status: 'OPEN',
 			image: '',
 			addManagerMode: false
@@ -98,6 +101,29 @@ Vue.component('addrestaurant', {
 	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="date" class="dateOfBirthPicker" v-model="manager.birthday"></h6>
 	               	</div>
 	           	</div>
+	           	<h4 class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px; margin-top:20px">Location</h4>
+	           	<div class="row" style="margin-left:20px; margin-right: 20px">
+	               	<div class="col-sm-3">
+	                   	<p class="m-b-10 f-w-600" style="text-align:left">Street</p>
+	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="text" class="discrete-textbox-black" placeholder="Street" v-model="address" ></h6>
+	               	</div>
+	               	<div class="col-sm-3">
+	                   	<p class="m-b-10 f-w-600">City</p>
+	                   	<h6 class="f-w-400"><input type="text" class="discrete-textbox-black" style="text-align:center" placeholder="City" v-model="townName" ></h6>
+	               	</div>
+	               	<div class="col-sm-3">
+	                   	<p class="m-b-10 f-w-600">Postal Code</p>
+	                   	<h6 class="f-w-400"><input type="text" class="discrete-textbox-black" style="text-align:center" placeholder="Postal Code" v-model="postalCode" ></h6>
+	               	</div>
+	               	<div class="col-sm-3">
+	                   	<p class="m-b-10 f-w-600" style="text-align:right">Lat/Lon</p>
+	                   	<div class="row" style="margin-left:55px">
+	                   		<h6 class="f-w-400" style="width: 40px; float: right"><input type="text" class="discrete-textbox-black" style="text-align:right" placeholder="Lat" v-model="latitude" ></h6>
+	               			<h6 class="f-w-400" style="width: 40px; float: right"><input type="text" class="discrete-textbox-black" style="text-align:right" placeholder="Lon" v-model="longtitude" ></h6>
+	               		</div>
+	               	</div>
+	           	</div>
+	           	<input type="button" class="generic_button" style="float:right" value="Confirm" :disabled="!canConfirm" v-bind:style="[true ? {opacity:0.9} : {opacity:0.3}]" v-on:click="addRestaurant()"/>
 		    </div>
 			
 			
@@ -168,7 +194,18 @@ Vue.component('addrestaurant', {
             });
         },
         
-        addRestaurant: function() {
+        addRestaurant() {
+        	if(this.addManagerMode)
+        	{
+        		this.addRestaurantWithManager();
+        	}
+        	else
+        	{
+        		this.addRestaurantWithoutManager();
+        	}
+        },
+        
+        addRestaurantWithoutManager: function() {
         	let self = this;
         	let newRestaurant = {
         		name: this.name,
@@ -257,6 +294,9 @@ Vue.component('addrestaurant', {
 		}
     },
     computed:{
+    	canConfirm(){
+    		return (this.name && this.type && this.manager.firstName && this.manager.lastName && this.manager.username && this.manager.password && this.manager.gender && this.address && this.townName && this.postalCode && this.latitude && this.longtitude && this.image)
+    	}
 		/*options(){
 			let manager_list = [];
 			console.log("TEST");
