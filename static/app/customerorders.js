@@ -9,7 +9,7 @@ Vue.component('customerorders', {
         <div class="container">
 		    <div class="container-fluid p-0" style="margin-top:100px" v-for="order in orders">
 				<div class="card-header">
-					<div class="row">>
+					<div class="row">
 						{{order.restaurantName}}
 						{{order.status}}
 						{{order.price}}

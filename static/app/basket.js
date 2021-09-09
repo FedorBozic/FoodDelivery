@@ -19,13 +19,17 @@ Vue.component('basket', {
 									<th>Name</th>
 									<th>Amount</th>
 									<th>Price</th>
+									<th></th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody v-for="i in cart.cartItems">
 								<tr>
 									<td>{{i.item.name}}</td>
 									<td>{{i.count}}</td>
-									<td>{{i.item.price}}</td>
+									<td>{{i.item.price * i.count}}</td>
+									<td><img :src="'data:image/png;base64,' + i.item.image" style="width:100px; height: 100px"/></td>
+									<td><i class="fa fa-trash"></i></td>
 								</tr>
 							</tbody>
 						</table>
