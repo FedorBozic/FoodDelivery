@@ -244,19 +244,26 @@ public class UserController {
     	
     	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
     	Item itemToAdd = r.findItemByName((String) body.get("name"));
-    	/*int amount;
-    	if(body.get("purchase_amount") == null || ((String) body.get("purchase_amount")).isEmpty())
+    	
+    	String purchaseAmountS = (String) body.get("purchase_amount");
+    	int amount;
+    	if(purchaseAmountS == null || purchaseAmountS.equals(""))
     	{
     		amount = 1;
     	}
     	else
     	{
-    		amount = Integer.parseInt((String) body.get("purchase_amount"));
+    		try {
+    			amount = Integer.parseInt(purchaseAmountS);
+    		}
+    		catch (Exception e){
+    			amount = 1; //Ili ovo, ili skroz da rejectuje?
+    		}
     	}
     	if(amount < 1)
-    		amount = 1;*/
+    		amount = 1;
     	
-    	int amount = 1;
+    	//int amount = 1;
     	CartItem cartItem = new CartItem(itemToAdd, amount);
     	
     	if(currentUser.getCart() == null)
@@ -266,19 +273,6 @@ public class UserController {
     	}
     	
     	currentUser.getCart().addCartItem(cartItem);
-    	
-    	/*Restaurant restaurant = new Restaurant();
-    	restaurant.setName((String) body.get("name"));
-    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
-    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
-    	restaurant.setLogo((String) body.get("image"));
-    	
-    	restaurantDao.newRestaurant(restaurant);
-    	
-    	User user = userDao.findById((String) body.get("manager"));
-    	user.setRestaurant(restaurant);
-
-    	System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getRestaurant().getName());*/
     	
         return response;
     };

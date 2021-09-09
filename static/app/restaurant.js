@@ -13,7 +13,7 @@ Vue.component('restaurant', {
 				type: 'FOOD',
 				amount: 1,
 				purchase_amount: 1,
-				description: '',
+				description: ''
 			},
 			mapPosition: {latitude: 45.267136, longitude: 19.833549},
 			image: '',
@@ -234,8 +234,8 @@ Vue.component('restaurant', {
 
 		addItemToCart: function(item) {
         	let self = this;
-        	let itemToCart = item
-			itemToCart.restaurant = this.restaurant.uuid
+        	let itemToCart = item;
+			itemToCart.restaurant = this.restaurant.uuid;
             axios.post('users/itemToCart', JSON.stringify(itemToCart))
                 .then(function (response) {
 					axios.get('users/currentUser')
