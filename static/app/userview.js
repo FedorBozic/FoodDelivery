@@ -10,11 +10,13 @@ Vue.component('userview', {
 	      		defaultColor1: 'red',
 	      		defaultColor2: 'blue',
 	      		currentSort:'username',
-  				currentSortDir:'asc'
+  				currentSortDir:'asc',
+  				filter: ""
        		}
         },
         template: `
         <div class="container">
+        	<input type="text" class="form_control" placeholder="Search" v-model="filter" >
 		    <div class="container-fluid p-0" style="margin-top:100px">
 				<div class="row">
 					<div class="col-xl-8">
@@ -122,13 +124,22 @@ Vue.component('userview', {
     	},
     	computed:{
 			sortedUsers : function() {
-				return Object.values(this.users).sort((a,b) => {
+				resultData =  Object.values(this.users).sort((a,b) => {
 					let direction = 1;
 					if(this.currentSortDir === 'desc') direction = -1;
 					if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
 					if(a[this.currentSort] > b[this.currentSort]) return 1 * direction;
 					return 0;
 				});
+				return resultData.filter(sortedUser => {
+				    const username = sortedUser.username.toString().toLowerCase();
+				    const firstName = sortedUser.firstName.toString().toLowerCase();
+				    const lastName = sortedUser.lastName.toString().toLowerCase();
+					const searchTerm = this.filter.toLowerCase();
+				    return (
+				      username.includes(searchTerm) || firstName.includes(searchTerm) || lastName.includes(searchTerm)
+				    );
+			    });
 			}
 		},
 		mounted() {
