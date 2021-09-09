@@ -31,8 +31,15 @@ public class UserDao {
         this.users = users;
     }
     
+    public List<User> getAllUsers() {
+    	return users.values()
+    			.stream()
+    			.filter(user -> !user.isDeleted())
+    			.collect(Collectors.toList());
+    }
+    
     public List<User> getManagers() {
-    	List<User> tmpStep = users.values()
+    	List<User> tmpStep = getAllUsers()
                 .stream()
                 .filter(user -> user.getRole() != null && user.getRole() == User.Role.MANAGER)
                 .collect(Collectors.toList());
@@ -43,7 +50,7 @@ public class UserDao {
     }
     
     public List<User> getAvailableManagers() {
-    	List<User> tmpStep = users.values()
+    	List<User> tmpStep = getAllUsers()
                 .stream()
                 .filter(user -> user.getRole() != null && user.getRole() == User.Role.MANAGER && user.getRestaurant() == null)
                 .filter(user -> user.getRestaurant() == null)
@@ -60,7 +67,7 @@ public class UserDao {
     }
     
     public User addUser(User user) {
-        var alreadyExisting = users.values()
+        var alreadyExisting = getAllUsers()
                 .stream()
                 .filter(userInBase -> userInBase.getUsername().equals(user.getUsername()))
                 .collect(Collectors.toList());
@@ -73,7 +80,7 @@ public class UserDao {
     }
     
     public User findByUsernameAndPassword(String username, String password) {
-        return users.values()
+        return getAllUsers()
                 .stream()
                 .filter(user -> user.getUsername() != null && user.getPassword() != null)
                 .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
