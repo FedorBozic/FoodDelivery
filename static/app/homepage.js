@@ -10,32 +10,42 @@ Vue.component('homepage', {
 			open: false,
 			currentSort:'name',
 	  		currentSortDir:'asc',
-	  		filter: ""
+	  		filterName: "",
+	  		filterType: "",
+	  		filterCity: ""
 		}
     },
     template: `
 	<div>
-		<div>
-			<input type="text" placeholder="Naziv" v-model="filter">
-			<select v-model="type">
-				<option value="ALL">All</option>
-				<option value="ITALIAN">Italijanski</option>
-				<option value="CHINESE">Kineski</option>
-				<option value="GRILL">Gril</option>
-				<option value="PIZZERIA">Picerija</option>
-			</select>
-			<select v-model="rating">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-			</select>
-			<div>
-			  <input type="checkbox" id="open" name="open" v-model="open">
-			  <label for="open">Show open only</label>
-			</div>
-			<button type="button" v-on:click="getRestaurants">Search</button>
+		<div class="row mb-3" style="margin-top: 20px">
+			<div class="col-lg-4 mx-auto">
+		    	<div class="bg-white p-3 rounded shadow">
+			      	<form action="">
+			        	<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+			          		<div class="input-group">
+			            		<input type="search" placeholder="Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterName">
+			            		<div class="input-group-append">
+			              			<button disabled id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+			            		</div>
+			          		</div>
+			        	</div>
+			        	<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+			        		<div class="input-group">
+			            		<div class="input-group-prepend">
+			              			<button disabled id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
+			            		</div>
+			            		<input type="search" placeholder="Type" aria-describedby="button-addon2" class="form-control border-0 bg-light" v-model="filterType">
+			          		</div>
+			        	</div>
+			        	<div class="input-group mb-4 border rounded-pill p-1">
+			        		<input type="search" placeholder="City" aria-describedby="button-addon3" class="form-control bg-none border-0" v-model="filterCity">
+			          		<div class="input-group-append border-0">
+			            		<button id="button-addon3" disabled type="button" class="btn btn-link text-success"><i class="fa fa-search"></i></button>
+			          		</div>
+			        	</div>
+		      		</form>
+		    	</div>
+		  	</div>
 		</div>
 		<div class="d-flex justify-content-center" style="margin-top:20px">
 			<div class="row row-cols-1 row-cols-md-2" style = "width: 85%;">
@@ -47,8 +57,8 @@ Vue.component('homepage', {
 				
 					<div class="card-content">
 					  <header class="card-header-restaurant">
-						<h2 v-html="highlightMatches(r.name)"></h2>
-						<span>{{r.type}}</span>
+						<h2 v-html="highlightMatches(r.name, filterName)"></h2>
+						<span v-html="highlightMatches(r.type, filterType)"></span>
 						<br />
 						<span>{{r.status}}</span>
 						
@@ -131,13 +141,13 @@ Vue.component('homepage', {
                     alert(error.response.data);
                 });
         },
-        highlightMatches(text) {
+        highlightMatches(text, filter) {
 		    const matchExists = text
 		      .toLowerCase()
-		      .includes(this.filter.toLowerCase());
+		      .includes(filter.toLowerCase());
 		    if (!matchExists) return text;
 		
-		    const re = new RegExp(this.filter, "ig");
+		    const re = new RegExp(filter, "ig");
 		    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
 		}
     },
@@ -152,9 +162,13 @@ Vue.component('homepage', {
 			});
 			return resultData.filter(sortedRestaurant => {
 			    const name = sortedRestaurant.name.toString().toLowerCase();
-			    const searchTerm = this.filter.toLowerCase();
+			    const type = sortedRestaurant.type.toString().toLowerCase();
+			    const city = sortedRestaurant.location.address.townName.toString().toLowerCase();
+			    const nameSearchTerm = this.filterName.toLowerCase();
+			    const typeSearchTerm = this.filterType.toLowerCase();
+			    const citySearchTerm = this.filterCity.toLowerCase();
 			    return (
-			    	name.includes(searchTerm)
+			    	name.includes(nameSearchTerm) && type.includes(typeSearchTerm) && city.includes(citySearchTerm)
 			    );
 		    });
 		}
