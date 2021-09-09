@@ -116,8 +116,7 @@ public class OrderController {
 		String priceFromS = request.queryParams("priceFrom");
 		String priceToS = request.queryParams("priceTo");
 		
-		//CHECK CAST
-		List<Order> orders = new ArrayList<Order>(DostavaMain.orderDao.getOrders().values());
+		List<Order> orders = DostavaMain.orderDao.getAllOrders();
 		
 		for (Order o : orders) {
 			filtered.add(o);
@@ -148,10 +147,16 @@ public class OrderController {
     public static Route getCustomerOrders = (Request request, Response response) -> {
 		List<Order> orders = new ArrayList<Order>();
 		
-		orders = DostavaMain.orderDao.getOrders().values().stream()
+		orders = DostavaMain.orderDao.getAllOrders().stream()
 				.filter(order -> order.getCustomer().equals(UUID.fromString(request.params(":id"))))
 				.collect(Collectors.toList());
 		
 		return gson.toJson(orders);
     };
+    
+    public static Route cancelOrder = (request, response) ->  {
+    	DostavaMain.orderDao.cancelOrder(request.params("id"));
+    	return gson.toJson(DostavaMain.orderDao.getAllOrders());
+    };
+
 }

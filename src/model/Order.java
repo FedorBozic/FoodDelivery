@@ -21,6 +21,8 @@ public class Order {
 	private String customerName;
 	private OrderStatus status;
 	private String restaurantName;
+	private boolean deleted = false;
+	private boolean canceled = false;
 	
 	public Order(UUID uuid, List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
 		this.uuid = uuid;
@@ -127,5 +129,21 @@ public class Order {
 
 	public void setRestaurantName(String restaurantName) {
 		this.restaurantName = restaurantName;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
 	}
 }

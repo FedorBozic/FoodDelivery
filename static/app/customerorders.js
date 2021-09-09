@@ -33,7 +33,7 @@ Vue.component('customerorders', {
 						</table>
 					</div>
 				</div>
-		
+			<button v-if="!order.canceled" type="button" v-on:click="cancelOrder(order)" >Cancel</button>
 			</div>
 		</div>
     	`,
@@ -44,6 +44,14 @@ Vue.component('customerorders', {
                 	self.orders = res.data;
                 })
 	        },
+	        
+	        cancelOrder: function(order) {
+	        	let self = this;
+	        	axios.put('orders/cancel/' + order.uuid)
+	            .then(res => {
+					self.orders = res.data;
+	            })
+	        }
 	    },
 		mounted() {
         	let self = this;

@@ -138,9 +138,10 @@ public class DostavaMain {
 		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
 		get("/api/users/getCart", UserController.getCart);
-		post("/api/users/newItem", UserController.newItemToRestaurant);
-		post("/api/users/overwriteItem", UserController.overwriteItem);
 		post("/api/users/itemToCart", UserController.itemToCart);
+		
+		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
+		post("/api/users/overwriteItem", UserController.overwriteItem);
 		
 		get("/api/orders/getorders/:id", OrderController.getOrders);
 		get("/api/orders/getcustomerorders/:id", OrderController.getCustomerOrders);
@@ -148,6 +149,7 @@ public class DostavaMain {
 		post("/api/orders/checkout", OrderController.addOrder);
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);
+		put("/api/orders/cancel/:id", OrderController.cancelOrder);
 		
 		get("/api/delivery/userdeliveries/:id", DeliveryRequestController.getDeliveryRequestsByUser);
 		get("/api/delivery/mydeliveries/:id", DeliveryRequestController.getDeliveriesByUser);

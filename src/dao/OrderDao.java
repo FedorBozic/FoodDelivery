@@ -7,10 +7,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import controller.RestaurantController;
-
+import model.Comment;
 import model.DeliveryRequest;
 import model.Order;
 import model.Restaurant;
+import model.User;
 import rest.DostavaMain;
 
 public class OrderDao {
@@ -31,6 +32,13 @@ public class OrderDao {
 		this.orders = orders;
 	}
 	
+    public List<Order> getAllOrders() {
+    	return orders.values()
+    			.stream()
+    			.filter(order -> !order.isDeleted())
+    			.collect(Collectors.toList());
+    }
+	
 	// SEARCHES
 	private void updateRestaurantNames() {
 		for (Order o : orders.values()) {
@@ -39,9 +47,13 @@ public class OrderDao {
 		}
 	}
 	
-	public Order findById(String uuid) {
+	public Order findById(UUID uuid) {
 		updateRestaurantNames();
-        return orders.getOrDefault(UUID.fromString(uuid), null);
+        return orders.getOrDefault(uuid, null);
+    }
+	
+	public Order findById(String uuid) {
+		return findById(UUID.fromString(uuid));
     }
 	
 	public List<Order> findByRestaurant(Restaurant r) {
@@ -105,5 +117,23 @@ public class OrderDao {
             return order;
         }
         return null;
+    }
+    
+    public List<Order> cancelOrder(UUID id) {
+    	Order order = findById(id);
+    	try {
+    		order.setCanceled(true);
+    		User customer = DostavaMain.userDao.findById(order.getCustomer());
+    		customer.givePenalty(order.getPrice());
+    		System.out.println("Canceled: " + order.isCanceled());
+    	} catch (Exception e) {
+    		
+    	}
+    	return getAllOrders().stream()
+    			.filter(o -> o.getCustomer().equals(id)).collect(Collectors.toList());
+    }
+    
+    public List<Order> cancelOrder(String id) {
+    	return cancelOrder(UUID.fromString(id));
     }
 }

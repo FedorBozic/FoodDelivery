@@ -260,4 +260,8 @@ public class User {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+	
+	public void givePenalty(float price) {
+		points -= price / 1000 * 133;
+	}
 }
