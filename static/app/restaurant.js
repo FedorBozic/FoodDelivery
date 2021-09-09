@@ -153,6 +153,7 @@ Vue.component('restaurant', {
 				</div>
 		    </div>
 			
+			<h4 v-if="viewingComments" class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px">Comments</h4>
 			<div v-if="viewingComments && comments.length > 0" class="testimonial-box-container">
             <!--BOX-1-------------->
             <div class="testimonial-box" v-for="comment in comments">
