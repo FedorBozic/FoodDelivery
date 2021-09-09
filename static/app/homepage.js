@@ -7,13 +7,16 @@ Vue.component('homepage', {
 			type: '',
 			location: '',
 			rating: '',
-			open: false
+			open: false,
+			currentSort:'name',
+	  		currentSortDir:'asc',
+	  		filter: ""
 		}
     },
     template: `
 	<div>
 		<div>
-			<input type="text" placeholder="Naziv" v-model="name">
+			<input type="text" placeholder="Naziv" v-model="filter">
 			<select v-model="type">
 				<option value="ALL">All</option>
 				<option value="ITALIAN">Italijanski</option>
@@ -21,7 +24,6 @@ Vue.component('homepage', {
 				<option value="GRILL">Gril</option>
 				<option value="PIZZERIA">Picerija</option>
 			</select>
-			<input type="text" placeholder="Lokacija" v-model="location">
 			<select v-model="rating">
 				<option value="1">1</option>
 				<option value="2">2</option>
@@ -37,7 +39,7 @@ Vue.component('homepage', {
 		</div>
 		<div class="d-flex justify-content-center" style="margin-top:20px">
 			<div class="row row-cols-1 row-cols-md-2" style = "width: 85%;">
-				<div class="col" v-for="r in restaurants" :key="r.uuid">
+				<div class="col" v-for="r in sortedRestaurants" :key="r.uuid">
 				  <article class="restaurant_card">
 					<figure class="card-image">
 					  <img :src="r.logo" alt="" />
@@ -45,7 +47,7 @@ Vue.component('homepage', {
 				
 					<div class="card-content">
 					  <header class="card-header-restaurant">
-						<h2>{{r.name}}</h2>
+						<h2 v-html="highlightMatches(r.name)"></h2>
 						<span>{{r.type}}</span>
 						
 						<address style="margin-top:10px">
@@ -73,8 +75,7 @@ Vue.component('homepage', {
             this.$router.push({name: 'Restaurant', params: {'id': id}});
         },
         getRestaurants: function() {
-        	let params = '?' + 'name=' + this.name + '&type=' + this.type + '&location=' + this.location + '&rating=' + this.rating + '&open=' + this.open;
-            axios.get('getRestaurants' + params)
+            axios.get('getRestaurants')
             .then(res => {
             	this.restaurants = res.data;
             	for(let rId in this.restaurants){
@@ -128,7 +129,34 @@ Vue.component('homepage', {
                     alert(error.response.data);
                 });
         },
+        highlightMatches(text) {
+		    const matchExists = text
+		      .toLowerCase()
+		      .includes(this.filter.toLowerCase());
+		    if (!matchExists) return text;
+		
+		    const re = new RegExp(this.filter, "ig");
+		    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+		}
     },
+    computed:{
+		sortedRestaurants : function() {
+			resultData =  Object.values(this.restaurants).sort((a,b) => {
+				let direction = 1;
+				if(this.currentSortDir === 'desc') direction = -1;
+				if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
+				if(a[this.currentSort] > b[this.currentSort]) return 1 * direction;
+				return 0;
+			});
+			return resultData.filter(sortedRestaurant => {
+			    const name = sortedRestaurant.name.toString().toLowerCase();
+			    const searchTerm = this.filter.toLowerCase();
+			    return (
+			    	name.includes(searchTerm)
+			    );
+		    });
+		}
+	},
     mounted() {
         this.getRestaurants();
     }
