@@ -42,6 +42,18 @@ public class UserDao {
     	return tmpStep;
     }
     
+    public List<User> getAvailableManagers() {
+    	List<User> tmpStep = users.values()
+                .stream()
+                .filter(user -> user.getRole() != null && user.getRole() == User.Role.MANAGER && user.getRestaurant() == null)
+                .filter(user -> user.getRestaurant() == null)
+                .collect(Collectors.toList());
+    	for (User u : tmpStep) {
+			System.out.println(u.getFirstName() + " " + u.getLastName());
+		}
+    	return tmpStep;
+    }
+    
     public Cart getCartByUserId(String uuid) {
     	User user = findById(uuid);
     	return user.getCart();

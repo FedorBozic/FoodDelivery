@@ -100,6 +100,16 @@ public class DostavaMain {
 		
 		tmpItem.setRestaurant(defaultRestaurant);
 		defaultRestaurant.addItem(tmpItem);
+		
+		User availableManager = new User();
+		availableManager.setUsername("mng1");
+		availableManager.setPassword("mng1");
+		availableManager.setFirstName("Branka");
+		availableManager.setLastName("Brankovic");
+		availableManager.setGender(User.Gender.valueOf("FEMALE"));
+		availableManager.setRole(User.Role.MANAGER);
+		availableManager.setType(userTypeDao.findByName("STAFF"));
+		userDao.addUser(availableManager);
 	}
 	
 	public static void main(String[] args) {
@@ -128,6 +138,7 @@ public class DostavaMain {
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
 		get("/api/users/managers", (request,response) -> gson.toJson(userDao.getManagers()));
+		get("/api/users/availablemanagers", (request,response) -> gson.toJson(userDao.getAvailableManagers()));
         get("/api/users/logout", UserController.logOut);
         post("/api/users/login", UserController.logIn);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));

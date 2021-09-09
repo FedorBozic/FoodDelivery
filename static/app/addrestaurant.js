@@ -119,6 +119,17 @@ Vue.component('addrestaurant', {
             };
         },
         
+        getAvailableManagers: function() {
+        	console.log(res);
+            axios.get('users/availablemanagers')
+        	.then(res => {
+            	this.managers = res.data;
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        },
+        
         addRestaurant: function() {
         	let self = this;
         	let newRestaurant = {
@@ -148,6 +159,7 @@ Vue.component('addrestaurant', {
 		            	}
 		            	window.location.href = "#/addrestaurant";
 		            })
+		            this.getAvailableManagers();
                 })
                 .catch(function (error) {
                     alert(error.response.data);
@@ -191,14 +203,7 @@ Vue.component('addrestaurant', {
 		    		window.location.href = "#/registration";
 		    	}
 		    	else {
-                	console.log(res);
-	                axios.get('users/managers')
-		        	.then(res => {
-		            	this.managers = res.data;
-		            })
-		            .catch(err => {
-		                console.error(err);
-		            });
+                	this.getAvailableManagers();
                 }
             })
             .catch(err => {
