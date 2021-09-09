@@ -32,9 +32,9 @@ Vue.component('userview', {
 							</thead>
 							<tbody v-for="user in sortedUsers">
 								<tr>
-									<td>{{user.username}}</td>
-									<td>{{user.firstName}}</td>
-									<td>{{user.lastName}}</td>
+									<td v-html="highlightMatches(user.username)"></td>
+									<td v-html="highlightMatches(user.firstName)"></td>
+									<td v-html="highlightMatches(user.lastName)"></td>
 									<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(user) }">{{user.type.name}}</span></td>
 									<td>{{user.role}}</td>
 								</tr>
@@ -120,7 +120,16 @@ Vue.component('userview', {
 					self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
 				}
 			  	this.currentSort = s;
-			}
+			},
+			highlightMatches(text) {
+			    const matchExists = text
+			      .toLowerCase()
+			      .includes(this.filter.toLowerCase());
+			    if (!matchExists) return text;
+			
+			    const re = new RegExp(this.filter, "ig");
+			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+		    }
     	},
     	computed:{
 			sortedUsers : function() {
