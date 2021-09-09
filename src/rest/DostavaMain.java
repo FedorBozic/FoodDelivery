@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import controller.CommentController;
 import controller.DeliveryRequestController;
 import controller.OrderController;
 import controller.RestaurantController;
@@ -23,6 +24,7 @@ import dao.RestaurantDao;
 import model.Address;
 import model.Cart;
 import model.CartItem;
+import model.Comment;
 import model.Item;
 import model.Location;
 import model.Restaurant;
@@ -102,6 +104,8 @@ public class DostavaMain {
 		
 		tmpItem.setRestaurant(defaultRestaurant);
 		defaultRestaurant.addItem(tmpItem);
+		
+		commentDao.addComment(new Comment(UUID.randomUUID(), defaultCustomer, defaultRestaurant, "ok", 4, true));
 	}
 	
 	public static void main(String[] args) {
@@ -162,6 +166,8 @@ public class DostavaMain {
 		post("/api/restaurants/newRestaurant", RestaurantController.addRestaurant);
 		get("api/restaurants/:id", RestaurantController.findById);
 		put("api/restaurants/edit", "application/json", RestaurantController.editRestaurant);
+		
+		get("api/comments/:id", CommentController.findByRestaurant);
 	}
 
 }

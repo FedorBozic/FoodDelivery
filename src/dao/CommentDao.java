@@ -75,7 +75,7 @@ public class CommentDao {
 	public List<Comment> findByRestaurant(UUID r) {
     	List<Comment> tmpStep = comments.values()
                 .stream()
-                .filter(comment -> comment.getRestaurant().getUuid() == r)
+                .filter(comment -> comment.getRestaurant().getUuid().equals(r))
                 .collect(Collectors.toList());
     	return tmpStep;
     }

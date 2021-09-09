@@ -28,7 +28,9 @@ Vue.component('restaurant', {
 				padding: '10px'
 			},
 			articlenumber: 0,
-			editingItem: {}
+			editingItem: {},
+			viewingComments: false,
+			comments: []
 		}
     },
     template: `
@@ -55,17 +57,17 @@ Vue.component('restaurant', {
 		       
 		        
 		        <div class="profile-card-inf">
-		          <div class="profile-card-inf__item">
+		          <div class="profile-card-inf__item" @click="viewingComments = false">
 		            <div class="profile-card-inf__title">{{this.articlenumber}}</div>
 		            <div class="profile-card-inf__txt">Articles</div>
 		          </div>
 		        
-		          <div class="profile-card-inf__item">
+		          <div class="profile-card-inf__item" @click="viewingComments = true">
 		            <div class="profile-card-inf__title">0</div>
 		            <div class="profile-card-inf__txt">Rating</div>
 		          </div>
 		        
-		          <div class="profile-card-inf__item">
+		          <div class="profile-card-inf__item" @click="viewingComments = true">
 		            <div class="profile-card-inf__title">0</div>
 		            <div class="profile-card-inf__txt">Comments</div>
 		          </div>
@@ -95,7 +97,7 @@ Vue.component('restaurant', {
 			    	</tbody>
 			    </table>
 			    
-				<div style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
+				<div v-if="!viewingComments" style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
 					<div class="row">
 						<div style="float:left; margin-left: 30px; margin-top: -15px; padding:3px 10px 3px 10px; border-radius:5px; background-color: rgba(250, 30, 20); color:white"><h3>FOOD</h3></div>
 					</div>
@@ -151,7 +153,38 @@ Vue.component('restaurant', {
 				</div>
 		    </div>
 			
-			
+			<div v-if="viewingComments && comments.length > 0" class="testimonial-box-container">
+            <!--BOX-1-------------->
+            <div class="testimonial-box" v-for="comment in comments">
+                <!--top------------------------->
+                <div class="box-top">
+                    <!--profile----->
+                    <div class="profile">
+                        <!--name-and-username-->
+                        <div class="name-user">
+                            <strong>{{comment.customer.firstName + ' ' + comment.customer.lastName}}</strong>
+                            <span>@{{comment.customer.username}}</span>
+                        </div>
+                    </div>
+                    <!--Veoma lazy resenje. Sa vfor moze lakse, ali bude ruznije iz nekog razloga------>
+                    <div class="reviews">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star" v-if="comment.rating >= 2"></i>
+                        <i class="fa fa-star" v-if="comment.rating >= 3"></i>
+                        <i class="fa fa-star" v-if="comment.rating >= 4"></i>
+                        <i class="fa fa-star" v-if="comment.rating >= 5"></i>
+                        <i class="fa fa-star-o" v-if="comment.rating < 2"></i>
+                        <i class="fa fa-star-o" v-if="comment.rating < 3"></i>
+                        <i class="fa fa-star-o" v-if="comment.rating < 4"></i>
+                        <i class="fa fa-star-o" v-if="comment.rating < 5"></i>
+                    </div>
+                </div>
+                <!--Comments---------------------------------------->
+                <div class="client-comment">
+                    <p>{{comment.text}}</p>
+                </div>
+            </div>
+        </div>
 			<svg hidden="hidden">
 			  <defs>
 			    <symbol id="icon-location" viewBox="0 0 32 32">
@@ -262,6 +295,7 @@ Vue.component('restaurant', {
         },
 	},
     mounted() {
+    	let self = this
         axios.get('restaurants/' + this.$route.params.id)
         .then(res => {
             this.restaurant = res.data;
@@ -275,6 +309,10 @@ Vue.component('restaurant', {
 		    	}
 				this.articlenumber++;
 		    }
+		    axios.get('comments/' + self.$route.params.id)
+		    .then(res => {
+		    	self.comments = res.data
+		    })
         })
         .catch(err => {
             console.error(err);
