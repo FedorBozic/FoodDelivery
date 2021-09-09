@@ -12,7 +12,9 @@ Vue.component('homepage', {
 	  		currentSortDir:'asc',
 	  		filterName: "",
 	  		filterType: "",
-	  		filterCity: ""
+	  		filterCity: "",
+	      	currentSort:'name',
+  			currentSortDir:'asc',
 		}
     },
     template: `
@@ -25,22 +27,24 @@ Vue.component('homepage', {
 			          		<div class="input-group">
 			            		<input type="search" placeholder="Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterName">
 			            		<div class="input-group-append">
-			              			<button disabled id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+			              			<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('name')"><i class="fa fa-sort"></i></button>
 			            		</div>
 			          		</div>
 			        	</div>
 			        	<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
 			        		<div class="input-group">
 			            		<div class="input-group-prepend">
-			              			<button disabled id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
+			              			<button id="button-addon2" type="submit" class="btn btn-link text-warning" v-on:click="sort('type')"><i class="fa fa-sort"></i></button>
 			            		</div>
 			            		<input type="search" placeholder="Type" aria-describedby="button-addon2" class="form-control border-0 bg-light" v-model="filterType">
 			          		</div>
 			        	</div>
-			        	<div class="input-group mb-4 border rounded-pill p-1">
-			        		<input type="search" placeholder="City" aria-describedby="button-addon3" class="form-control bg-none border-0" v-model="filterCity">
-			          		<div class="input-group-append border-0">
-			            		<button id="button-addon3" disabled type="button" class="btn btn-link text-success"><i class="fa fa-search"></i></button>
+			        	<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+			          		<div class="input-group">
+			            		<input type="search" placeholder="City" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterCity">
+			            		<div class="input-group-append">
+			              			<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('location.address.townName')"><i class="fa fa-sort"></i></button>
+			            		</div>
 			          		</div>
 			        	</div>
 		      		</form>
@@ -141,6 +145,13 @@ Vue.component('homepage', {
                     alert(error.response.data);
                 });
         },
+        sort: function(s) {
+	       	let self = this
+			if(s === this.currentSort) {
+				self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
+			}
+		  	this.currentSort = s;
+		},
         highlightMatches(text, filter) {
 		    const matchExists = text
 		      .toLowerCase()
