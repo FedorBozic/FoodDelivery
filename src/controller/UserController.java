@@ -208,6 +208,7 @@ public class UserController {
     	if(body.get("restaurant") != null && DostavaMain.restaurantDao.findById((String) body.get("restaurant")) != null)
     	{
     		DostavaMain.restaurantDao.findById((String) body.get("restaurant")).addItem(item);
+        	item.setRestaurant(DostavaMain.restaurantDao.findById((String) body.get("restaurant")));
     	}
     	else
     	{
