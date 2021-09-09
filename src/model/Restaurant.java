@@ -105,4 +105,14 @@ public class Restaurant {
 		}
         return foundItem;
     }
+	
+	public Item findItemById(String uuid) {
+		Item foundItem = null;
+		for(Item i : this.items)
+		{
+			if(i.getUuid().equals(UUID.fromString(uuid)))
+				foundItem = i;
+		}
+        return foundItem;
+    }
 }

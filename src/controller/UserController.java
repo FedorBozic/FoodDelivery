@@ -281,4 +281,36 @@ public class UserController {
     	
         return response;
     };
+    
+    public static Route overwriteItem = (Request request, Response response) -> {
+    	response.status(200);
+    	
+    	var body = gson.fromJson((request.body()), HashMap.class);
+    	
+    	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
+    	Item itemToOverwrite = r.findItemById((String) body.get("uuid"));
+
+    	String name = (String) body.get("name");
+    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
+    	String description = (String) body.get("description");
+    	float price = Float.parseFloat(((String) body.get("price")));
+    	int amount = 0;
+    	String image = (String) body.get("image");
+    	
+    	if(r.findItemByName(name) != null && !r.findItemByName(name).getUuid().equals(itemToOverwrite.getUuid()))
+    	{
+    		response.status(400);
+    		response.body("Invalid name: name is already taken by another item!");
+    		return response;
+    	}
+    	
+    	itemToOverwrite.setName(name);
+    	itemToOverwrite.setType(type);
+    	itemToOverwrite.setAmount(amount);
+    	itemToOverwrite.setDescription(description);
+    	itemToOverwrite.setPrice(price);
+    	itemToOverwrite.setImage(image);
+    	
+        return response;
+    };
 }

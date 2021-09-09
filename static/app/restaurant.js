@@ -252,6 +252,13 @@ Vue.component('restaurant', {
         
         deactivateEditMode: function(item) {
         	this.editingItem = {}
+        	axios.post('users/overwriteItem', JSON.stringify(item))
+                .then(function (response) {
+					axios.get('users/currentUser')
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
         },
 	},
     mounted() {
