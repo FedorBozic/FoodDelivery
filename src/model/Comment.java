@@ -8,7 +8,8 @@ public class Comment {
 	private Restaurant restaurant;
 	private String text;
 	private int rating;
-	private boolean approved;
+	private boolean approved = false;
+	private boolean deleted = false;
 	
 	public Comment() {
 		
@@ -62,5 +63,13 @@ public class Comment {
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

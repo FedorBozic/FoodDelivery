@@ -33,8 +33,19 @@ public class CommentDao {
 	
 	// SEARCHES
 	
+    public List<Comment> getAllComments() {
+    	return comments.values()
+    			.stream()
+    			.filter(comment -> !comment.isDeleted())
+    			.collect(Collectors.toList());
+    }
+	
+	public Comment findById(UUID uuid) {
+        return comments.getOrDefault(uuid, null);
+    }
+	
 	public Comment findById(String uuid) {
-        return comments.getOrDefault(UUID.fromString(uuid), null);
+        return findById(UUID.fromString(uuid));
     }
 	
 	public List<Comment> findByCustomer(User u) {
@@ -81,4 +92,13 @@ public class CommentDao {
         }
         return null;
     }
+    
+	public boolean deleteComment(UUID id) {
+		findById(id).setDeleted(true);
+		return true;
+	}
+	
+	public boolean deleteComment(String id) {
+		return deleteComment(UUID.fromString(id));
+	}
 }
