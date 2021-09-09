@@ -17,6 +17,7 @@ public class Order {
 	private UUID deliverer = null;
 	private LocalDateTime dateTime;
 	private float price;
+	private UUID customer;
 	private String customerName;
 	private OrderStatus status;
 	private String restaurantName;
@@ -89,6 +90,26 @@ public class Order {
 		this.status = status;
 	}
 	
+	public UUID getDeliverer() {
+		return deliverer;
+	}
+
+	public void setDeliverer(UUID deliverer) {
+		this.deliverer = deliverer;
+	}
+
+	public UUID getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(UUID customer) {
+		this.customer = customer;
+	}
+
+	public void setRestaurant(UUID restaurant) {
+		this.restaurant = restaurant;
+	}
+
 	public void addItem(CartItem item)
 	{
 		items.add(item);

@@ -5,6 +5,7 @@ const Login = {template: '<login></login>'}
 const AddRestaurant = {template: '<addrestaurant></addrestaurant>'}
 const Restaurant = {template: '<restaurant></restaurant>'}
 const Orders = {template: '<orders></orders>'}
+const CustomerOrders = {template: '<customerorders></customerorders>'}
 const AwaitingDeliveryOrders = {template: '<awaitingdeliveryorders></awaitingdeliveryorders>'}
 const Profile = {template: '<profile></profile>'}
 const Basket = {template: '<basket></basket>'}
@@ -21,6 +22,7 @@ const router = new VueRouter({
 		{path: '/addrestaurant', component: AddRestaurant},
 		{path: '/restaurant/:id', name: 'Restaurant', component: Restaurant},
 		{path: '/orders/:id/', name: 'Orders', component: Orders},
+		{path: '/customerorders/:id/', name: 'CustomerOrders', component: CustomerOrders},
 		{path: '/awaitingdeliveryorders', component: AwaitingDeliveryOrders},
 		{path: '/profile', component: Profile},
 		{path: '/basket', component: Basket},

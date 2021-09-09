@@ -1,0 +1,54 @@
+Vue.component('customerorders', {
+        data: function () {
+        	return{
+        		currentUser: {},
+				orders: []
+       		}
+        },
+        template: `
+        <div class="container">
+		    <div class="container-fluid p-0" style="margin-top:100px">
+				<div class="row" v-for="order in orders">
+					<div class="card-header">{{order.restaurantName}}</div>
+					<div class="col-xl-8">
+						<table class="table table-striped" style="width:100%">
+							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
+								<tr>
+									<th>Name</th>
+									<th>Count</th>
+								</tr>
+							</thead>
+							<tbody v-for="ci in order.items">
+								<tr>
+									<td>{{ci.item.name}}</td>
+									<td>{{ci.item.count}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+		
+			</div>
+		</div>
+    	`,
+    	methods: {
+	        getOrders: function() {
+        		axios.get('orders/getcustomerorders/' + this.$route.params.id)
+                .then(res => {
+                	self.orders = res.data;
+                })
+	        },
+	    },
+		mounted() {
+        	let self = this;
+        	axios.get('users/currentUser')
+            .then(res => {
+				self.currentUser = res.data
+                axios.get('orders/getcustomerorders/' + this.$route.params.id)
+                .then(res => {
+                	self.orders = res.data;
+                })
+            })
+        }
+    }
+);

@@ -62,6 +62,7 @@ public class OrderController {
         		newOrder.setUuid(UUID.randomUUID());
         		newOrder.setRestaurant(ci.getItem().getRestaurant());
         		newOrder.setRestaurantName(ci.getItem().getRestaurant().getName());
+        		newOrder.setCustomer(user.getUuid());
         		newOrder.setCustomerName(user.getUsername());
         		newOrder.setStatus(Order.OrderStatus.PROCESSING);
         		createdOrders.add(newOrder);
@@ -140,5 +141,15 @@ public class OrderController {
 		//Treba jos datum
 		
 		return gson.toJson(filtered);
+    };
+    
+    public static Route getCustomerOrders = (Request request, Response response) -> {
+		List<Order> orders = new ArrayList<Order>();
+		
+		orders = DostavaMain.orderDao.getOrders().values().stream()
+				.filter(order -> order.getCustomer().equals(UUID.fromString(request.params(":id"))))
+				.collect(Collectors.toList());
+		
+		return gson.toJson(orders);
     };
 }

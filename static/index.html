@@ -1160,6 +1160,7 @@
 		<a href="#/awaitingdeliveryorders" v-if="isSignedIn && role == 'DELIVERY'">Orders</a>
 		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/restaurant/' + currentUser.restaurant.uuid" style="width:120px">Restaurant</a>
 		<a v-if="isSignedIn && currentUser.restaurant" v-bind:href="'#/orders/' + currentUser.restaurant.uuid">Orders</a>
+		<a v-if="isSignedIn && role == 'CUSTOMER'" v-bind:href="'#/customerorders/' + currentUser.uuid">Orders</a>
 		<a href="#/userview" v-if="isSignedIn && role == 'ADMIN'">Users</a>
 		<a href="#/addrestaurant" v-if="isSignedIn && role == 'ADMIN'" style="width:120px">Restaurants</a>
 		<a href="#/profile" v-if="isSignedIn">Profile</a>
@@ -1183,6 +1184,7 @@
 <script src="app/addrestaurant.js"></script>
 <script src="app/restaurant.js"></script>
 <script src="app/orders.js"></script>
+<script src="app/customerorders.js"></script>
 <script src="app/awaitingdeliveryorders.js"></script>
 <script src="app/profile.js"></script>
 <script src="app/user_tier_card.js"></script>
