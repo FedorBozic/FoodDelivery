@@ -58,4 +58,9 @@ public class CommentController {
     	        
         return response;
     };
+    
+    public static Route deleteComment = (Request request, Response response) -> {
+    	DostavaMain.commentDao.deleteComment(request.params("id"));
+    	return response;
+    };
 }

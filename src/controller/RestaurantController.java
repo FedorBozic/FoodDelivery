@@ -127,8 +127,7 @@ public class RestaurantController {
 		String rating = request.queryParams("rating");
 		String open = request.queryParams("open");
 		
-		//CHECK CAST
-		List<Restaurant> restaurants = new ArrayList<Restaurant>(restaurantDao.getRestaurants().values());
+		List<Restaurant> restaurants = restaurantDao.getAllRestaurants();
 		
 		for (Restaurant r : restaurants) {
 			filtered.add(r);
@@ -164,6 +163,11 @@ public class RestaurantController {
 		return gson.toJson(filtered);
     };
 
+    public static Route deleteRestaurant = (Request request, Response response) -> {
+    	restaurantDao.deleteRestaurant(request.params("id"));
+    	return response;
+    };
+    
 	public static Route getRestaurants() {
 		// TODO Auto-generated method stub
 		return null;

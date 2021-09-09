@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,14 +23,22 @@ public class RestaurantDao {
     public HashMap<UUID, Restaurant> getRestaurants() {
         return restaurants;
     }
+    
+    public List<Restaurant> getAllRestaurants() {
+    	return restaurants.values()
+    			.stream()
+    			.filter(restaurant -> !restaurant.isDeleted())
+    			.collect(Collectors.toList());
+    }
 
     public void setUsers(HashMap<UUID, Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
     
     public Restaurant newRestaurant(Restaurant restaurant) {
-        var alreadyExisting = restaurants.values() //Mozda u foreachu da bi stao nakon prvog matcha?
+        var alreadyExisting = restaurants.values()
                 .stream()
+                .filter(r -> !r.isDeleted())
                 .filter(userInBase -> userInBase.getName().equals(restaurant.getName()))
                 .collect(Collectors.toList());
         if (alreadyExisting.size() == 0) {
@@ -47,5 +56,14 @@ public class RestaurantDao {
 
 	public Restaurant findById(UUID id) {
 		return restaurants.getOrDefault(id, null);
+	}
+	
+	public boolean deleteRestaurant(UUID id) {
+		findById(id).setDeleted(true);
+		return true;
+	}
+	
+	public boolean deleteRestaurant(String id) {
+		return deleteRestaurant(UUID.fromString(id));
 	}
 }

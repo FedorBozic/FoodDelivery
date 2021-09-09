@@ -16,6 +16,8 @@ public class Restaurant {
 	private Location location;
 	private String logo;
 	private UUID manager;
+	private float rating = 0f;
+	private boolean deleted = false;
 	
 	public Restaurant() {
 		this.uuid = UUID.randomUUID();
@@ -115,4 +117,20 @@ public class Restaurant {
 		}
         return foundItem;
     }
+
+	public float getRating() {
+		return rating;
+	}
+
+	public void setRating(float rating) {
+		this.rating = rating;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }
