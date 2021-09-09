@@ -37,7 +37,7 @@ public class RestaurantController {
     public static Route findById = (Request request, Response response) ->
     	gson.toJson(restaurantDao.findById(request.params(":id")));
     
-    public static Route newRestaurant = (Request request, Response response) -> {
+    public static Route addRestaurant = (Request request, Response response) -> {
     	
     	var body = gson.fromJson((request.body()), HashMap.class);
     	
@@ -51,10 +51,9 @@ public class RestaurantController {
     	restaurant.setManager((String) body.get("manager"));
     	DostavaMain.userDao.findById((String) body.get("manager")).setRestaurant(restaurant);
     	
-    	// TEMPORARNO, UKLONITI POSLE
-    	Address tmpAdd = new Address("Nikole Tesle 13", "Novi Sad", "21000");
-		Location tmpLoc = new Location(0, 0, tmpAdd);
-    	restaurant.setLocation(tmpLoc);
+    	Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
+		Location location = new Location(Float.parseFloat(((String) body.get("latitude"))), Float.parseFloat(((String) body.get("longtitude"))), address);
+    	restaurant.setLocation(location);
     	
     	restaurantDao.newRestaurant(restaurant);
     	

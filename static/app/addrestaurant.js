@@ -118,8 +118,8 @@ Vue.component('addrestaurant', {
 	               	<div class="col-sm-3">
 	                   	<p class="m-b-10 f-w-600" style="text-align:right">Lat/Lon</p>
 	                   	<div class="row" style="margin-left:55px">
-	                   		<h6 class="f-w-400" style="width: 40px; float: right"><input type="text" class="discrete-textbox-black" style="text-align:right" placeholder="Lat" v-model="latitude" ></h6>
-	               			<h6 class="f-w-400" style="width: 40px; float: right"><input type="text" class="discrete-textbox-black" style="text-align:right" placeholder="Lon" v-model="longtitude" ></h6>
+	                   		<h6 class="f-w-400" style="width: 40px; float: right"><input type="number" class="discrete-textbox-black" style="text-align:right" placeholder="Lat" v-model="latitude" ></h6>
+	               			<h6 class="f-w-400" style="width: 40px; float: right"><input type="number" class="discrete-textbox-black" style="text-align:right" placeholder="Lon" v-model="longtitude" ></h6>
 	               		</div>
 	               	</div>
 	           	</div>
@@ -213,28 +213,15 @@ Vue.component('addrestaurant', {
         		status: this.status,
         		manager: this.manager.uuid,
         		image: this.image,
+        		address: self.address,
+				townName: self.townName,
+				postalCode: self.postalCode,
+				latitude: self.latitude,
+				longtitude: self.longtitude
         	};
             axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
                 .then(function (response) {
-					axios.get('getRestaurants')
-		            .then(res => {
-		            	self.restaurants = res.data;
-		            	for(let rId in self.restaurants){
-		            		let r = self.restaurants[rId];
-		            		if(r.location != null && r.location.address != null){
-		            			let address = r.location.address;
-		            			r.locationLabel = address.streetAddress + ' ' + address.townName + ' ' + address.zipCode;
-		            		}
-		            		else
-		            			r.location = '';
-		            			
-		            		if(r.logo != null){
-		            			r.logo = 'data:image/png;base64,' + r.logo;
-		            		}
-		            	}
-		            	window.location.href = "#/addrestaurant";
-		            })
-		            this.getAvailableManagers();
+		            window.location.href = "#/";
                 })
                 .catch(function (error) {
                     alert(error.response.data);
@@ -247,7 +234,6 @@ Vue.component('addrestaurant', {
         	this.manager.type = 'STAFF';
             axios.post('users/adduser', JSON.stringify(this.manager))
                 .then(function (response) {
-                    alert(response.data);
                     axios.get('users/availablemanagers')
 			        	.then(res => {
 			            	self.managers = res.data;
@@ -259,11 +245,15 @@ Vue.component('addrestaurant', {
 					        		status: self.status,
 					        		manager: self.manager.uuid,
 					        		image: self.image,
+					        		address: self.address,
+					        		townName: self.townName,
+					        		postalCode: self.postalCode,
+					        		latitude: self.latitude,
+					        		longtitude: self.longtitude
 					        	};
 					            axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
 					                .then(function (response) {
-										self.getRestaurants();
-										//this.getAvailableManagers();
+										window.location.href = "#/";
 					                })
 					                .catch(function (error) {
 					                    alert(error.response.data);
@@ -284,7 +274,6 @@ Vue.component('addrestaurant', {
         
 		options() {
 			let manager_list = [];
-			//alert("TEST");
 			console.log(this.managers.length);
 			for(let m in this.managers){
 				manager_list.push(m.username);
@@ -295,11 +284,10 @@ Vue.component('addrestaurant', {
     },
     computed:{
     	canConfirm(){
-    		return (this.name && this.type && this.manager.firstName && this.manager.lastName && this.manager.username && this.manager.password && this.manager.gender && this.address && this.townName && this.postalCode && this.latitude && this.longtitude && this.image)
+    		return (this.name && this.type && this.manager.firstName && this.manager.lastName && this.manager.username && this.manager.password && this.manager.gender && this.address && this.townName && this.postalCode && this.latitude && this.longtitude && this.latitude > -90 && this.latitude < 90 && this.longtitude > -90 && this.longtitude < 90 && this.image)
     	}
 		/*options(){
 			let manager_list = [];
-			console.log("TEST");
 			console.log(this.managers.length);
 			for(let m in this.managers){
 				manager_list.push(m.username);
