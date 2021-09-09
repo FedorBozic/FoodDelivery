@@ -66,6 +66,38 @@ Vue.component('addrestaurant', {
 						</h6>
 	               	</div>
 	           	</div>
+	           	<h4 v-if="addManagerMode" class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px; margin-top:20px">Manager</h4>
+	           	<div v-if="addManagerMode" class="row" style="margin-left:20px; margin-right: 20px">
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600" style="text-align:left">Username</p>
+	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="text" class="discrete-textbox-black" placeholder="Username" v-model="manager.username" ></h6>
+	               	</div>
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600">First Name</p>
+	                   	<h6 class="f-w-400"><input type="text" class="discrete-textbox-black" style="text-align:center" placeholder="First Name" v-model="manager.firstName" ></h6>
+	               	</div>
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600" style="text-align:right">Last Name</p>
+	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="text" class="discrete-textbox-black" style="text-align:right" placeholder="Last Name" v-model="manager.lastName" ></h6>
+	               	</div>
+	           	</div>
+	           	<div v-if="addManagerMode" class="row" style="margin-left:20px; margin-right: 20px">
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600" style="text-align:left">Password</p>
+	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="password" class="discrete-textbox-black" placeholder="Password" v-model="manager.password" ></h6>
+	               	</div>
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600">Gender</p>
+	                   	<h6 class="f-w-400"><select name="gender" v-model="manager.gender" >
+							<option value="FEMALE">Female</option>
+							<option value="MALE">Male</option>
+						</select></h6>
+	               	</div>
+	               	<div class="col-sm-4">
+	                   	<p class="m-b-10 f-w-600" style="text-align:right">Date of Birth</p>
+	                   	<h6 class="f-w-400" style="margin-left:-3px"><input type="date" class="dateOfBirthPicker" v-model="manager.birthday"></h6>
+	               	</div>
+	           	</div>
 		    </div>
 			
 			
