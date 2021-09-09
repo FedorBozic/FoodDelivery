@@ -98,8 +98,25 @@ public class DostavaMain {
 		defaultManager.setRestaurant(defaultRestaurant);
 		restaurantDao.newRestaurant(defaultRestaurant);
 		
+		Restaurant defaultRestaurant2 = new Restaurant();
+		defaultRestaurant2.setStatus(RestaurantStatus.OPEN);
+		defaultRestaurant2.setType(RestaurantType.GRILL);
+		defaultRestaurant2.setLocation(tmpLoc);
+		defaultRestaurant2.setManager(defaultManager);
+		defaultManager.setRestaurant(defaultRestaurant2);
+		restaurantDao.newRestaurant(defaultRestaurant2);
+		
 		tmpItem.setRestaurant(defaultRestaurant);
 		defaultRestaurant.addItem(tmpItem);
+		
+		Item tmpItem2 = new Item();
+		tmpItem2.setName("Nesto");
+		tmpItem2.setDescription("Test");
+		tmpItem2.setPrice(30);
+		tmpItem2.setType(Item.ItemType.FOOD);
+		
+		tmpItem2.setRestaurant(defaultRestaurant2);
+		defaultRestaurant2.addItem(tmpItem2);
 		
 		//defaultCustomer.addCartItem(tmpItem, 4);
 	}

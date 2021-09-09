@@ -50,18 +50,39 @@ public class OrderController {
             return response;
         }
         
-        Order newOrder = new Order();
-        newOrder.setUuid(UUID.randomUUID());
-        newOrder.setRestaurant(user.getCart().getCartItems().get(0).getItem().getRestaurant());
-        newOrder.setRestaurantName(newOrder.getRestaurant().getName());
-        newOrder.setCustomerName(user.getUsername());
-        newOrder.setStatus(Order.OrderStatus.PROCESSING);
+        List<Restaurant> restaurantsInBasket = new ArrayList<>();
+        List<Order> createdOrders = new ArrayList<>();
+        for(CartItem ci : user.getCart().getCartItems())
+        {
+        	if(!restaurantsInBasket.contains(ci.getItem().getRestaurant()))
+        	{
+        		System.out.println(ci.getItem().getRestaurant().getName());
+        		restaurantsInBasket.add(ci.getItem().getRestaurant());
+        		Order newOrder = new Order();
+        		newOrder.setUuid(UUID.randomUUID());
+        		newOrder.setRestaurant(ci.getItem().getRestaurant());
+        		newOrder.setRestaurantName(ci.getItem().getRestaurant().getName());
+        		newOrder.setCustomerName(user.getUsername());
+        		newOrder.setStatus(Order.OrderStatus.PROCESSING);
+        		createdOrders.add(newOrder);
+        	}
+        }
         
         for(CartItem ci : user.getCart().getCartItems())
         {
-        	newOrder.addItem(ci);
+        	for(Order order : createdOrders)
+        	{
+        		if(ci.getItem().getRestaurant().getUuid().equals(order.getRestaurant().getUuid()))
+        		{
+        			order.addItem(ci);
+        		}
+        	}
         }
-        DostavaMain.orderDao.addOrder(newOrder);
+        
+        for(Order order : createdOrders)
+        {
+        	DostavaMain.orderDao.addOrder(order);
+        }
         user.setCart(null);
         
         return response;
