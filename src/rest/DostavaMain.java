@@ -100,16 +100,6 @@ public class DostavaMain {
 		
 		tmpItem.setRestaurant(defaultRestaurant);
 		defaultRestaurant.addItem(tmpItem);
-		
-		User availableManager = new User();
-		availableManager.setUsername("mng1");
-		availableManager.setPassword("mng1");
-		availableManager.setFirstName("Branka");
-		availableManager.setLastName("Brankovic");
-		availableManager.setGender(User.Gender.valueOf("FEMALE"));
-		availableManager.setRole(User.Role.MANAGER);
-		availableManager.setType(userTypeDao.findByName("STAFF"));
-		userDao.addUser(availableManager);
 	}
 	
 	public static void main(String[] args) {

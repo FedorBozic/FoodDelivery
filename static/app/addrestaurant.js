@@ -6,7 +6,15 @@ Vue.component('addrestaurant', {
 			managers: [],
 			name: '',
 			type: '',
-			manager: '',
+			manager: {
+				firstName: '',
+				lastName: '',
+				username: '',
+				password: '',
+				role: 'MANAGER',
+				type: 'STAFF',
+				gender: 'FEMALE',
+			},
 			status: 'OPEN',
 			image: ''
 		}
@@ -36,9 +44,19 @@ Vue.component('addrestaurant', {
 							<option value="PIZZERIA">Picerija</option>
 						</select>
 						
-						<select v-model="manager">
+						<select v-if="managers.length > 0" v-model="manager">
 							<option v-for="m of managers" :value="m">{{m.firstName}} {{m.lastName}}</option>
 						</select>
+						<div v-if="managers.length == 0">
+							<input type="text" class="discrete-textbox" placeholder="Username" v-model="manager.username">
+							<input type="password" class="discrete-textbox" placeholder="Password" v-model="manager.password">
+							<input type="text" class="discrete-textbox" placeholder="First Name" v-model="manager.firstName">
+							<input type="text" class="discrete-textbox" placeholder="Last Name" v-model="manager.lastName">
+							<select name="gender" v-model="manager.gender" >
+							  <option value="FEMALE">Female</option>
+							  <option value="MALE">Male</option>
+						  </select>
+						</div>
 						
 						<address style="margin-top:10px">
 				          <span class="icon-pin" aria-hidden="true"></span>
@@ -47,7 +65,8 @@ Vue.component('addrestaurant', {
 				      </header>
 				    </div>
 				
-				    <button class="card-button" v-on:click="addRestaurant">+</button>
+				    <button class="card-button" v-if="managers.length > 0" v-on:click="addRestaurant">+</button>
+				    <button class="card-button" v-if="managers.length == 0" v-on:click="addRestaurantWithManager">+</button>
 				  </article>
 				</div>
 		    	<div class="col" v-for="r in restaurants" :key="r.uuid">
@@ -120,7 +139,6 @@ Vue.component('addrestaurant', {
         },
         
         getAvailableManagers: function() {
-        	console.log(res);
             axios.get('users/availablemanagers')
         	.then(res => {
             	this.managers = res.data;
@@ -166,6 +184,47 @@ Vue.component('addrestaurant', {
                 });
         },
         
+        addRestaurantWithManager: function() {
+        	let self = this;
+        	this.manager.role = 'MANAGER';
+        	this.manager.type = 'STAFF';
+            axios.post('users/adduser', JSON.stringify(this.manager))
+                .then(function (response) {
+                    alert(response.data);
+                    axios.get('users/availablemanagers')
+			        	.then(res => {
+			            	self.managers = res.data;
+							if(self.managers.length > 0){
+								self.manager = self.managers[0];
+					        	let newRestaurant = {
+					        		name: self.name,
+					        		type: self.type,
+					        		status: self.status,
+					        		manager: self.manager.uuid,
+					        		image: self.image,
+					        	};
+					            axios.post('restaurants/newRestaurant', JSON.stringify(newRestaurant))
+					                .then(function (response) {
+										self.getRestaurants();
+										//this.getAvailableManagers();
+					                })
+					                .catch(function (error) {
+					                    alert(error.response.data);
+					                });
+							}
+							
+			            })
+			            .catch(err => {
+			                console.error(err);
+			            });
+		        	
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
+			//axios.get('getUsers');
+        },
+        
 		options() {
 			let manager_list = [];
 			//alert("TEST");
@@ -203,6 +262,7 @@ Vue.component('addrestaurant', {
 		    		window.location.href = "#/registration";
 		    	}
 		    	else {
+		    		console.log(res);
                 	this.getAvailableManagers();
                 }
             })
