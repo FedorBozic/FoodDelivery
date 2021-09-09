@@ -40,19 +40,19 @@ Vue.component('restaurant', {
 		    </div>
 		
 		    <div class="profile-card__cnt js-profile-cnt">
-	    		<div class="col map" id="map">
-				</div>
-		        <div class="profile-card__name">{{restaurant.name}}</div>
+		    	<div class="profile-card__name">{{restaurant.name}}</div>
 		        <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
-		        <div class="profile-card-loc">
-		          <span class="profile-card-loc__icon">
-		            <svg class="icon"><use xlink:href="#icon-location"></use></svg>
-		          </span>
-		        
-		          <span class="profile-card-loc__txt">
-		            {{restaurant.location.address.streetAddress}}
+	    		 <div class="profile-card-loc">
+		         <span class="profile-card-loc__icon">
+		         	<svg class="icon"><use xlink:href="#icon-location"></use></svg>
+		         </span>
+		         
+		         <span class="profile-card-loc__txt">
+		         	{{restaurant.location.address.streetAddress}}
 		          </span>
 		        </div>
+	    		<div class="col map" id="map" style="margin-top:10px"></div>
+		       
 		        
 		        <div class="profile-card-inf">
 		          <div class="profile-card-inf__item">
