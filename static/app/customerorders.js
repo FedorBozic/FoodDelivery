@@ -15,11 +15,60 @@ Vue.component('customerorders', {
 				itemBorderStyleNoBorder: {
 					margin: '10px', 
 					padding: '10px'
-				}
+				},
+				currentSort:'restaurantName',
+				currentSortDir:'asc',
+				filterRestaurantName: '',
+				filterDateFrom: '',
+				filterDateTo: '',
+				filterPriceFrom: '',
+				filterPriceTo: ''
        		}
         },
         template: `
         <div class="container">
+			<div class="row mb-3" style="margin-top: 20px">
+				<div class="col-lg-4 mx-auto">
+					<div class="bg-white p-3 rounded shadow">
+						<form action="">
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Restaurant Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterRestaurantName">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('restaurantName')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Price from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterPriceFrom">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('price')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Price to" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterPriceTo">
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('date')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
         	<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-for="order in orders">
         		<div class="profile-card__cnt js-profile-cnt">
 		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
@@ -108,8 +157,54 @@ Vue.component('customerorders', {
                 .catch(function (error) {
                     alert(error.response.data);
                 });
-	        }
+	        },
+	        
+	        sort: function(s) {
+		       	let self = this
+				if(s === this.currentSort) {
+					self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
+				}
+			  	this.currentSort = s;
+			},
+			
+	        highlightMatches(text, filter) {
+			    const matchExists = text
+			      .toLowerCase()
+			      .includes(filter.toLowerCase());
+			    if (!matchExists) return text;
+			
+			    const re = new RegExp(filter, "ig");
+			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+			}
 	    },
+	    
+	    computed: {
+			sortedOrders : function() {
+				resultData =  Object.values(this.restaurants).sort((a,b) => {
+					let direction = 1;
+					if(this.currentSortDir === 'desc') direction = -1;
+					if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
+					if(a[this.currentSort] > b[this.currentSort]) return 1 * direction;
+					return 0;
+				});
+				return resultData.filter(sortedOrder => {
+				    const restaurantName = sortedOrder.restaurantName.toString().toLowerCase();
+				    const price = sortedOrder.priceFrom
+				    const date = sortedOrder.dateFrom
+				    
+				    const restaurantNameSearchTerm = this.filterRestaurantName.toLowerCase();
+				    const priceFromSearchTerm = this.filterPriceFrom;
+				    const priceToSearchTerm = this.filterPriceTo;
+				    const DateFromSearchTerm = this.filterDateFrom;
+				    const DateToSearchTerm = this.filterDateTo;
+				    return (
+				    	restaurantName.includes(restaurantNameSearchTerm) && price >= priceFromSearchTerm && price <= priceToSearchTerm
+				    					&& date >= dateFromSearchTerm && date <= dateToSearchTerm
+				    );
+			    });
+			}
+	    },
+	    
 		mounted() {
         	let self = this;
         	axios.get('users/currentUser')
