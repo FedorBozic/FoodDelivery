@@ -22,7 +22,8 @@ Vue.component('customerorders', {
 				filterDateFrom: '',
 				filterDateTo: '',
 				filterPriceFrom: '',
-				filterPriceTo: ''
+				filterPriceTo: '',
+				filterStatus: '',
        		}
         },
         template: `
@@ -65,6 +66,14 @@ Vue.component('customerorders', {
 									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
 								</div>
 							</div>
+							<select v-model="filterStatus" style="max-width:100%">
+								<option value="PROCESSING">Processing</option>
+								<option value="PREPARATION">Preparation</option>
+								<option value="AWAITING_DELIVERY">Awaiting Delivery</option>
+								<option value="IN_TRANSPORT">In Transport</option>
+								<option value="DELIVERED">Delivered</option>
+								<option value="CANCELLED">Cancelled</option>
+							</select>
 						</form>
 					</div>
 				</div>
@@ -200,15 +209,17 @@ Vue.component('customerorders', {
 				    const restaurantName = sortedOrder.restaurantName.toString().toLowerCase();
 				    const price = sortedOrder.price
 				    const date = Date.parse(sortedOrder.date)
+				    const status = sortedOrder.status
 				    
 				    const restaurantNameSearchTerm = this.filterRestaurantName.toLowerCase();
 				    const priceFromSearchTerm = this.filterPriceFrom;
 				    const priceToSearchTerm = this.filterPriceTo;
 				    const DateFromSearchTerm = this.convertJsonDateToRaw(this.filterDateFrom);
 				    const DateToSearchTerm = this.convertJsonDateToRaw(this.filterDateTo);
+				    const statusSearchTerm = this.filterStatus;
 				    return (
 				    	restaurantName.includes(restaurantNameSearchTerm) && (!priceFromSearchTerm || price >= priceFromSearchTerm) && (!priceToSearchTerm || price <= priceToSearchTerm)
-				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm)
+				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm) && status.includes(statusSearchTerm)
 				    );
 			    });
 			}
