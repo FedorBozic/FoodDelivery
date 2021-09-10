@@ -47,21 +47,27 @@ public class CommentController {
             return response;
         }
         
-        String customerIdS = (String) body.get("customer");
-        String restaurantIdS = (String) body.get("restaurant");
-        String text = (String) body.get("text");
-        double ratingS = (double) body.get("rating");
-        String orderS = (String) body.get("order");
-        
-    	Comment comment = new Comment();
-    	comment.setCustomer(DostavaMain.userDao.findById(customerIdS));
-    	comment.setRestaurant(DostavaMain.restaurantDao.findById(restaurantIdS));
-    	comment.setText(text);
-    	comment.setApproved(false);
-    	comment.setRating((int)ratingS);
-    	
-    	DostavaMain.orderDao.findById(orderS).setCommented(true);
-    	DostavaMain.commentDao.addComment(comment);
+        try {
+	        String customerIdS = (String) body.get("customer");
+	        String restaurantIdS = (String) body.get("restaurant");
+	        String text = (String) body.get("text");
+	        double ratingS = (double) body.get("rating");
+	        String orderS = (String) body.get("order");
+	        
+	    	Comment comment = new Comment();
+	    	comment.setCustomer(DostavaMain.userDao.findById(customerIdS));
+	    	comment.setRestaurant(DostavaMain.restaurantDao.findById(restaurantIdS));
+	    	comment.setText(text);
+	    	comment.setApproved(false);
+	    	comment.setRating((int)ratingS);
+	    	
+	    	DostavaMain.orderDao.findById(orderS).setCommented(true);
+	    	DostavaMain.commentDao.addComment(comment);
+        }
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to add comment!");
+        }
     	        
         return response;
     };
@@ -81,15 +87,21 @@ public class CommentController {
             return response;
         }
     	
-        var body = gson.fromJson((request.body()), HashMap.class);
-        response.body("Approved successfully!");
-        response.status(200);
-        
-        Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
-        comment.setApproved(true);
-        
-        Restaurant restaurant = DostavaMain.restaurantDao.findById(comment.getRestaurant().getUuid());
-        restaurant.recalculateRating();
+        try {
+	        var body = gson.fromJson((request.body()), HashMap.class);
+	        response.body("Approved successfully!");
+	        response.status(200);
+	        
+	        Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
+	        comment.setApproved(true);
+	        
+	        Restaurant restaurant = DostavaMain.restaurantDao.findById(comment.getRestaurant().getUuid());
+	        restaurant.recalculateRating();
+        }
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to approve comment!");
+        }
         
         return response;
 	};
@@ -109,18 +121,32 @@ public class CommentController {
             return response;
         }
     	
-        var body = gson.fromJson((request.body()), HashMap.class);
-        response.body("Rejected successfully!");
-        response.status(200);
-        
-        Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
-        comment.setRejected(true);
+        try {
+	        var body = gson.fromJson((request.body()), HashMap.class);
+	        response.body("Rejected successfully!");
+	        response.status(200);
+	        
+	        Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
+	        comment.setRejected(true);
+        }
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to reject comment!");
+        }
         
         return response;
 	};
     
     public static Route deleteComment = (Request request, Response response) -> {
-    	DostavaMain.commentDao.deleteComment(request.params("id"));
+    	try {
+    		response.status(200);
+    		response.body("Deleted successfully!");
+    		DostavaMain.commentDao.deleteComment(request.params("id"));
+    	}
+    	catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to delete comment!");
+    	}
     	return response;
     };
 }

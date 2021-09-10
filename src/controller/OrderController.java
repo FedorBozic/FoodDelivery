@@ -51,52 +51,57 @@ public class OrderController {
             return response;
         }
         
-        List<Restaurant> restaurantsInBasket = new ArrayList<>();
-        List<Order> createdOrders = new ArrayList<>();
-        
-        float totalPrice = 0;
-        
-        for(CartItem ci : user.getCart().getCartItems())
-        {
-        	if(!restaurantsInBasket.contains(ci.getItem().getRestaurant()))
-        	{
-        		System.out.println(ci.getItem().getRestaurant().getName());
-        		restaurantsInBasket.add(ci.getItem().getRestaurant());
-        		Order newOrder = new Order();
-        		newOrder.setUuid(UUID.randomUUID());
-        		newOrder.setRestaurant(ci.getItem().getRestaurant());
-        		newOrder.setRestaurantName(ci.getItem().getRestaurant().getName());
-        		newOrder.setCustomer(user.getUuid());
-        		newOrder.setCustomerName(user.getUsername());
-        		newOrder.setPrice(0);
-        		newOrder.setStatus(Order.OrderStatus.PROCESSING);
-        		newOrder.setDateTime(LocalDateTime.now());
-        		createdOrders.add(newOrder);
-        	}
+        try {
+	        List<Restaurant> restaurantsInBasket = new ArrayList<>();
+	        List<Order> createdOrders = new ArrayList<>();
+	        
+	        float totalPrice = 0;
+	        
+	        for(CartItem ci : user.getCart().getCartItems())
+	        {
+	        	if(!restaurantsInBasket.contains(ci.getItem().getRestaurant()))
+	        	{
+	        		System.out.println(ci.getItem().getRestaurant().getName());
+	        		restaurantsInBasket.add(ci.getItem().getRestaurant());
+	        		Order newOrder = new Order();
+	        		newOrder.setUuid(UUID.randomUUID());
+	        		newOrder.setRestaurant(ci.getItem().getRestaurant());
+	        		newOrder.setRestaurantName(ci.getItem().getRestaurant().getName());
+	        		newOrder.setCustomer(user.getUuid());
+	        		newOrder.setCustomerName(user.getUsername());
+	        		newOrder.setPrice(0);
+	        		newOrder.setStatus(Order.OrderStatus.PROCESSING);
+	        		newOrder.setDateTime(LocalDateTime.now());
+	        		createdOrders.add(newOrder);
+	        	}
+	        }
+	        
+	        for(CartItem ci : user.getCart().getCartItems())
+	        {
+	        	for(Order order : createdOrders)
+	        	{
+	        		if(ci.getItem().getRestaurant().getUuid().equals(order.getRestaurant().getUuid()))
+	        		{
+	        			order.addItem(ci);
+	        			order.setPrice(order.getPrice() + (ci.getItem().getPrice() * ci.getCount()));
+	        			totalPrice += order.getPrice();
+	        		}
+	        	}
+	        }
+	        
+	        for(Order order : createdOrders)
+	        {
+	        	DostavaMain.orderDao.addOrder(order);
+	        }
+	        user.setCart(null);
+	        
+        	response.status(200);
+        	response.body("Order added successfully!");
         }
-        
-        for(CartItem ci : user.getCart().getCartItems())
-        {
-        	for(Order order : createdOrders)
-        	{
-        		if(ci.getItem().getRestaurant().getUuid().equals(order.getRestaurant().getUuid()))
-        		{
-        			order.addItem(ci);
-        			order.setPrice(order.getPrice() + (ci.getItem().getPrice() * ci.getCount()));
-        			totalPrice += order.getPrice();
-        		}
-        	}
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to add order!");
         }
-        
-        for(Order order : createdOrders)
-        {
-        	DostavaMain.orderDao.addOrder(order);
-        }
-        user.setCart(null);
-        System.out.println("Dodat order: " + totalPrice);
-        user.giveLoyaltyPoints(totalPrice);
-        System.out.println("User points: " + user.getPoints());
-        
         return response;
     };
     
@@ -106,16 +111,21 @@ public class OrderController {
         response.body("Successful upgrade!");
         response.status(200);
         
-        Order order = DostavaMain.orderDao.findById((String) body.get("uuid"));
-        if(order.getStatus().equals(Order.OrderStatus.PROCESSING))
-        	order.setStatus(Order.OrderStatus.PREPARATION);
-        else if(order.getStatus().equals(Order.OrderStatus.PREPARATION))
-        	order.setStatus(Order.OrderStatus.AWAITING_DELIVERY);
-        else if(order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
-        	order.setStatus(Order.OrderStatus.IN_TRANSPORT);
-        else if(order.getStatus().equals(Order.OrderStatus.IN_TRANSPORT))
-        	order.setStatus(Order.OrderStatus.DELIVERED);
-        
+        try {
+	        Order order = DostavaMain.orderDao.findById((String) body.get("uuid"));
+	        if(order.getStatus().equals(Order.OrderStatus.PROCESSING))
+	        	order.setStatus(Order.OrderStatus.PREPARATION);
+	        else if(order.getStatus().equals(Order.OrderStatus.PREPARATION))
+	        	order.setStatus(Order.OrderStatus.AWAITING_DELIVERY);
+	        else if(order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
+	        	order.setStatus(Order.OrderStatus.IN_TRANSPORT);
+	        else if(order.getStatus().equals(Order.OrderStatus.IN_TRANSPORT))
+	        	order.setStatus(Order.OrderStatus.DELIVERED);
+        }
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to upgrade status!");
+        }
         return response;
 	};
     
@@ -134,7 +144,15 @@ public class OrderController {
     };
     
     public static Route cancelOrder = (request, response) ->  {
-    	DostavaMain.orderDao.cancelOrder(request.params("id"));
+    	response.status(200);
+    	response.body("Order canceled successfully!");
+    	try {
+    		DostavaMain.orderDao.cancelOrder(request.params("id"));
+    	}
+    	catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to cancel order!");
+    	}
     	return gson.toJson(DostavaMain.orderDao.getAllOrders());
     };
 
