@@ -61,7 +61,7 @@ public class OrderDao {
 		updateRestaurantNames();
     	List<Order> tmpStep = getAllOrders()
                 .stream()
-                .filter(order -> order.getRestaurant().getUuid() == r)
+                .filter(order -> order.getRestaurant().getUuid().equals(r))
                 .collect(Collectors.toList());
     	return tmpStep;
     }

@@ -118,7 +118,7 @@ Vue.component('orders', {
             .then(res => {
 				self.currentUser = res.data
 				self.restaurant = self.currentUser.restaurant
-                axios.get('orders/' + this.$route.params.id)
+                axios.get('orders/' + self.$route.params.id)
                 .then(res => {
                 	self.orders = res.data;
                 	axios.get('delivery/opendeliveryrequestsforrestaurant/' + self.restaurant.uuid)
