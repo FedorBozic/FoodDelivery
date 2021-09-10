@@ -29,6 +29,7 @@ Vue.component('restaurant', {
 			},
 			articlenumber: 0,
 			editingItem: {},
+			addingItem: false,
 			viewingComments: false,
 			comments: []
 		}
@@ -73,31 +74,33 @@ Vue.component('restaurant', {
 		          </div>
 		        </div>
 			    
-			    <table class="table table-striped" style="width:100%" v-if="$root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager))">
-			    	<tbody>
-			    		<tr>
-			  			<td><button type="button" v-on:click="addItem">Dodaj</button></td>
-			    			<td><input type="text" placeholder="Name" v-model="itemBeingAdded.name"></td>
-			  			<td>
-			  				<select v-model="itemBeingAdded.type">
-			  					<option value="FOOD">Food</option>
-			  					<option value="DRINK">Drink</option>
-			  				</select>
-			  			</td>
-			  			<td><input type="text" placeholder="Description" v-model="itemBeingAdded.description"></td>
-			  			<td><input type="text" placeholder="Cena" v-model="itemBeingAdded.price" style="width:30px"></td>
-			  			<td>
-			  				 <label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
+			    <div class="row" v-if="addingItem || restaurant.items.length < 1">
+				    <div class="col-sm-7 mr-auto">
+						<div class="col-sm-2"><h2 style="margin-top:5px; margin-left:25px"><input type="text" placeholder="Name" style="width: 200px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="itemBeingAdded.name" ></h2></div>
+						<div class="col-sm-2"><textarea style="width:250px; height:100px" v-model="itemBeingAdded.description" ></textarea></div>
+					</div>
+				    <div class="col-sm-2"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="itemBeingAdded.price" >$</strong></h2></div>
+				    <div class="col-sm-3">
+						<div class="row">
+							<label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
 			  		    		<img v-if="image" :src="'data:image/png;base64,' + image" style="width:60px; height: 60px"/>
 			  					<img v-else src="/Add_Image.jpg" alt="" style="max-width:60px; max-height:60px;" />
 			  				 </label>
 			  				 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
-			  			</td>
-			    		</tr>
-			    	</tbody>
-			    </table>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<button class="generic_button" style="margin-top:10px" v-on:click="addItem">
+								  	<div class="pretext">
+								    	<h5 style="padding-bottom:0px; margin-bottom:0px">OK</h5>
+								  	</div>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			    
-				<div v-if="!viewingComments" style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
+				<div v-if="!viewingComments && restaurant.items.length > 0" style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
 					<div class="row">
 						<div style="float:left; margin-left: 30px; margin-top: -15px; padding:3px 10px 3px 10px; border-radius:5px; background-color: rgba(250, 30, 20); color:white"><h3>FOOD</h3></div>
 					</div>

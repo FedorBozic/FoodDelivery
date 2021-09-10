@@ -47,8 +47,6 @@ public class UserController {
         	response.status(400);
         	response.body("An unknown error has occurred");
         }
-        System.out.println((String) body.get("birthday"));
-        user.setBirthday(LocalDate.parse((String) body.get("birthday")));
         try {
         	user.setUsername((String) body.get("username"));
         	user.setPassword((String) body.get("password"));
