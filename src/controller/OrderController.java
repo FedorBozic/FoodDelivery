@@ -155,5 +155,18 @@ public class OrderController {
     	}
     	return gson.toJson(DostavaMain.orderDao.getAllOrders());
     };
+    
+    public static Route deleteOrder = (request, response) ->  {
+    	response.status(200);
+    	response.body("Order canceled successfully!");
+    	try {
+    		DostavaMain.orderDao.deleteOrder(request.queryParams("id"));
+    	}
+    	catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to cancel order!");
+    	}
+    	return response;
+    };
 
 }

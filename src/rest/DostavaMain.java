@@ -169,6 +169,7 @@ public class DostavaMain {
 		post("/api/users/itemToCart", UserController.itemToCart);
 		get("/api/users/getCustomersOfRestaurant", UserController.getCustomersOfRestaurant);
 		delete("/api/users/deleteCartItem/:id", UserController.deleteCartItem);
+		delete("/api/users/deleteuser", UserController.deleteUser);
 		
 		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
 		post("/api/users/overwriteItem", UserController.overwriteItem);
@@ -181,6 +182,7 @@ public class DostavaMain {
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
 		get("api/orders/:id", OrderController.findByRestaurant);
 		put("/api/orders/cancel/:id", OrderController.cancelOrder);
+		delete("/api/orders/deleteorder", OrderController.deleteOrder);
 		
 		get("/api/delivery/userdeliveries/:id", DeliveryRequestController.getDeliveryRequestsByUser);
 		get("/api/delivery/mydeliveries/:id", DeliveryRequestController.getDeliveriesByUser);

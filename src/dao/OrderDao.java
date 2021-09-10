@@ -147,4 +147,13 @@ public class OrderDao {
     public List<Order> cancelOrder(String id) {
     	return cancelOrder(UUID.fromString(id));
     }
+    
+    public boolean deleteOrder(UUID id) {
+    	findById(id).setDeleted(true);
+    	return true;
+    }
+    
+    public boolean deleteOrder(String id) {
+    	return deleteOrder(UUID.fromString(id));
+    }
 }
