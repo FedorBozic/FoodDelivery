@@ -197,6 +197,8 @@ public class DostavaMain {
 		put("/api/comments/approvecomment/:id", CommentController.approveComment);
 		put("/api/comments/rejectcomment/:id", CommentController.rejectComment);
 		
+		get("/api/users/getnextrank", UserController.getNextRank);
+		
 		afterAfter((request, response) -> {
             Thread t = new Thread(() -> {
                 try {

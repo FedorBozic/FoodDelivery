@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import dao.UserTypeDao;
 import model.Cart;
 import model.CartItem;
 import model.Item;
@@ -150,6 +151,13 @@ public class UserController {
     public static Route getCart = (Request request, Response response) -> {
     	response.status(200);
     	response.body(gson.toJson(currentUser.getCart()));
+    	return response;
+    };
+    
+    public static Route getNextRank = (Request request, Response response) -> {
+    	response.status(200);
+    	UserTypeDao userTypeDao = DostavaMain.userTypeDao;
+    	response.body(gson.toJson(userTypeDao.getNextRank(currentUser.getPoints())));
     	return response;
     };
     

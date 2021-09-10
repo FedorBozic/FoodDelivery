@@ -53,6 +53,17 @@ public class UserTypeDao {
     	return maxType;
     }
     
+    public UserType getNextRank(int points) {
+    	UserType minType = null;
+    	for (UserType ut : userTypes.values()) {
+    		if(minType == null && ut.getPointRequirement() > points)
+    			minType = ut;
+    		else if(minType != null && ut.getPointRequirement() < minType.getPointRequirement() && ut.getPointRequirement() > points)
+    			minType = ut;
+		}
+    	return minType;
+    }
+    
     public UserType findByName(String userType) {
         return userTypes.values()
                 .stream()
