@@ -69,8 +69,25 @@ public class UserController {
     public static Route addUser = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
+        User user = null;
+        boolean overwritingUserMode = false;
         
-        User user = new User();
+        if(((String) body.get("uuid")).equals("nouuid"))
+        {
+        	user = new User();
+        }
+        else
+        {
+        	user = DostavaMain.userDao.findById((String) body.get("uuid"));
+        	overwritingUserMode = true; 
+        }
+        
+        if(user == null)
+        {
+        	response.status(400);
+        	response.body("An unknown error has occurred");
+        }
+        
         try {
         	user.setUsername((String) body.get("username"));
         	user.setPassword((String) body.get("password"));

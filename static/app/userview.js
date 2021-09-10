@@ -3,6 +3,7 @@ Vue.component('userview', {
         	return{
         		users: {},
         		user: {
+        			uuid: 'nouuid',
         			gender: 'MALE'
         		},
         		currentUser: {},
@@ -30,13 +31,13 @@ Vue.component('userview', {
 									<th>Role</th>
 								</tr>
 							</thead>
-							<tbody v-for="user in sortedUsers">
+							<tbody v-for="u in sortedUsers" @click="user=u">
 								<tr>
-									<td v-html="highlightMatches(user.username)"></td>
-									<td v-html="highlightMatches(user.firstName)"></td>
-									<td v-html="highlightMatches(user.lastName)"></td>
-									<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(user) }">{{user.type.name}}</span></td>
-									<td>{{user.role}}</td>
+									<td v-html="highlightMatches(u.username)"></td>
+									<td v-html="highlightMatches(u.firstName)"></td>
+									<td v-html="highlightMatches(u.lastName)"></td>
+									<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(u) }">{{u.type.name}}</span></td>
+									<td>{{u.role}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -90,11 +91,11 @@ Vue.component('userview', {
     	`,
     	methods: {
     		profileTierGradientSmall: function(user){
-			if(user != null && user.type != null)
-			{
-				return `linear-gradient(${this.angle}deg, ${user.type.firstColor}, ${user.type.secondColor})`
-			}
-	        return `linear-gradient(${this.angle}deg, ${this.defaultColor1}, ${this.defaultColor2})`
+				if(user != null && user.type != null)
+				{
+					return `linear-gradient(${this.angle}deg, ${user.type.firstColor}, ${user.type.secondColor})`
+				}
+		        return `linear-gradient(${this.angle}deg, ${this.defaultColor1}, ${this.defaultColor2})`
 	      	},
 	      	register: function () {
 	            let self = this;
