@@ -53,6 +53,9 @@ public class OrderController {
         
         List<Restaurant> restaurantsInBasket = new ArrayList<>();
         List<Order> createdOrders = new ArrayList<>();
+        
+        float totalPrice = 0;
+        
         for(CartItem ci : user.getCart().getCartItems())
         {
         	if(!restaurantsInBasket.contains(ci.getItem().getRestaurant()))
@@ -69,6 +72,8 @@ public class OrderController {
         		newOrder.setStatus(Order.OrderStatus.PROCESSING);
         		newOrder.setDateTime(LocalDateTime.now());
         		createdOrders.add(newOrder);
+        		
+        		totalPrice += newOrder.getPrice();
         	}
         }
         
@@ -89,6 +94,7 @@ public class OrderController {
         	DostavaMain.orderDao.addOrder(order);
         }
         user.setCart(null);
+        user.giveLoyaltyPoints(totalPrice);
         
         return response;
     };

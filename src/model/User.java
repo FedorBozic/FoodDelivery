@@ -265,4 +265,8 @@ public class User {
 	public void givePenalty(float price) {
 		points -= price / 1000 * 133 * 4;
 	}
+	
+	public void giveLoyaltyPoints(float price) {
+		points += price / 1000 * 133;
+	}
 }
