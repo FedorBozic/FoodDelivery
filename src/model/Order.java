@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import rest.DostavaMain;
@@ -14,7 +15,10 @@ public class Order {
 	
 	public enum OrderStatus {PROCESSING, PREPARATION, AWAITING_DELIVERY, IN_TRANSPORT, DELIVERED, CANCELLED};
 	
+	private static String codeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	
 	private UUID uuid;
+	private String code = "";
 	private List<CartItem> items;
 	private UUID restaurant;
 	private UUID deliverer = null;
@@ -37,6 +41,7 @@ public class Order {
 		this.price = price;
 		this.customerName = customerName;
 		this.status = status;
+		generateCode();
 	}
 	
 	public Order(List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, String customerName, OrderStatus status) {
@@ -48,10 +53,12 @@ public class Order {
 		this.price = totalPrice;
 		this.customerName = customerName;
 		this.status = status;
+		generateCode();
 	}
 	
 	public Order() {
 		items = new ArrayList<>();
+		generateCode();
 	}
 
 	public UUID getUuid() {
@@ -169,6 +176,21 @@ public class Order {
 
 	public void setCommented(boolean commented) {
 		this.commented = commented;
+	}
+	
+	public void generateCode() {
+		Random rand = new Random();
+		for(int i = 0; i < 10; i++) {
+			setCode(getCode() + codeCharacters.charAt(rand.nextInt(62)));
+		}
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	
