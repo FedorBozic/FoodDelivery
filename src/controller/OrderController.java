@@ -72,8 +72,6 @@ public class OrderController {
         		newOrder.setStatus(Order.OrderStatus.PROCESSING);
         		newOrder.setDateTime(LocalDateTime.now());
         		createdOrders.add(newOrder);
-        		
-        		totalPrice += newOrder.getPrice();
         	}
         }
         
@@ -84,7 +82,8 @@ public class OrderController {
         		if(ci.getItem().getRestaurant().getUuid().equals(order.getRestaurant().getUuid()))
         		{
         			order.addItem(ci);
-        			order.setPrice(order.getPrice() + (ci.getItem().getPrice() + ci.getCount()));
+        			order.setPrice(order.getPrice() + (ci.getItem().getPrice() * ci.getCount()));
+        			totalPrice += order.getPrice();
         		}
         	}
         }
@@ -94,7 +93,9 @@ public class OrderController {
         	DostavaMain.orderDao.addOrder(order);
         }
         user.setCart(null);
+        System.out.println("Dodat order: " + totalPrice);
         user.giveLoyaltyPoints(totalPrice);
+        System.out.println("User points: " + user.getPoints());
         
         return response;
     };
@@ -119,37 +120,7 @@ public class OrderController {
 	};
     
     public static Route getOrders = (Request request, Response response) -> {
-		List<Order> filtered = new ArrayList<Order>();
-		String restaurantName = request.queryParams("restaurantName");
-		String priceFromS = request.queryParams("priceFrom");
-		String priceToS = request.queryParams("priceTo");
-		
-		List<Order> orders = DostavaMain.orderDao.getAllOrders();
-		
-		for (Order o : orders) {
-			filtered.add(o);
-		}
-		
-		System.out.println("restaurantName: " + restaurantName);
-		if(restaurantName != null && !restaurantName.equals("")) {
-			filtered = filtered.stream().filter(o -> o.getRestaurantName().toLowerCase().contains(restaurantName.toLowerCase())).collect(Collectors.toList());
-		}
-		
-		System.out.println(priceFromS);
-		if(priceFromS != null && !priceFromS.equals("")) {
-			int priceFrom = Integer.parseInt(priceFromS);
-			filtered = filtered.stream().filter(r -> r.getPrice() >= priceFrom).collect(Collectors.toList());
-		}
-		
-		System.out.println(priceToS);
-		if(priceToS != null && !priceToS.equals("")) {
-			int priceTo = Integer.parseInt(priceToS);
-			filtered = filtered.stream().filter(r -> r.getPrice() <= priceTo).collect(Collectors.toList());
-		}
-		
-		//Treba jos datum
-		
-		return gson.toJson(filtered);
+		return gson.toJson(DostavaMain.orderDao.getAllOrders());
     };
     
     public static Route getCustomerOrders = (Request request, Response response) -> {

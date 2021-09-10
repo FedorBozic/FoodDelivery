@@ -171,7 +171,8 @@ public class DostavaMain {
 		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
 		post("/api/users/overwriteItem", UserController.overwriteItem);
 		
-		get("/api/orders/getorders/:id", OrderController.getOrders);
+		//get("/api/orders/getorders/:id", OrderController.getOrders);
+		get("/api/orders/getorders", OrderController.getOrders);
 		get("/api/orders/getcustomerorders/:id", OrderController.getCustomerOrders);
 		get("/api/orders/awaitingdeliveryorders/:id", (request,response) -> gson.toJson(orderDao.getAvailableOpenDeliveries(request.params(":id"))));
 		post("/api/orders/checkout", OrderController.addOrder);

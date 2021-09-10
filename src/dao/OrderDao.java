@@ -57,18 +57,9 @@ public class OrderDao {
 		return findById(UUID.fromString(uuid));
     }
 	
-	public List<Order> findByRestaurant(Restaurant r) {
-		updateRestaurantNames();
-    	List<Order> tmpStep = orders.values()
-                .stream()
-                .filter(order -> order.getRestaurant().getUuid().equals(r.getUuid()))
-                .collect(Collectors.toList());
-    	return tmpStep;
-    }
-	
 	public List<Order> findByRestaurant(UUID r) {
 		updateRestaurantNames();
-    	List<Order> tmpStep = orders.values()
+    	List<Order> tmpStep = getAllOrders()
                 .stream()
                 .filter(order -> order.getRestaurant().getUuid() == r)
                 .collect(Collectors.toList());
@@ -77,11 +68,29 @@ public class OrderDao {
 	
 	public List<Order> findByRestaurant(String r) {
 		updateRestaurantNames();
-    	List<Order> tmpStep = orders.values()
+    	return findByRestaurant(UUID.fromString(r));
+    }
+	
+	public List<Order> findByRestaurant(Restaurant r) {
+		updateRestaurantNames();
+    	return findByRestaurant(r.getUuid());
+    }
+	
+	public List<Order> findByCustomer(UUID r) {
+		updateRestaurantNames();
+    	List<Order> tmpStep = getAllOrders()
                 .stream()
-                .filter(order -> order.getRestaurant().getUuid().equals(UUID.fromString(r)))
+                .filter(order -> order.getCustomer() == r)
                 .collect(Collectors.toList());
     	return tmpStep;
+    }
+	
+	public List<Order> findByCustomer(User u) {
+    	return findByCustomer(u.getUuid());
+    }
+	
+	public List<Order> findByCustomer(String u) {
+    	return findByCustomer(UUID.fromString(u));
     }
 	
 	public List<Order> getAvailableOpenDeliveries(String user) {
@@ -97,7 +106,7 @@ public class OrderDao {
 		{
 			userDeliveriesOrderCast.add(userDelivery.getOrder());
 		}
-    	List<Order> tmpStep = orders.values()
+    	List<Order> tmpStep = getAllOrders()
                 .stream()
                 .filter(order -> order.getStatus().equals(Order.OrderStatus.AWAITING_DELIVERY))
                 .filter(order -> userDeliveriesOrderCast.size() < 1 || !userDeliveriesOrderCast.contains(order))

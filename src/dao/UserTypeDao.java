@@ -47,7 +47,7 @@ public class UserTypeDao {
     	for (UserType ut : userTypes.values()) {
     		if(maxType == null && ut.getPointRequirement() <= points)
     			maxType = ut;
-    		else if(ut.getPointRequirement() > maxType.getPointRequirement() && ut.getPointRequirement() <= points)
+    		else if(maxType != null && ut.getPointRequirement() > maxType.getPointRequirement() && ut.getPointRequirement() <= points)
 				maxType = ut;
 		}
     	return maxType;
