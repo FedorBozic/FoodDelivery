@@ -57,7 +57,7 @@ public class CommentDao {
     }
 	
 	public List<Comment> findByCustomer(UUID u) {
-    	List<Comment> tmpStep = comments.values()
+    	List<Comment> tmpStep = getAllComments()
                 .stream()
                 .filter(comment -> comment.getCustomer().getUuid() == u)
                 .collect(Collectors.toList());
@@ -73,8 +73,21 @@ public class CommentDao {
     }
 	
 	public List<Comment> findByRestaurant(UUID r) {
-    	List<Comment> tmpStep = comments.values()
+    	List<Comment> tmpStep = getAllComments()
                 .stream()
+                .filter(comment -> comment.getRestaurant().getUuid().equals(r))
+                .collect(Collectors.toList());
+    	return tmpStep;
+    }
+	
+	public List<Comment> findByRestaurantApproved(String r) {
+    	return findByRestaurantApproved(UUID.fromString(r));
+    }
+	
+	public List<Comment> findByRestaurantApproved(UUID r) {
+    	List<Comment> tmpStep = getAllComments()
+                .stream()
+                .filter(comment -> comment.isApproved())
                 .filter(comment -> comment.getRestaurant().getUuid().equals(r))
                 .collect(Collectors.toList());
     	return tmpStep;

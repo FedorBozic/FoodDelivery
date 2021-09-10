@@ -27,6 +27,9 @@ public class CommentController {
 		
 	public static Route findByRestaurant = (Request request, Response response) ->
 		gson.toJson(DostavaMain.commentDao.findByRestaurant(request.params(":id")));
+		
+		public static Route findByRestaurantApproved = (Request request, Response response) ->
+		gson.toJson(DostavaMain.commentDao.findByRestaurantApproved(request.params(":id")));
 	
 	public static Route addComment = (Request request, Response response) -> {
         
