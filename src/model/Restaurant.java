@@ -17,11 +17,18 @@ public class Restaurant {
 	private String logo;
 	private UUID manager;
 	private float rating = 0f;
+	private int[] ratings;
 	private boolean deleted = false;
 	
 	public Restaurant() {
 		this.uuid = UUID.randomUUID();
 		items = new ArrayList<Item>();
+		ratings = new int[5];
+		ratings[0] = 0;
+		ratings[0] = 0;
+		ratings[0] = 0;
+		ratings[0] = 0;
+		ratings[0] = 0;
 	}
 	
 	public Restaurant(UUID uuid, String name, RestaurantType type, List<Item> items, RestaurantStatus status, Location location, String logo) {
@@ -132,5 +139,9 @@ public class Restaurant {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	
+	public void addRating(int rating) {
+		ratings[rating]++;
 	}
 }

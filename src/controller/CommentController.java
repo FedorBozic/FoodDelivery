@@ -34,7 +34,7 @@ public class CommentController {
         response.body("Comment added");
         response.status(200);
         
-        User user = DostavaMain.userDao.findById((String) body.get("uuid"));
+        User user = DostavaMain.userDao.findById((String) body.get("customer"));
         if(user == null)
         {
         	response.body("You are not logged in!");
@@ -42,17 +42,21 @@ public class CommentController {
             return response;
         }
         
-        String customerIdS = (String) body.get("customerId");
-        String restaurantIdS = (String) body.get("restaurantId");
+        String customerIdS = (String) body.get("customer");
+        String restaurantIdS = (String) body.get("restaurant");
         String text = (String) body.get("text");
-        String ratingS = (String) body.get("rating");
+        double ratingS = (double) body.get("rating");
+        String orderS = (String) body.get("order");
         
     	Comment comment = new Comment();
     	comment.setCustomer(DostavaMain.userDao.findById(customerIdS));
     	comment.setRestaurant(DostavaMain.restaurantDao.findById(restaurantIdS));
     	comment.setText(text);
     	comment.setApproved(false);
-    	comment.setRating(Integer.parseInt(ratingS));
+    	comment.setRating((int)ratingS);
+    	comment.getRestaurant().addRating((int)ratingS);
+    	
+    	DostavaMain.orderDao.findById(orderS).setCommented(true);
     	
     	DostavaMain.commentDao.addComment(comment);
     	        

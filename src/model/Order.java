@@ -23,6 +23,7 @@ public class Order {
 	private String restaurantName;
 	private boolean deleted = false;
 	private boolean cancelled = false;
+	private boolean commented = false;
 	
 	public Order(UUID uuid, List<CartItem> items, Restaurant restaurant, LocalDateTime dateTime, float price, String customerName, OrderStatus status) {
 		this.uuid = uuid;
@@ -146,4 +147,14 @@ public class Order {
 	public void setCancelled(boolean canceled) {
 		this.cancelled = canceled;
 	}
+
+	public boolean isCommented() {
+		return commented;
+	}
+
+	public void setCommented(boolean commented) {
+		this.commented = commented;
+	}
+	
+	
 }

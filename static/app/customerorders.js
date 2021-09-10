@@ -52,7 +52,7 @@ Vue.component('customerorders', {
 					</div>
 				</div>
 				
-				<div class="row" v-if="order.status === 'DELIVERED'">
+				<div class="row" v-if="order.status === 'DELIVERED' && !order.commented">
 					<div class="col-sm-7 mr-auto">
 						<div class="row"><h4 style="margin-left:30px"><strong>Leave a Rating</strong></h4></div>
 						<div class="row" style="margin-left: 10px; margin-bottom:20px; text-align: left; "><textarea placeholder="Description" v-model="comment.text" style="min-width:300px; max-width:600px; height:150px"></textarea></div>
@@ -69,7 +69,7 @@ Vue.component('customerorders', {
 		                        <i class="fa fa-star-o" v-if="comment.rating < 4" @click="setRating(4)"></i>
 		                        <i class="fa fa-star-o" v-if="comment.rating < 5" @click="setRating(5)"></i>
 	                        </div>
-	                        <button class="generic_button">Confirm</button>
+	                        <button class="generic_button" v-on:click="leaveComment(order)">Confirm</button>
 	                    </div>
 					</div>
 				</div>
@@ -94,6 +94,20 @@ Vue.component('customerorders', {
 	        
 	        setRating: function(r) {
 	        	this.comment.rating = r
+	        },
+	        
+	        leaveComment: function(item) {
+	        	let self = this;
+	        	this.comment.restaurant = item.items[0].item.restaurant
+	        	this.comment.customer = this.currentUser.uuid
+	        	this.comment.order = item.uuid
+	        	axios.post('comments/newcomment', JSON.stringify(this.comment))
+                .then(function (response) {
+		        	self.getOrders()
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
 	        }
 	    },
 		mounted() {
