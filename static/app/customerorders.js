@@ -31,7 +31,7 @@ Vue.component('customerorders', {
 			    				<h4 style="min-width:100px;text-align:center; margin:10px; margin-right:20px">
 			    					<i v-if="order.status === 'PROCESSING'" class="fa fa-times" @click="cancelOrder(order)"></i>
 			    					<i v-if="order.status === 'PREPARATION'" class="fa fa-spinner fa-spin"></i>
-			    					<i v-if="order.status === 'AWAITING_DELIVERY'" class="fa fa-truck"></i>
+			    					<i v-if="order.status === 'AWAITING_DELIVERY'" class="fas fa-truck-loading"></i>
 			    					<i v-if="order.status === 'IN_TRANSPORT'" class="fa fa-truck"></i>
 			    					<i v-if="order.status === 'DELIVERED'" class="fa fa-check"></i>
 			    					<i v-if="order.status === 'CANCELLED'" class="fa fa-ban"></i>
@@ -48,7 +48,7 @@ Vue.component('customerorders', {
 					</div>
 					<div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.item.price}}$</strong></h2></div>
 					<div class="col-sm-3">
-						<div class="row"><img :src="'data:image/png;base64,' + item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+						<div class="row"><img :src="item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 					</div>
 				</div>
 				
@@ -59,15 +59,15 @@ Vue.component('customerorders', {
 					</div>
 						<div class="col-sm-3">
 							<div class="reviews">
-		                        <i class="fa fa-star" @click="setRating(1)"></i>
-		                        <i class="fa fa-star" v-if="comment.rating >= 2" @click="setRating(2)"></i>
-		                        <i class="fa fa-star" v-if="comment.rating >= 3" @click="setRating(3)"></i>
-		                        <i class="fa fa-star" v-if="comment.rating >= 4" @click="setRating(4)"></i>
-		                        <i class="fa fa-star" v-if="comment.rating >= 5" @click="setRating(5)"></i>
-		                        <i class="fa fa-star-o" v-if="comment.rating < 2" @click="setRating(2)"></i>
-		                        <i class="fa fa-star-o" v-if="comment.rating < 3" @click="setRating(3)"></i>
-		                        <i class="fa fa-star-o" v-if="comment.rating < 4" @click="setRating(4)"></i>
-		                        <i class="fa fa-star-o" v-if="comment.rating < 5" @click="setRating(5)"></i>
+		                        <i class="fas fa-star" @click="setRating(1)"></i>
+		                        <i class="fas fa-star" v-if="comment.rating >= 2" @click="setRating(2)"></i>
+		                        <i class="fas fa-star" v-if="comment.rating >= 3" @click="setRating(3)"></i>
+		                        <i class="fas fa-star" v-if="comment.rating >= 4" @click="setRating(4)"></i>
+		                        <i class="fas fa-star" v-if="comment.rating >= 5" @click="setRating(5)"></i>
+		                        <i class="far fa-star" v-if="comment.rating < 2" @click="setRating(2)"></i>
+		                        <i class="far fa-star" v-if="comment.rating < 3" @click="setRating(3)"></i>
+		                        <i class="far fa-star" v-if="comment.rating < 4" @click="setRating(4)"></i>
+		                        <i class="far fa-star" v-if="comment.rating < 5" @click="setRating(5)"></i>
 	                        </div>
 	                        <button class="generic_button" v-on:click="leaveComment(order)">Confirm</button>
 	                    </div>

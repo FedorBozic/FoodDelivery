@@ -132,8 +132,8 @@ Vue.component('restaurant', {
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
 							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><textarea style="width:250px; height:100px; margin-left:-25px" v-model="editingItem.description" ></textarea></div>
 						</div>
-					    <div class="col-sm-2 my-auto" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
-					    <div class="col-sm-2 my-auto" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
+					    <div class="col-sm-1 my-auto" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-1 my-auto" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
 					    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
 					    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.price" >$
 					    	</h2>
@@ -151,9 +151,13 @@ Vue.component('restaurant', {
 				  				 <input type="file" v-on:change="convertEditImage(editingItem)" id="editimage" name="editimage" accept="image/*" style="display:none">
 							</div>
 						</div>
-						<div class="col-sm-1 my-auto">
-							<div class="row">
-								<i class="fas fa-check" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && editingItem.uuid && editingItem.uuid === item.uuid && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid" @click="deactivateEditMode(item)"></i>
+						<div class="col-sm-2 my-auto">
+							<div class="row" v-if="$root.isSignedIn && editingItem.uuid && editingItem.uuid === item.uuid && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid">
+								<i class="fas fa-check" style="color: rgba(250, 30, 20)" @click="deactivateEditMode(item)"></i>
+							</div>
+							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'">
+								<input type="number" class="discrete-textbox" style="width:40px;margin-left:5px" v-model="item.purchase_amount">
+								<i class="fas fa-shopping-cart my-auto" style="color: rgba(250, 30, 20); margin-left:5px" @click="addItemToCart(item)"></i>
 							</div>
 						</div>
 				    </div>
@@ -181,10 +185,10 @@ Vue.component('restaurant', {
                         <i class="fa fa-star" v-if="comment.rating >= 3"></i>
                         <i class="fa fa-star" v-if="comment.rating >= 4"></i>
                         <i class="fa fa-star" v-if="comment.rating >= 5"></i>
-                        <i class="fa fa-star-o" v-if="comment.rating < 2"></i>
-                        <i class="fa fa-star-o" v-if="comment.rating < 3"></i>
-                        <i class="fa fa-star-o" v-if="comment.rating < 4"></i>
-                        <i class="fa fa-star-o" v-if="comment.rating < 5"></i>
+                        <i class="far fa-star" v-if="comment.rating < 2"></i>
+                        <i class="far fa-star" v-if="comment.rating < 3"></i>
+                        <i class="far fa-star" v-if="comment.rating < 4"></i>
+                        <i class="far fa-star" v-if="comment.rating < 5"></i>
                     </div>
                 </div>
                 <!--Comments---------------------------------------->
