@@ -44,6 +44,7 @@ public class CommentDao {
     	return comments.values()
     			.stream()
     			.filter(comment -> comment.isApproved())
+    			.filter(comment -> !comment.isRejected())
     			.filter(comment -> !comment.isDeleted())
     			.collect(Collectors.toList());
     }
@@ -93,9 +94,8 @@ public class CommentDao {
     }
 	
 	public List<Comment> findByRestaurantApproved(UUID r) {
-    	List<Comment> tmpStep = getAllComments()
+    	List<Comment> tmpStep = getAllCommentsApproved()
                 .stream()
-                .filter(comment -> comment.isApproved())
                 .filter(comment -> comment.getRestaurant().getUuid().equals(r))
                 .collect(Collectors.toList());
     	return tmpStep;

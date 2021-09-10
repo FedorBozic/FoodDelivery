@@ -9,6 +9,7 @@ public class Comment {
 	private String text;
 	private int rating;
 	private boolean approved = false;
+	private boolean rejected = false;
 	private boolean deleted = false;
 	
 	public Comment() {
@@ -71,5 +72,13 @@ public class Comment {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public boolean isRejected() {
+		return rejected;
+	}
+
+	public void setRejected(boolean rejected) {
+		this.rejected = rejected;
 	}
 }

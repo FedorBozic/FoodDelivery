@@ -120,7 +120,7 @@ public class DostavaMain {
 	}
 	
 	public static void main(String[] args) {
-		port(8080);
+		port(18080);
 		
 		try {
             staticFiles.externalLocation(new File("./static").getCanonicalPath());
@@ -195,6 +195,7 @@ public class DostavaMain {
 		get("api/comments/:id", CommentController.findByRestaurant);
 		post("api/comments/newcomment", CommentController.addComment);
 		put("/api/comments/approvecomment/:id", CommentController.approveComment);
+		put("/api/comments/rejectcomment/:id", CommentController.rejectComment);
 		
 		afterAfter((request, response) -> {
             Thread t = new Thread(() -> {

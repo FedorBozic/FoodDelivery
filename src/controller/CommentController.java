@@ -93,6 +93,31 @@ public class CommentController {
         
         return response;
 	};
+	
+    public static Route rejectComment = (Request request, Response response) -> {
+        
+        User user = UserController.currentUser;
+        if(user == null)
+        {
+        	response.body("You are not logged in!");
+            response.status(400);
+            return response;
+        }
+        else if(user.getRole() != User.Role.MANAGER) {
+        	response.body("Action not allowed!");
+            response.status(400);
+            return response;
+        }
+    	
+        var body = gson.fromJson((request.body()), HashMap.class);
+        response.body("Rejected successfully!");
+        response.status(200);
+        
+        Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
+        comment.setRejected(true);
+        
+        return response;
+	};
     
     public static Route deleteComment = (Request request, Response response) -> {
     	DostavaMain.commentDao.deleteComment(request.params("id"));
