@@ -187,6 +187,8 @@ Vue.component('restaurant', {
                             <span>@{{comment.customer.username}}</span>
                         </div>
                     </div>
+                    <i class="fas fa-check" v-if="!comment.approved" style="color: rgba(250, 30, 20)" @click="approveComment(comment)"></i>
+                    <i class="fas fa-times" v-if="!comment.approved" style="color: rgba(250, 30, 20)" @click="deleteComment(comment)"></i>
                     <!--Veoma lazy resenje. Sa vfor moze lakse, ali bude ruznije iz nekog razloga------>
                     <div class="reviews">
                         <i class="fa fa-star"></i>
@@ -220,6 +222,30 @@ Vue.component('restaurant', {
 	</div>
 	`,
 	methods : {
+		loadData: function(self) {
+	        axios.get('restaurants/' + self.$route.params.id)
+	        .then(res => {
+	            self.restaurant = res.data;
+	            self.showOnMap();
+				if(self.restaurant != null && self.restaurant.logo != null){
+	            	self.restaurant.logo = 'data:image/png;base64,' + self.restaurant.logo;
+	            }
+				for(let i in self.restaurant.items){
+			    	if(self.restaurant.items[i].image != null){
+			    		self.restaurant.items[i].image = self.restaurant.items[i].image;
+			    	}
+					self.articlenumber++;
+			    }
+			    axios.get('comments/' + self.$route.params.id)
+			    .then(res => {
+			    	self.comments = res.data
+			    })
+	        })
+	        .catch(err => {
+	            console.error(err);
+	        });
+		},
+	
 		convertImage: function() {
         	let file = document.querySelector('#image').files[0];
             let reader = new FileReader();
@@ -344,6 +370,14 @@ Vue.component('restaurant', {
         	return 'g'
         },
         
+        approveComment: function(comment) {
+        	let self = this
+        	axios.put('comments/approvecomment/' + comment.uuid, JSON.stringify(comment))
+        	.then( res => {
+        		self.loadData(self);
+        	})
+        },
+        
         generateApprovedComments: function() {
         	let self = this
         	for(comment in this.comments)
@@ -357,26 +391,6 @@ Vue.component('restaurant', {
 	},
     mounted() {
     	let self = this
-        axios.get('restaurants/' + this.$route.params.id)
-        .then(res => {
-            this.restaurant = res.data;
-            this.showOnMap();
-			if(this.restaurant != null && this.restaurant.logo != null){
-            	this.restaurant.logo = 'data:image/png;base64,' + this.restaurant.logo;
-            }
-			for(let i in this.restaurant.items){
-		    	if(this.restaurant.items[i].image != null){
-		    		this.restaurant.items[i].image = this.restaurant.items[i].image;
-		    	}
-				this.articlenumber++;
-		    }
-		    axios.get('comments/' + self.$route.params.id)
-		    .then(res => {
-		    	self.comments = res.data
-		    })
-        })
-        .catch(err => {
-            console.error(err);
-        });
+        this.loadData(self);
     }
 });
