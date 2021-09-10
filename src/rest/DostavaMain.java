@@ -2,9 +2,14 @@ package rest;
 
 import static spark.Spark.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +42,20 @@ import model.UserType;
 public class DostavaMain {
 	
 	public static Gson gson = new Gson();
-	public static UserDao userDao = new UserDao();
-	public static UserTypeDao userTypeDao = new UserTypeDao();
-	public static RestaurantDao restaurantDao = new RestaurantDao();
-	public static OrderDao orderDao = new OrderDao();
-	public static DeliveryRequestDao deliveryRequestDao = new DeliveryRequestDao();
-	public static CommentDao commentDao = new CommentDao();
+	public static UserDao userDao;
+	public static UserTypeDao userTypeDao;
+	public static RestaurantDao restaurantDao;
+	public static OrderDao orderDao;
+	public static DeliveryRequestDao deliveryRequestDao;
+	public static CommentDao commentDao;
 	
 	private static void createDummyData() {
+		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
+		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
+		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
+		userTypeDao.addUserType(new UserType("STAFF", -1, -1, "darkgreen", "forestgreen"));
+		userTypeDao.addUserType(new UserType("ADMIN", -1, -1, "royalblue", "dodgerblue"));
+		
 		User defaultAdmin = new User();
 		defaultAdmin.setUsername("ftn");
 		defaultAdmin.setPassword("ftn");
@@ -122,13 +133,23 @@ public class DostavaMain {
             response.header("Access-Control-Allow-Methods", "*");
         });
 		
-		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
-		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
-		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
-		userTypeDao.addUserType(new UserType("STAFF", -1, -1, "darkgreen", "forestgreen"));
-		userTypeDao.addUserType(new UserType("ADMIN", -1, -1, "royalblue", "dodgerblue"));
-		
-		createDummyData();
+		//createDummyData();
+		try {
+			getUserTypes();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			getUsers();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		getRestaurants();
+		getOrders();
+		getDeliveryRequests();
+		getComments();
 		RestaurantController.restaurantDao = restaurantDao;
 		RestaurantController.userDao = userDao;
 		
@@ -169,6 +190,102 @@ public class DostavaMain {
 		
 		get("api/comments/:id", CommentController.findByRestaurant);
 		post("api/comments/newcomment", CommentController.addComment);
+		
+		afterAfter((request, response) -> {
+            Thread t = new Thread(() -> {
+                try {
+                    saveData();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            t.start();
+        });
 	}
+	
+	private static void saveData() throws IOException {
+        FileWriter fw = new FileWriter("users.json");
+        fw.write(gson.toJson(userDao));
+        fw.close();
+        fw = new FileWriter("restaurants.json");
+        fw.write(gson.toJson(restaurantDao));
+        fw.close();
+        fw = new FileWriter("orders.json");
+        fw.write(gson.toJson(orderDao));
+        fw.close();
+        fw = new FileWriter("delivery_requests.json");
+        fw.write(gson.toJson(deliveryRequestDao));
+        fw.close();
+        fw = new FileWriter("comments.json");
+        fw.write(gson.toJson(commentDao));
+        fw.close();
+    }
 
+    private static void getUsers() throws IOException {
+    	try {
+    		userDao = gson.fromJson(new BufferedReader(new FileReader("users.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), UserDao.class);
+    	} catch (FileNotFoundException e) {
+            userDao = new UserDao();
+            User defaultAdmin = new User();
+    		defaultAdmin.setUsername("ftn");
+    		defaultAdmin.setPassword("ftn");
+    		defaultAdmin.setFirstName("Fedor");
+    		defaultAdmin.setLastName("Bozic");
+    		defaultAdmin.setGender(User.Gender.valueOf("MALE"));
+    		defaultAdmin.setRole(User.Role.valueOf("ADMIN"));
+    		defaultAdmin.setType(userTypeDao.findByName("ADMIN"));
+    		userDao.addUser(defaultAdmin);
+        }
+    }
+    
+    private static void getUserTypes() throws IOException {
+    	try {
+    		userTypeDao = gson.fromJson(new BufferedReader(new FileReader("userTypes.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), UserTypeDao.class);
+    	} catch (FileNotFoundException e) {
+    		userTypeDao = new UserTypeDao();
+    		userTypeDao.addUserType(new UserType("BRONZE", 0, 0, "saddlebrown", "sandybrown"));
+    		userTypeDao.addUserType(new UserType("SILVER", 10, 100, "grey", "silver"));
+    		userTypeDao.addUserType(new UserType("GOLD", 20, 500, "gold", "palegoldenrod"));
+    		userTypeDao.addUserType(new UserType("STAFF", -1, -1, "darkgreen", "forestgreen"));
+    		userTypeDao.addUserType(new UserType("ADMIN", -1, -1, "royalblue", "dodgerblue"));
+        }
+    }
+
+    private static void getRestaurants() {
+    	try {
+    		restaurantDao = gson.fromJson(new BufferedReader(new FileReader("restaurants.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), RestaurantDao.class);
+    	} catch (FileNotFoundException e) {
+    		restaurantDao = new RestaurantDao();
+        }
+    }
+
+    private static void getOrders() {
+    	try {
+    		orderDao = gson.fromJson(new BufferedReader(new FileReader("orders.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), OrderDao.class);
+    	} catch (FileNotFoundException e) {
+    		orderDao = new OrderDao();
+        }
+    }
+
+    public static void getDeliveryRequests() {
+    	try {
+    		deliveryRequestDao = gson.fromJson(new BufferedReader(new FileReader("delivery_requests.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), DeliveryRequestDao.class);
+    	} catch (FileNotFoundException e) {
+    		deliveryRequestDao = new DeliveryRequestDao();
+        }
+    }
+    
+    public static void getComments() {
+    	try {
+    		commentDao = gson.fromJson(new BufferedReader(new FileReader("comments.json"))
+                	.lines().collect(Collectors.joining(System.lineSeparator())), CommentDao.class);
+    	} catch (FileNotFoundException e) {
+    		commentDao = new CommentDao();
+        }
+    }
 }

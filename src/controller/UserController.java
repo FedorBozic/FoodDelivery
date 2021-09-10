@@ -72,7 +72,7 @@ public class UserController {
         User user = null;
         boolean overwritingUserMode = false;
         
-        if(((String) body.get("uuid")).equals("nouuid"))
+        if(body.get("uuid") == null || ((String) body.get("uuid")).equals("nouuid"))
         {
         	user = new User();
         }
