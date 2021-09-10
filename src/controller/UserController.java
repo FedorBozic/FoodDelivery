@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -161,6 +162,13 @@ public class UserController {
     	response.status(200);
     	UserTypeDao userTypeDao = DostavaMain.userTypeDao;
     	response.body(gson.toJson(userTypeDao.getNextRank(currentUser.getPoints())));
+    	return response;
+    };
+    
+    public static Route deleteCartItem = (Request request, Response response) -> {
+    	response.status(200);
+    	String id = request.queryParams("id");
+    	currentUser.getCart().removeItem(UUID.fromString(id));
     	return response;
     };
     

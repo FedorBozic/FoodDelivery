@@ -1,8 +1,11 @@
 package model;
 
+import java.util.UUID;
+
 public class CartItem {
 	private Item item;
 	private int count;
+	private UUID uuid;
 	
 	public CartItem(Item item, int count) {
 		this.item = item;
@@ -20,5 +23,13 @@ public class CartItem {
 	}
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 }

@@ -63,4 +63,14 @@ public class Cart {
 		}
 		this.cartItems.add(item);
 	}
+	
+	public boolean removeItem(UUID id) {
+		for (CartItem ci : cartItems) {
+			if(ci.getUuid() == id) {
+				cartItems.remove(ci);
+				return true;
+			}
+		}
+		return false;
+	}
 }

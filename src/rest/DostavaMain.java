@@ -167,7 +167,8 @@ public class DostavaMain {
 		put("api/users/edit", "application/json", UserController.editUser);
 		get("/api/users/getCart", UserController.getCart);
 		post("/api/users/itemToCart", UserController.itemToCart);
-		get("/api/users/getCustomersOfRestaurant", UserController.getCart);
+		get("/api/users/getCustomersOfRestaurant", UserController.getCustomersOfRestaurant);
+		delete("/api/users/deleteCartItem/:id", UserController.deleteCartItem);
 		
 		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
 		post("/api/users/overwriteItem", UserController.overwriteItem);
