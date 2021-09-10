@@ -158,6 +158,7 @@ public class DostavaMain {
 		RestaurantController.userDao = userDao;
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
+		//get("/api/users/:id", UserController.findById);
 		get("/api/users/managers", (request,response) -> gson.toJson(userDao.getManagers()));
 		get("/api/users/availablemanagers", (request,response) -> gson.toJson(userDao.getAvailableManagers()));
         get("/api/users/logout", UserController.logOut);

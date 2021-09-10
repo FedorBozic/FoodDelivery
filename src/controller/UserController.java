@@ -31,6 +31,9 @@ public class UserController {
             .setPrettyPrinting()
             .create();
     
+    /*public static Route findById = (Request request, Response response) ->
+		gson.toJson(DostavaMain.userDao.findById(request.params(":id")));*/
+    
     public static Route addUser = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
