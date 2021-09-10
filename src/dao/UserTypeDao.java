@@ -1,6 +1,8 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,17 @@ public class UserTypeDao {
             return userType;
         }
         return null;
+    }
+    
+    public UserType getByPoints(int points) {
+    	UserType maxType = null;
+    	for (UserType ut : userTypes.values()) {
+    		if(maxType == null && ut.getPointRequirement() <= points)
+    			maxType = ut;
+    		else if(ut.getPointRequirement() > maxType.getPointRequirement() && ut.getPointRequirement() <= points)
+				maxType = ut;
+		}
+    	return maxType;
     }
     
     public UserType findByName(String userType) {

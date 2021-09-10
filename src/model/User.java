@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import rest.DostavaMain;
+
 public class User {
 	
 	public enum Gender {MALE, FEMALE};
@@ -262,11 +264,17 @@ public class User {
 		this.deleted = deleted;
 	}
 	
+	public void updateType() {
+		type = DostavaMain.userTypeDao.getByPoints(points);
+	}
+	
 	public void givePenalty(float price) {
 		points -= price / 1000 * 133 * 4;
+		updateType();
 	}
 	
 	public void giveLoyaltyPoints(float price) {
 		points += price / 1000 * 133;
+		updateType();
 	}
 }
