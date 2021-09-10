@@ -5,11 +5,61 @@ Vue.component('awaitingdeliveryorders', {
 				restaurant: {},
 				orders: [],
 				userdeliveries: [],
-				mydeliveries: []
+				mydeliveries: [],
+				currentSort:'restaurantName',
+				currentSortDir:'asc',
+				filterRestaurantName: '',
+				filterDateFrom: '',
+				filterDateTo: '',
+				filterPriceFrom: '',
+				filterPriceTo: ''
        		}
         },
         template: `
         <div class="container">
+        	<div class="row mb-3" style="margin-top: 20px">
+				<div class="col-lg-4 mx-auto">
+					<div class="bg-white p-3 rounded shadow">
+						<form action="">
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Restaurant Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterRestaurantName">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('restaurantName')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Price from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterPriceFrom">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('price')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Price to" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterPriceTo">
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
+									<div class="input-group-append">
+										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('date')"><i class="fa fa-sort"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+        
         	<div class="tabs-container" style="margin-top:100px">
 					<div class="tabs-block">
 						<div class="tabs">
@@ -19,14 +69,14 @@ Vue.component('awaitingdeliveryorders', {
 								<table class="table table-striped" style="width:100%">
 									<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
 										<tr>
-											<th>Username</th>
+											<th>Restaurant</th>
 											<th>Status</th>
 											<th>Upgrade</th>
 										</tr>
 									</thead>
 									<tbody v-for="mydelivery in mydeliveries">
 										<tr>
-											<td>{{mydelivery.order.customerName}}</td>
+											<td>{{mydelivery.order.restaurantName}}</td>
 											<td>{{mydelivery.order.status}}</td>
 											<td><button v-on:click="upgradeOrderStatus(mydelivery.order)">Upgrade</button></td>
 										</tr>
@@ -40,13 +90,13 @@ Vue.component('awaitingdeliveryorders', {
 								<table class="table table-striped" style="width:100%">
 									<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
 										<tr>
-											<th>Username</th>
+											<th>Restaurant</th>
 											<th>Status</th>
 										</tr>
 									</thead>
 									<tbody v-for="userdelivery in userdeliveries">
 										<tr>
-											<td>{{userdelivery.order.customerName}}</td>
+											<td>{{userdelivery.order.restaurantName}}</td>
 											<td>{{userdelivery.order.status}}</td>
 										</tr>
 									</tbody>
@@ -59,14 +109,16 @@ Vue.component('awaitingdeliveryorders', {
 								<table class="table table-striped" style="width:100%; margin-bottom:0px">
 									<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
 										<tr>
-											<th>Username</th>
+											<th>Restaurant</th>
+											<th>Price</th>
 											<th>Status</th>
 											<th>Request</th>
 										</tr>
 									</thead>
-									<tbody v-for="order in orders">
+									<tbody v-for="order in sortedOrders">
 										<tr>
-											<td>{{order.customerName}}</td>
+											<td>{{order.restaurantName}}</td>
+											<td>{{order.price}}</td>
 											<td>{{order.status}}</td>
 											<td><button v-on:click="requestDelivery(order)">Request</button></td>
 										</tr>
@@ -134,8 +186,56 @@ Vue.component('awaitingdeliveryorders', {
 	            .catch(err => {
 	                alert(err.response.data);
 	            })
-	        }
-	
+	        },
+			
+			sort: function(s) {
+		       	let self = this
+				if(s === this.currentSort) {
+					self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
+				}
+			  	this.currentSort = s;
+			},
+			
+	        highlightMatches(text, filter) {
+			    const matchExists = text
+			      .toLowerCase()
+			      .includes(filter.toLowerCase());
+			    if (!matchExists) return text;
+			
+			    const re = new RegExp(filter, "ig");
+			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+			},
+			
+			convertJsonDateToRaw(date) {
+				date = date.split('-')
+				return (parseInt(date[0]) - 1970)*31536000000 + (parseInt(date[1])-1)*2629800000 + parseInt(date[2])*86400000;
+			}
+	    },
+	    computed: {
+			sortedOrders : function() {
+				resultData =  Object.values(this.orders).sort((a,b) => {
+					let direction = 1;
+					if(this.currentSortDir === 'desc') direction = -1;
+					if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
+					if(a[this.currentSort] > b[this.currentSort]) return 1 * direction;
+					return 0;
+				});
+				return resultData.filter(sortedOrder => {
+				    const restaurantName = sortedOrder.restaurantName.toString().toLowerCase();
+				    const price = sortedOrder.price
+				    const date = Date.parse(sortedOrder.date)
+				    
+				    const restaurantNameSearchTerm = this.filterRestaurantName.toLowerCase();
+				    const priceFromSearchTerm = this.filterPriceFrom;
+				    const priceToSearchTerm = this.filterPriceTo;
+				    const DateFromSearchTerm = this.convertJsonDateToRaw(this.filterDateFrom);
+				    const DateToSearchTerm = this.convertJsonDateToRaw(this.filterDateTo);
+				    return (
+				    	restaurantName.includes(restaurantNameSearchTerm) && (!priceFromSearchTerm || price >= priceFromSearchTerm) && (!priceToSearchTerm || price <= priceToSearchTerm)
+				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm)
+				    );
+			    });
+			}
 	    },
 		mounted() {
         	let self = this;

@@ -76,7 +76,8 @@ Vue.component('customerorders', {
 		    				<div class="col-sm-2">
 			    				<div class="row">
 			    					<div class="col-sm-2"><h4 style="min-width:100px;text-align:left; margin:20px">{{order.restaurantName}}</h4></div>
-			    					<div class="col-sm-2"><h4 style="text-align:left">{{order.price}}</h4></div>
+			    					<div class="col-sm-2"><h4 style="text-align:left">{{order.price}}$</h4></div>
+			    					<div class="col-sm-2"><h4 style="width:400px; text-align:right">{{order.date}}</h4></div>
 			    				</div>
 			    			</div>
 			    			<div class="col-sm-2">

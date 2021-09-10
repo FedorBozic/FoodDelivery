@@ -19,7 +19,7 @@ Vue.component('orders', {
 					margin: '10px', 
 					padding: '10px'
 				},
-				currentSort:'restaurantName',
+				currentSort:'customerName',
 				currentSortDir:'asc',
 				filterCustomerName: '',
 				filterDateFrom: '',
