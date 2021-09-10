@@ -196,6 +196,7 @@ public class DostavaMain {
 		get("api/restaurants/:id", RestaurantController.findById);
 		put("api/restaurants/edit", "application/json", RestaurantController.editRestaurant);
 		put("api/restaurants/openclose", "application/json", RestaurantController.openCloseRestaurant);
+		delete("/api/restaurants/deleterestaurant", RestaurantController.deleteRestaurant);
 		
 		get("api/comments/:id", CommentController.findByRestaurant);
 		post("api/comments/newcomment", CommentController.addComment);

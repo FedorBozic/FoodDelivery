@@ -180,7 +180,7 @@ public class RestaurantController {
     };
 
     public static Route deleteRestaurant = (Request request, Response response) -> {
-    	restaurantDao.deleteRestaurant(request.params("id"));
+    	restaurantDao.deleteRestaurant(request.queryParams("id"));
     	return response;
     };
     
