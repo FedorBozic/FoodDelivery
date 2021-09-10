@@ -336,7 +336,7 @@ public class UserController {
     };
     
     public static Route deleteUser = (Request request, Response response) -> {
-    	DostavaMain.userDao.deleteUser(request.params("id"));
+    	DostavaMain.userDao.deleteUser(request.queryParams("id"));
     	return response;
     };
 }
