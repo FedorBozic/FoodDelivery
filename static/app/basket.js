@@ -19,7 +19,7 @@ Vue.component('basket', {
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-8">
-				<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px">
+				<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-if="cart">
 		       		<div class="profile-card__cnt js-profile-cnt">
 						<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
 							<div class="row d-flex justify-content-between">
@@ -153,9 +153,12 @@ Vue.component('basket', {
     computed: {
     	totalprice() {
     		totalpriceResult = 0
-    		for(let ciId in this.cart.cartItems){
-	            let ci = this.cart.cartItems[ciId];
-	            totalpriceResult += (ci.count*ci.item.price)
+    		if(this.cart && this.cart.cartItems)
+    		{
+	    		for(let ciId in this.cart.cartItems){
+		            let ci = this.cart.cartItems[ciId];
+		            totalpriceResult += (ci.count*ci.item.price)
+		        }
 	        }
     		return Number.parseFloat(totalpriceResult).toPrecision(3);
     	}
