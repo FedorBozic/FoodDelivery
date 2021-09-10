@@ -174,8 +174,7 @@ public class UserController {
     	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
     	String description = (String) body.get("description");
     	float price = Float.parseFloat(((String) body.get("price")));
-    	//int amount = Integer.parseInt((String) body.get("amount"));
-    	int amount = 0;
+    	int amount = (int) Float.parseFloat(((String) body.get("amount")));
     	String image = (String) body.get("image");
     	
     	Item item = new Item();
@@ -195,19 +194,6 @@ public class UserController {
     	{
     		currentUser.getRestaurant().getItems().add(item);
     	}
-    	
-    	/*Restaurant restaurant = new Restaurant();
-    	restaurant.setName((String) body.get("name"));
-    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
-    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
-    	restaurant.setLogo((String) body.get("image"));
-    	
-    	restaurantDao.newRestaurant(restaurant);
-    	
-    	User user = userDao.findById((String) body.get("manager"));
-    	user.setRestaurant(restaurant);
-
-    	System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getRestaurant().getName());*/
     	
         return response;
     };
@@ -269,7 +255,13 @@ public class UserController {
     	String name = (String) body.get("name");
     	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
     	String description = (String) body.get("description");
-    	float price = Float.parseFloat(((String) body.get("price")));
+    	float price;
+    	try{
+    		price = (float) (double) body.get("price");
+    	}
+    	catch (Exception ex){
+    		price = Float.parseFloat(((String) body.get("price")));
+    	}
     	int amount = 0;
     	String image = (String) body.get("image");
     	

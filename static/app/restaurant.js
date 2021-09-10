@@ -11,7 +11,7 @@ Vue.component('restaurant', {
 				price: '',
 				restaurant: '',
 				type: 'FOOD',
-				amount: 1,
+				amount: '',
 				purchase_amount: 1,
 				description: ''
 			},
@@ -74,34 +74,37 @@ Vue.component('restaurant', {
 		          </div>
 		        </div>
 			    
-			    <div class="row" v-if="addingItem || restaurant.items.length < 1">
+			    <div class="row" v-if="(addingItem || restaurant.items.length < 1) && $root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager))">
 				    <div class="col-sm-5">
-						 <div class="row" style="margin-top:5px; margin-left:35px">
+						<div class="row" style="margin-top:5px; margin-left:35px">
 						 	<h2><input type="text" placeholder="Name" style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="itemBeingAdded.name" ></h2>
 						 	<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px"></i>
 						 	<i v-if="itemBeingAdded.type === 'FOOD'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px; color:rgba(250, 30, 20)"></i>
 						 	<i v-if="itemBeingAdded.type === 'FOOD'" @click="itemBeingAdded.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px"></i>
-						 	<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px; color:rgba(250, 30, 20)"></i>
-						 </div>
+							<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px; color:rgba(250, 30, 20)"></i>
+						</div>
 						<textarea style="width:250px; height:100px" v-model="itemBeingAdded.description" ></textarea>
 					</div>
-				    <div class="col-sm-2"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="itemBeingAdded.price" >$</strong></h2></div>
-				    <div class="col-sm-3">
+				    <div class="col-sm-2 my-auto">
+				    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
+				    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="itemBeingAdded.price" >$
+				    	</h2>
+				    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
+				    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="itemBeingAdded.amount" >{{unitOfMeasure(itemBeingAdded)}}
+				    	</h2>
+				    </div>
+				    <div class="col-sm-3 my-auto">
 						<div class="row">
-							<label for="image" style="margin: 0px; padding: 0; width:60px; height:60px; border-radius: 3px">
-			  		    		<img v-if="image" :src="'data:image/png;base64,' + image" style="width:60px; height: 60px"/>
-			  					<img v-else src="/Add_Image.jpg" alt="" style="max-width:60px; max-height:60px;" />
+							<label for="image" style="width:150px; height:150px; border-radius: 10px">
+			  		    		<img v-if="image" :src="image" style="width:150px; height:150px; border-radius: 10px"/>
+			  					<img v-else src="/Add_Image_Round.jpg" alt="" style="width:150px; height:150px; border-radius: 10px" />
 			  				 </label>
 			  				 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
 						</div>
+					</div>
+					<div class="col-sm-1 my-auto" v-if="itemBeingAdded.name && itemBeingAdded.price && itemBeingAdded.amount && image">
 						<div class="row">
-							<div class="col-sm-4">
-								<button class="generic_button" style="margin-top:10px" v-on:click="addItem">
-								  	<div class="pretext">
-								    	<h5 style="padding-bottom:0px; margin-bottom:0px">OK</h5>
-								  	</div>
-								</button>
-							</div>
+							<i class="fas fa-plus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-on:click="addItem()"></i>
 						</div>
 					</div>
 				</div>
@@ -111,51 +114,46 @@ Vue.component('restaurant', {
 						<div style="float:left; margin-left: 30px; margin-top: -15px; padding:3px 10px 3px 10px; border-radius:5px; background-color: rgba(250, 30, 20); color:white"><h3>FOOD</h3></div>
 					</div>
 				    <div class="row" v-for="(item,index) in restaurant.items" v-bind:style="[(index < restaurant.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
-					    <div class="col-sm-7 mr-auto">
-							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h4><strong>{{item.name}}</strong></h4></div>
-							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="width: 200px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="editingItem.name" ></strong></h2></div>
+					    <div class="col-sm-5">
+							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid">
+								<h4>
+									<strong>{{item.name}}</strong>
+									<i class="fas fa-pencil-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)"  v-on:click="activateEditMode(item)"></i>
+									<i class="fas fa-trash-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)"></i>
+								</h4>
+							</div>
+							<div class="row" style="margin-left:15px" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
+							 	<h2><input type="text" placeholder="Name" style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="editingItem.name" ></h2>
+							 	<i v-if="editingItem.type === 'DRINK'" @click="editingItem.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px"></i>
+							 	<i v-if="editingItem.type === 'FOOD'" @click="editingItem.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px; color:rgba(250, 30, 20)"></i>
+							 	<i v-if="editingItem.type === 'FOOD'" @click="editingItem.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px"></i>
+								<i v-if="editingItem.type === 'DRINK'" @click="editingItem.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px; color:rgba(250, 30, 20)"></i>
+							</div>
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
-							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><textarea style="width:250px; height:100px" v-model="editingItem.description" ></textarea></div>
-							<div v-if="editingItem.uuid && editingItem.uuid === item.uuid">
-								<select v-model="editingItem.type">
-				  					<option value="FOOD">Food</option>
-				  					<option value="DRINK">Drink</option>
-				  				</select>
+							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><textarea style="width:250px; height:100px; margin-left:-25px" v-model="editingItem.description" ></textarea></div>
+						</div>
+					    <div class="col-sm-2 my-auto" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-2 my-auto" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
+					    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
+					    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.price" >$
+					    	</h2>
+					    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
+					    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.amount" >{{unitOfMeasure(editingItem)}}
+					    	</h2>
+					    </div>
+					    <div class="col-sm-4 my-auto">
+							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+							<div class="row" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
+								<label for="editimage" style="width:150px; height:150px; border-radius: 10px; margin-left:20px">
+				  		    		<img v-if="item.image" :src="item.image" style="width:150px; height:150px; border-radius: 10px"/>
+				  					<img v-else src="/Add_Image_Round.jpg" alt="" style="width:150px; height:150px; border-radius: 10px" />
+				  				 </label>
+				  				 <input type="file" v-on:change="convertEditImage(editingItem)" id="editimage" name="editimage" accept="image/*" style="display:none">
 							</div>
 						</div>
-					    <div class="col-sm-2" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
-					    <div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.price" >$</strong></h2></div>
-					    <div class="col-sm-3">
-							<div class="row"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
-							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'">
-								<div class="col-sm-4 mr-auto">
-									<input type="text" class="discrete-textbox" style="vertical-align: center; height: 100%; margin-top:4px" placeholder="" v-model="item.purchase_amount">
-								</div>
-								<div class="col-sm-4">
-									<button class="addtocart" style="margin-top:10px" v-on:click="addItemToCart(item)">
-									  	<div class="pretext">
-									    	<h5 style="padding-bottom:0px; margin-bottom:0px">+</h5>
-									  	</div>
-									</button>
-								</div>
-							</div>
-							<div class="row" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)">
-								<div class="col-sm-4">
-									<button class="generic_button" style="margin-top:10px" v-on:click="activateEditMode(item)">
-									  	<div class="pretext">
-									    	<h5 style="padding-bottom:0px; margin-bottom:0px">EDIT</h5>
-									  	</div>
-									</button>
-								</div>
-							</div>
-							<div class="row" v-if="$root.isSignedIn && editingItem && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid">
-								<div class="col-sm-4">
-									<button class="generic_button" style="margin-top:10px" v-on:click="deactivateEditMode(item)">
-									  	<div class="pretext">
-									    	<h5 style="padding-bottom:0px; margin-bottom:0px">OK</h5>
-									  	</div>
-									</button>
-								</div>
+						<div class="col-sm-1 my-auto">
+							<div class="row">
+								<i class="fas fa-check" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && editingItem.uuid && editingItem.uuid === item.uuid && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid" @click="deactivateEditMode(item)"></i>
 							</div>
 						</div>
 				    </div>
@@ -215,7 +213,20 @@ Vue.component('restaurant', {
             reader.readAsDataURL(file);
             let self = this;
             reader.onload = function () {
-                self.image = reader.result.split(',')[1];
+                self.image = 'data:image/png;base64,' + reader.result.split(',')[1];
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        },
+        
+        convertEditImage: function(item) {
+        	let file = document.querySelector('#editimage').files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            let self = this;
+            reader.onload = function () {
+                item.image = 'data:image/png;base64,' + reader.result.split(',')[1];
             };
             reader.onerror = function (error) {
                 console.log('Error: ', error);
@@ -313,6 +324,11 @@ Vue.component('restaurant', {
         		result = result / (this.restaurant.ratings[0] + this.restaurant.ratings[1] + this.restaurant.ratings[2] + this.restaurant.ratings[3] + this.restaurant.ratings[4])
         	}
         	return result;
+        },
+        
+        unitOfMeasure: function(item) {
+        	if(item.type === 'DRINK') return 'ml'
+        	return 'g'
         }
 	},
     mounted() {
@@ -326,7 +342,7 @@ Vue.component('restaurant', {
             }
 			for(let i in this.restaurant.items){
 		    	if(this.restaurant.items[i].image != null){
-		    		this.restaurant.items[i].image = 'data:image/png;base64,' + this.restaurant.items[i].image;
+		    		this.restaurant.items[i].image = this.restaurant.items[i].image;
 		    	}
 				this.articlenumber++;
 		    }
