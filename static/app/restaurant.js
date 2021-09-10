@@ -106,7 +106,7 @@ Vue.component('restaurant', {
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h4><strong>{{item.name}}</strong></h4></div>
 							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="width: 200px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="editingItem.name" ></strong></h2></div>
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
-							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><input type="text" class="discrete-textbox" style="width:250px; height:100px" v-model="editingItem.description" ></div>
+							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><textarea style="width:250px; height:100px" v-model="editingItem.description" ></textarea></div>
 							<div v-if="editingItem.uuid && editingItem.uuid === item.uuid">
 								<select v-model="editingItem.type">
 				  					<option value="FOOD">Food</option>
