@@ -108,7 +108,10 @@ public class UserController {
             	user.setRole(User.Role.valueOf("CUSTOMER"));
             }
             
-            User addedUser = DostavaMain.userDao.addUser(user);
+            if(!overwritingUserMode)
+            {
+            	DostavaMain.userDao.addUser(user);
+            }
         } catch (Exception e) {
             response.body("Not all fields have been filled!");
             response.status(400);

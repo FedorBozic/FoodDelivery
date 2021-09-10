@@ -31,7 +31,7 @@ Vue.component('userview', {
 									<th>Role</th>
 								</tr>
 							</thead>
-							<tbody v-for="u in sortedUsers" @click="user=u">
+							<tbody v-for="u in sortedUsers" @click="changeUserEditingMode(u)">
 								<tr>
 									<td v-html="highlightMatches(u.username)"></td>
 									<td v-html="highlightMatches(u.firstName)"></td>
@@ -46,7 +46,8 @@ Vue.component('userview', {
 					<div class="col-xl-4">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title mb-0">Add User</h5>
+								<h5 v-if="this.user.uuid === 'nouuid'" class="card-title mb-0">Add User</h5>
+								<h5 v-if="this.user.uuid != 'nouuid'" class="card-title mb-0">Edit User</h5>
 							</div>
 							<div class="card-body">
 		
@@ -80,7 +81,8 @@ Vue.component('userview', {
 									  </select>
 									 </div>
 								</div>
-								<input type="button" value="Add" class="generic_button" v-on:click="register()"/>
+								<input v-if="this.user.uuid === 'nouuid'" type="button" value="Add" class="generic_button" v-on:click="register()"/>
+								<input v-if="this.user.uuid != 'nouuid'" type="button" value="Confirm" class="generic_button" v-on:click="register()"/>
 							</div>
 						</div>
 					</div>
@@ -114,6 +116,24 @@ Vue.component('userview', {
 	                    alert(error.response.data);
 	                });
 				axios.get('getUsers');
+	        },
+	        changeUserEditingMode: function(u) {
+	        	let self = this
+	        	if(this.user === u)
+	        	{
+	        		this.user = {
+	        			uuid: 'nouuid',
+        				gender: 'MALE',
+        				username: '',
+        				firstName: '',
+        				lastName: '',
+        				type: ''
+	        		}
+	        	}
+	        	else
+	        	{
+	        		this.user = u
+	        	}
 	        },
 	        sort: function(s) {
 	        	let self = this
