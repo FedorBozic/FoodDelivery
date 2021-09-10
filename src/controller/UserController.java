@@ -2,7 +2,9 @@ package controller;
 
 import java.awt.SystemColor;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +13,7 @@ import dao.UserTypeDao;
 import model.Cart;
 import model.CartItem;
 import model.Item;
+import model.Order;
 import model.Restaurant;
 import model.RestaurantStatus;
 import model.RestaurantType;
@@ -161,6 +164,27 @@ public class UserController {
     	return response;
     };
     
+    public static Route getCustomersOfRestaurant = (Request request, Response response) -> {
+    	response.status(200);
+    	Restaurant restaurant = currentUser.getRestaurant();
+    	List<Order> ordersOfRestaurant = DostavaMain.orderDao.findByRestaurant(restaurant);
+    	List<User> users = DostavaMain.userDao.getAllUsers();
+    	List<User> customersOfRestaurant = new ArrayList<User>();
+    	for (User u : users) {
+    		boolean found = false;
+			for (Order o : ordersOfRestaurant) {
+				if(o.getCustomer() == u.getUuid()) {
+					found = true;
+					break;
+				}
+			}
+			if(found)
+				customersOfRestaurant.add(u);
+		}
+    	response.body(gson.toJson(customersOfRestaurant));
+    	return response;
+    };
+    
     public static Route newItemToRestaurant = (Request request, Response response) -> {
     	response.status(200);
     	
@@ -170,33 +194,41 @@ public class UserController {
             response.body("Not logged in!");
             response.status(400);
             return response;
-        
         }
     	
-    	String name = (String) body.get("name");
-    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
-    	String description = (String) body.get("description");
-    	float price = Float.parseFloat(((String) body.get("price")));
-    	int amount = (int) Float.parseFloat(((String) body.get("amount")));
-    	String image = (String) body.get("image");
-    	
-    	Item item = new Item();
-    	item.setName(name);
-    	item.setType(type);
-    	item.setAmount(amount);
-    	item.setDescription(description);
-    	item.setPrice(price);
-    	item.setImage(image);
-    	
-    	if(body.get("restaurant") != null && DostavaMain.restaurantDao.findById((String) body.get("restaurant")) != null)
-    	{
-    		DostavaMain.restaurantDao.findById((String) body.get("restaurant")).addItem(item);
-        	item.setRestaurant(DostavaMain.restaurantDao.findById((String) body.get("restaurant")));
-    	}
-    	else
-    	{
-    		currentUser.getRestaurant().getItems().add(item);
-    	}
+        try {
+	    	String name = (String) body.get("name");
+	    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
+	    	String description = (String) body.get("description");
+	    	float price = Float.parseFloat(((String) body.get("price")));
+	    	int amount = (int) Float.parseFloat(((String) body.get("amount")));
+	    	String image = (String) body.get("image");
+	    	
+	    	Item item = new Item();
+	    	item.setName(name);
+	    	item.setType(type);
+	    	item.setAmount(amount);
+	    	item.setDescription(description);
+	    	item.setPrice(price);
+	    	item.setImage(image);
+	    	
+	    	if(body.get("restaurant") != null && DostavaMain.restaurantDao.findById((String) body.get("restaurant")) != null)
+	    	{
+	    		DostavaMain.restaurantDao.findById((String) body.get("restaurant")).addItem(item);
+	        	item.setRestaurant(DostavaMain.restaurantDao.findById((String) body.get("restaurant")));
+	    	}
+	    	else
+	    	{
+	    		currentUser.getRestaurant().getItems().add(item);
+	    	}
+	    	
+	    	response.body("Item added successfully!");
+            response.status(200);
+        }
+        catch (Exception e) {
+            response.body("Failed to add item to restaurant!");
+            response.status(400);
+        }
     	
         return response;
     };
@@ -217,8 +249,7 @@ public class UserController {
     	
     	String purchaseAmountS = (String) body.get("purchase_amount");
     	int amount;
-    	if(purchaseAmountS == null || purchaseAmountS.equals(""))
-    	{
+    	if(purchaseAmountS == null || purchaseAmountS.equals("")) {
     		amount = 1;
     	}
     	else
@@ -227,23 +258,34 @@ public class UserController {
     			amount = Integer.parseInt(purchaseAmountS);
     		}
     		catch (Exception e){
-    			amount = 1; //Ili ovo, ili skroz da rejectuje?
+    			response.body("Invalid amount!");
+                response.status(400);
+                return response;
     		}
     	}
-    	if(amount < 1)
-    		amount = 1;
-    	
-    	//int amount = 1;
-    	CartItem cartItem = new CartItem(itemToAdd, amount);
-    	
-    	if(currentUser.getCart() == null)
-    	{
-    		currentUser.setCart(new Cart());
-    		currentUser.getCart().setUser(currentUser);
+    	if(amount < 1) {
+    		response.body("Invalid amount!");
+            response.status(400);
+            return response;
     	}
     	
-    	currentUser.getCart().addCartItem(cartItem);
-    	
+    	try {
+	    	CartItem cartItem = new CartItem(itemToAdd, amount);
+	    	
+	    	if(currentUser.getCart() == null) {
+	    		currentUser.setCart(new Cart());
+	    		currentUser.getCart().setUser(currentUser);
+	    	}
+	    	
+	    	currentUser.getCart().addCartItem(cartItem);
+	    	
+	    	response.body("Item added to cart successfully!");
+            response.status(200);
+    	}
+    	catch (Exception e) {
+    		response.body("Failed to add item to cart!");
+            response.status(400);
+    	}
         return response;
     };
     
