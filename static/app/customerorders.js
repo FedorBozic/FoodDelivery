@@ -54,7 +54,7 @@ Vue.component('customerorders', {
 							</div>
 							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
 								<div class="input-group">
-									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
+									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
 									<div class="input-group-append">
 										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('date')"><i class="fa fa-sort"></i></button>
 									</div>
@@ -62,19 +62,22 @@ Vue.component('customerorders', {
 							</div>
 							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
 								<div class="input-group">
-									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
+									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
 								</div>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
-        	<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-for="order in orders">
+        	<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-for="order in sortedOrders">
         		<div class="profile-card__cnt js-profile-cnt">
 		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
 		    			<div class="row d-flex justify-content-between">
 		    				<div class="col-sm-2">
-			    				<h4 style="min-width:100px;text-align:left; margin:10px">{{order.restaurantName}}</h4>
+			    				<div class="row">
+			    					<div class="col-sm-2"><h4 style="min-width:100px;text-align:left; margin:20px">{{order.restaurantName}}</h4></div>
+			    					<div class="col-sm-2"><h4 style="text-align:left">{{order.price}}</h4></div>
+			    				</div>
 			    			</div>
 			    			<div class="col-sm-2">
 			    				<h4 style="min-width:100px;text-align:center; margin:10px; margin-right:20px">
@@ -175,12 +178,16 @@ Vue.component('customerorders', {
 			
 			    const re = new RegExp(filter, "ig");
 			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
+			},
+			
+			convertJsonDateToRaw(date) {
+			
 			}
 	    },
 	    
 	    computed: {
 			sortedOrders : function() {
-				resultData =  Object.values(this.restaurants).sort((a,b) => {
+				resultData =  Object.values(this.orders).sort((a,b) => {
 					let direction = 1;
 					if(this.currentSortDir === 'desc') direction = -1;
 					if(a[this.currentSort] < b[this.currentSort]) return -1 * direction;
@@ -189,17 +196,18 @@ Vue.component('customerorders', {
 				});
 				return resultData.filter(sortedOrder => {
 				    const restaurantName = sortedOrder.restaurantName.toString().toLowerCase();
-				    const price = sortedOrder.priceFrom
-				    const date = sortedOrder.dateFrom
+				    const price = sortedOrder.price
+				    const date = sortedOrder.dateTime
 				    
 				    const restaurantNameSearchTerm = this.filterRestaurantName.toLowerCase();
 				    const priceFromSearchTerm = this.filterPriceFrom;
 				    const priceToSearchTerm = this.filterPriceTo;
 				    const DateFromSearchTerm = this.filterDateFrom;
-				    const DateToSearchTerm = this.filterDateTo;
+				    console.log(DateFromSearchTerm)
+				    const DateToSearchTerm = Date.parse(this.filterDateTo);
 				    return (
-				    	restaurantName.includes(restaurantNameSearchTerm) && price >= priceFromSearchTerm && price <= priceToSearchTerm
-				    					&& date >= dateFromSearchTerm && date <= dateToSearchTerm
+				    	restaurantName.includes(restaurantNameSearchTerm) && (!priceFromSearchTerm || price >= priceFromSearchTerm) && (!priceToSearchTerm || price <= priceToSearchTerm)
+				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm)
 				    );
 			    });
 			}

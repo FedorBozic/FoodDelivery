@@ -166,14 +166,6 @@ Vue.component('userview', {
 				    const firstName = sortedUser.firstName.toString().toLowerCase();
 				    const lastName = sortedUser.lastName.toString().toLowerCase();
 					const searchTerm = this.filter.toLowerCase();
-					/*if(searchTerm.includes(":"))
-					{
-						searchTerms = searchTerm.split(/(?=:|;)/)
-						for(tmps in searchTerms)
-						{
-							console.log(searchTerms[tmps]);
-						}
-					}*/
 				    return (
 				      username.includes(searchTerm) || firstName.includes(searchTerm) || lastName.includes(searchTerm)
 				    );

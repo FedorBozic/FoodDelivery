@@ -76,6 +76,7 @@ Vue.component('basket', {
 	            			ci.image = '';
 	            		}
 	            	}
+	            	this.totalprice = Number.parseFloat(this.totalprice).toPrecision(3);
                 }
             })
             .catch(err => {
