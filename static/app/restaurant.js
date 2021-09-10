@@ -31,7 +31,8 @@ Vue.component('restaurant', {
 			editingItem: {},
 			addingItem: false,
 			viewingComments: false,
-			comments: []
+			comments: [],
+			approvedComments: []
 		}
     },
     template: `
@@ -102,12 +103,14 @@ Vue.component('restaurant', {
 			  				 <input type="file" v-on:change="convertImage" id="image" name="image" accept="image/*" style="display:none">
 						</div>
 					</div>
-					<div class="col-sm-1 my-auto" v-if="itemBeingAdded.name && itemBeingAdded.price && itemBeingAdded.amount && image">
+					<div class="col-sm-2 my-auto" v-if="itemBeingAdded.name && itemBeingAdded.price && itemBeingAdded.amount && image">
 						<div class="row">
 							<i class="fas fa-plus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-on:click="addItem()"></i>
 						</div>
 					</div>
 				</div>
+			    
+			    <!--IZMENA I POGLED ITEMA-------------->
 			    
 				<div v-if="!viewingComments && restaurant.items.length > 0" style="border-left: 2px solid rgba(250, 30, 20); border-bottom: 2px solid rgba(250, 30, 20); border-radius: 30px; margin: 10px">
 					<div class="row">
@@ -142,21 +145,23 @@ Vue.component('restaurant', {
 					    	</h2>
 					    </div>
 					    <div class="col-sm-4 my-auto">
-							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid">
+								<img :src="item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px; margin-left:50px"/>
+							</div>
 							<div class="row" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
-								<label for="editimage" style="width:150px; height:150px; border-radius: 10px; margin-left:20px">
-				  		    		<img v-if="item.image" :src="item.image" style="width:150px; height:150px; border-radius: 10px"/>
+								<label for="editimage" style="max-width:100%; height:auto; border-radius: 10px; margin-left:50px">
+				  		    		<img v-if="item.image" :src="item.image" style="max-width:100%; height:auto; border-radius: 10px"/>
 				  					<img v-else src="/Add_Image_Round.jpg" alt="" style="width:150px; height:150px; border-radius: 10px" />
 				  				 </label>
 				  				 <input type="file" v-on:change="convertEditImage(editingItem)" id="editimage" name="editimage" accept="image/*" style="display:none">
 							</div>
 						</div>
 						<div class="col-sm-2 my-auto">
-							<div class="row" v-if="$root.isSignedIn && editingItem.uuid && editingItem.uuid === item.uuid && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid">
+							<div class="row" style="margin-left:20px" v-if="$root.isSignedIn && editingItem.uuid && editingItem.uuid === item.uuid && ($root.currentUser.uuid === restaurant.manager) && editingItem.uuid === item.uuid">
 								<i class="fas fa-check" style="color: rgba(250, 30, 20)" @click="deactivateEditMode(item)"></i>
 							</div>
-							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'">
-								<input type="number" class="discrete-textbox" style="width:40px;margin-left:5px" v-model="item.purchase_amount">
+							<div class="row" v-if="$root.isSignedIn && $root.currentUser.role == 'CUSTOMER'" style="margin-left:40px">
+								<input type="number" class="discrete-textbox" style="width:40px;" v-model="item.purchase_amount">
 								<i class="fas fa-shopping-cart my-auto" style="color: rgba(250, 30, 20); margin-left:5px" @click="addItemToCart(item)"></i>
 							</div>
 						</div>
@@ -167,7 +172,7 @@ Vue.component('restaurant', {
 			<h4 v-if="viewingComments" class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px">Comments</h4>
 			<div v-if="viewingComments && comments.length > 0" class="testimonial-box-container">
             <!--BOX-1-------------->
-            <div class="testimonial-box" v-for="comment in comments">
+            <div class="testimonial-box" v-for="comment in comments" v-if="($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === comment.restaurant.manager) || comment.approved) && !comment.deleted">
                 <!--top------------------------->
                 <div class="box-top">
                     <!--profile----->
@@ -333,6 +338,17 @@ Vue.component('restaurant', {
         unitOfMeasure: function(item) {
         	if(item.type === 'DRINK') return 'ml'
         	return 'g'
+        },
+        
+        generateApprovedComments: function() {
+        	let self = this
+        	for(comment in this.comments)
+        	{
+        		if(comment.approved && !comment.deleted)
+        		{
+        			self.approvedComments.push(comment)
+        		}
+        	}
         }
 	},
     mounted() {
