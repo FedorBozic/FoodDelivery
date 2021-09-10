@@ -1,6 +1,7 @@
 package controller;
 
 import java.awt.SystemColor;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -25,47 +26,6 @@ public class UserController {
             .setPrettyPrinting()
             .create();
     
-    public static Route newBuyer = (Request request, Response response) -> {
-    	
-        if (currentUser != null) {
-            response.body("Cannot register when already logged in !");
-            response.status(400);
-            return response;
-        }
-        
-        var body = gson.fromJson((request.body()), HashMap.class);
-        
-        User user = new User();
-        try {
-        	user.setUsername((String) body.get("username"));
-        	user.setPassword((String) body.get("password"));
-            user.setFirstName((String) body.get("firstName"));
-            user.setLastName((String) body.get("lastName"));
-            user.setGender(User.Gender.valueOf((String) body.get("gender")));
-            user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
-            if(body.get("role") != null && !((String) body.get("role")).isEmpty())
-            {
-            	user.setRole(User.Role.valueOf((String) body.get("role")));
-            }
-            user.setRole(User.Role.valueOf("CUSTOMER"));
-            
-            User addedUser = DostavaMain.userDao.addUser(user);
-
-            if (addedUser != null) {
-                response.body("Registration successful!");
-                response.status(200);
-                request.session().attribute("currentUser", addedUser);
-                currentUser = addedUser;
-            }
-        } catch (Exception e) {
-            response.body("Not all fields have been filled!");
-            response.status(400);
-            return response;
-        }
-        
-        return response;
-    };
-    
     public static Route addUser = (Request request, Response response) -> {
         
         var body = gson.fromJson((request.body()), HashMap.class);
@@ -87,12 +47,14 @@ public class UserController {
         	response.status(400);
         	response.body("An unknown error has occurred");
         }
-        
+        System.out.println((String) body.get("birthday"));
+        user.setBirthday(LocalDate.parse((String) body.get("birthday")));
         try {
         	user.setUsername((String) body.get("username"));
         	user.setPassword((String) body.get("password"));
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
+            user.setBirthday(LocalDate.parse((String) body.get("birthday")));
             user.setGender(User.Gender.valueOf((String) body.get("gender")));
             user.setType(DostavaMain.userTypeDao.findByName("BRONZE"));
             if(body.get("role") != null && !((String) body.get("role")).isEmpty())
@@ -181,6 +143,7 @@ public class UserController {
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
             user.setGender(User.Gender.valueOf((String) body.get("gender")));
+            user.setBirthday(LocalDate.parse((String) body.get("birthdate")));
 
         } catch (Exception e) {
             message = "An error has occurred!";

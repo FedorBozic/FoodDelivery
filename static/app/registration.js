@@ -2,7 +2,9 @@ Vue.component('registration', {
     data: function () {
 		return {
 			user: {
-                gender: 'MALE'
+                gender: 'MALE',
+                role: 'CUSTOMER',
+                type: 'BRONZE'
             },
 			currentUser: {}
 		}
@@ -53,7 +55,7 @@ Vue.component('registration', {
         },
         register: function () {
             let self = this;
-            axios.post('users/newBuyer', JSON.stringify(this.user))
+            axios.post('users/adduser', JSON.stringify(this.user))
                 .then(function (response) {
                     alert(response.data);
                     axios.get('users/currentUser')

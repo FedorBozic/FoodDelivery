@@ -159,7 +159,6 @@ public class DostavaMain {
         get("/api/users/logout", UserController.logOut);
         post("/api/users/login", UserController.logIn);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
-		post("/api/users/newBuyer", UserController.newBuyer);
 		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
 		get("/api/users/getCart", UserController.getCart);

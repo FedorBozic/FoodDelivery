@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +18,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private Gender gender;
-	private Date birthday;
+	private LocalDate birthday;
 	private Role role;
 	
 	private List<Order> orders;
@@ -34,7 +35,7 @@ public class User {
 		this.uuid = UUID.randomUUID();
 	}
 	
-	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday, Role role,
+	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, LocalDate birthday, Role role,
 				List<Order> orders, Cart cart, Restaurant restaurant, List<Order> deliveryOrders, int points, UserType type) {
 		this.uuid = uuid;
 		this.username = username;
@@ -53,7 +54,7 @@ public class User {
 	}
 	
 	//ADMIN, mozda User da bude apstraktna klasa?
-	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday) {
+	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, LocalDate birthday) {
 		this.uuid = uuid;
 		this.username = username;
 		this.password = password;
@@ -71,7 +72,7 @@ public class User {
 	}
 	
 	//MANAGER
-	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday, Restaurant restaurant) {
+	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, LocalDate birthday, Restaurant restaurant) {
 		this.uuid = uuid;
 		this.username = username;
 		this.password = password;
@@ -89,7 +90,7 @@ public class User {
 	}
 	
 	//DELIVERY
-	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday, List<Order> deliveryOrders) {
+	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, LocalDate birthday, List<Order> deliveryOrders) {
 		this.uuid = uuid;
 		this.username = username;
 		this.password = password;
@@ -107,7 +108,7 @@ public class User {
 	}
 	
 	//CUSTOMER
-	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, Date birthday, List<Order> orders, Cart cart,
+	public User(UUID uuid, String username, String password, String firstName, String lastName, Gender gender, LocalDate birthday, List<Order> orders, Cart cart,
 				int points, UserType type) {
 		this.uuid = uuid;
 		this.username = username;
@@ -173,11 +174,11 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 
