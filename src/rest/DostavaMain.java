@@ -189,6 +189,7 @@ public class DostavaMain {
 		
 		get("api/comments/:id", CommentController.findByRestaurant);
 		post("api/comments/newcomment", CommentController.addComment);
+		put("/api/comments/approvecomment/:id", CommentController.approveComment);
 		
 		afterAfter((request, response) -> {
             Thread t = new Thread(() -> {
