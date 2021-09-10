@@ -63,12 +63,12 @@ Vue.component('restaurant', {
 		          </div>
 		        
 		          <div class="profile-card-inf__item" @click="viewingComments = true">
-		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__title">{{calculateAverageRating()}}</div>
 		            <div class="profile-card-inf__txt">Rating</div>
 		          </div>
 		        
 		          <div class="profile-card-inf__item" @click="viewingComments = true">
-		            <div class="profile-card-inf__title">0</div>
+		            <div class="profile-card-inf__title">{{this.comments.length}}</div>
 		            <div class="profile-card-inf__txt">Comments</div>
 		          </div>
 		        </div>
@@ -294,6 +294,17 @@ Vue.component('restaurant', {
                     alert(error.response.data);
                 });
         },
+        
+        calculateAverageRating: function() {
+        	let self = this
+        	result = 0
+        	result = this.restaurant.ratings[0] + this.restaurant.ratings[1]*2 + this.restaurant.ratings[2]*3 + this.restaurant.ratings[3]*4 + this.restaurant.ratings[4]*5
+        	if(result != 0)
+        	{
+        		result = result / (this.restaurant.ratings[0] + this.restaurant.ratings[1] + this.restaurant.ratings[2] + this.restaurant.ratings[3] + this.restaurant.ratings[4])
+        	}
+        	return result;
+        }
 	},
     mounted() {
     	let self = this

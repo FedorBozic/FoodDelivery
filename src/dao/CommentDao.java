@@ -88,6 +88,7 @@ public class CommentDao {
         if (alreadyExisting.size() == 0) {
         	comment.setUuid(UUID.randomUUID());
             comments.put(comment.getUuid(), comment);
+            comment.getRestaurant().addRating(comment.getRating());
             return comment;
         }
         return null;

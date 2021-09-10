@@ -142,6 +142,6 @@ public class Restaurant {
 	}
 	
 	public void addRating(int rating) {
-		ratings[rating]++;
+		ratings[rating-1]++;
 	}
 }

@@ -54,10 +54,8 @@ public class CommentController {
     	comment.setText(text);
     	comment.setApproved(false);
     	comment.setRating((int)ratingS);
-    	comment.getRestaurant().addRating((int)ratingS);
     	
     	DostavaMain.orderDao.findById(orderS).setCommented(true);
-    	
     	DostavaMain.commentDao.addComment(comment);
     	        
         return response;
