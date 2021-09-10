@@ -81,17 +81,13 @@ public class UserController {
         return response;
     };
 
-    public static Route logOut = (Request request, Response response)
-            ->
-    {
+    public static Route logOut = (Request request, Response response) -> {
         request.session().invalidate();
         currentUser = null;
         return response;
     };
     
-    public static Route logIn = (Request request, Response response)
-            ->
-    {
+    public static Route logIn = (Request request, Response response) -> {
         if (currentUser != null) {
             response.body("You are already logged in!");
             response.status(400);
@@ -116,8 +112,7 @@ public class UserController {
         return response;
     };
     
-    public static Route editUser = (Request request, Response response) ->
-    {
+    public static Route editUser = (Request request, Response response) -> {
         if (currentUser == null) {
             response.status(400);
             return response;
