@@ -4,7 +4,8 @@ Vue.component('restaurant', {
 			restaurant: {
 				location: {
 					address: {}
-				}
+				},
+				items: {}
 			},
 			itemBeingAdded: {
 				name: '',
