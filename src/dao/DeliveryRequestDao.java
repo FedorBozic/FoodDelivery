@@ -73,6 +73,7 @@ public class DeliveryRequestDao {
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
                 .filter(deliveryRequest -> deliveryRequest.getOrder().getRestaurant().getUuid().equals(UUID.fromString(r)))
+                .filter(deliveryRequest -> !deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}
@@ -82,6 +83,7 @@ public class DeliveryRequestDao {
 		List<DeliveryRequest> tmpStep = deliveryRequests.values()
                 .stream()
                 .filter(deliveryRequest -> deliveryRequest.getOrder().getRestaurant().getUuid().equals(r))
+                .filter(deliveryRequest -> !deliveryRequest.isApproved())
                 .collect(Collectors.toList());
     	return tmpStep;
 	}

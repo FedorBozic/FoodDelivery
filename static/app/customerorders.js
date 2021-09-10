@@ -3,6 +3,10 @@ Vue.component('customerorders', {
         	return{
         		currentUser: {},
 				orders: [],
+				comment: {
+					text: '',
+					rating: 3
+				},
 				itemBorderStyle: {
 					margin: '10px', 
 					padding: '10px',
@@ -47,6 +51,28 @@ Vue.component('customerorders', {
 						<div class="row"><img :src="'data:image/png;base64,' + item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 					</div>
 				</div>
+				
+				<div class="row" v-if="order.status === 'DELIVERED'">
+					<div class="col-sm-7 mr-auto">
+						<div class="row"><h4 style="margin-left:30px"><strong>Leave a Rating</strong></h4></div>
+						<div class="row" style="margin-left: 10px; margin-bottom:20px; text-align: left; "><input type="text" placeholder="Description" v-model="comment" style="min-width:300px; max-width:600px; height:150px"></div>
+					</div>
+						<div class="col-sm-3">
+							<div class="reviews">
+		                        <i class="fa fa-star" @click="setRating(1)"></i>
+		                        <i class="fa fa-star" v-if="rating >= 2" @click="setRating(2)"></i>
+		                        <i class="fa fa-star" v-if="rating >= 3" @click="setRating(3)"></i>
+		                        <i class="fa fa-star" v-if="rating >= 4" @click="setRating(4)"></i>
+		                        <i class="fa fa-star" v-if="rating >= 5" @click="setRating(5)"></i>
+		                        <i class="fa fa-star-o" v-if="rating < 2" @click="setRating(2)"></i>
+		                        <i class="fa fa-star-o" v-if="rating < 3" @click="setRating(3)"></i>
+		                        <i class="fa fa-star-o" v-if="rating < 4" @click="setRating(4)"></i>
+		                        <i class="fa fa-star-o" v-if="rating < 5" @click="setRating(5)"></i>
+	                        </div>
+	                        <button class="generic_button">Confirm</button>
+	                    </div>
+					</div>
+				</div>
         	</div>
 		</div>
     	`,
@@ -64,6 +90,10 @@ Vue.component('customerorders', {
 	            .then(res => {
 					self.orders = res.data;
 	            })
+	        },
+	        
+	        setRating: function(r) {
+	        	this.rating = r
 	        }
 	    },
 		mounted() {
