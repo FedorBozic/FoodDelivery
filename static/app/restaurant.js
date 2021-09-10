@@ -50,6 +50,7 @@ Vue.component('restaurant', {
 		    		<i class="fas fa-minus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-if="addingItem && restaurant.items.length > 0" v-on:click="addingItem = false"></i>
 		    		<i class="fas fa-door-open" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && ($root.currentUser.uuid === restaurant.manager)" v-on:click="openOrClose()"></i>
 		    		<i class="fas fa-pencil-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && ($root.currentUser.uuid === restaurant.manager)" v-on:click="editRestaurant()"></i>
+		    		<i class="fas fa-trash-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && $root.currentUser.role == 'ADMIN'" v-on:click="deleteRestaurant()"></i>
 		    	</div>
 		    	<div class="profile-card__name">
 		    		{{restaurant.status}} 
@@ -358,6 +359,12 @@ Vue.component('restaurant', {
         editRestaurant: function() {
         	let self = this
         	window.location.href = "#/editrestaurant/" + self.$route.params.id;
+        },
+        
+        deleteRestaurant: function() {
+        	let self = this
+        	axios.delete('restaurants/deleterestaurant' + '?id=' + self.restaurant.uuid)
+        	window.location.href = "#/";
         },
         
         activateEditMode: function(item) {
