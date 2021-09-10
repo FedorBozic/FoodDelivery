@@ -181,7 +181,7 @@ public class UserController {
     	for (User u : users) {
     		boolean found = false;
 			for (Order o : ordersOfRestaurant) {
-				if(o.getCustomer() == u.getUuid()) {
+				if(o.getCustomer().equals(u.getUuid())) {
 					found = true;
 					break;
 				}

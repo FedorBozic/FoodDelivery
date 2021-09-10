@@ -120,7 +120,7 @@ public class DostavaMain {
 	}
 	
 	public static void main(String[] args) {
-		port(18080);
+		port(38080);
 		
 		try {
             staticFiles.externalLocation(new File("./static").getCanonicalPath());

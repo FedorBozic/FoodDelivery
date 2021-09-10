@@ -11,7 +11,7 @@ const Profile = {template: '<profile></profile>'}
 const Basket = {template: '<basket></basket>'}
 const AddItem = {template: '<additem></additem>'}
 
-axios.defaults.baseURL = 'http://localhost:18080/api/'
+axios.defaults.baseURL = 'http://localhost:38080/api/'
 const router = new VueRouter({
     mode: 'hash',
     routes: [
