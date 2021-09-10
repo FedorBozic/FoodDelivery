@@ -1,7 +1,10 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +19,7 @@ public class Order {
 	private UUID restaurant;
 	private UUID deliverer = null;
 	private LocalDateTime dateTime;
+	private Date date;
 	private float price;
 	private UUID customer;
 	private String customerName;
@@ -73,6 +77,17 @@ public class Order {
 	}
 	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = dateTime;
+		
+		LocalDate localDate = dateTime.toLocalDate();
+		
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+	    this.date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	public float getPrice() {
 		return price;

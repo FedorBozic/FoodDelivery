@@ -181,7 +181,8 @@ Vue.component('customerorders', {
 			},
 			
 			convertJsonDateToRaw(date) {
-			
+				date = date.split('-')
+				return (parseInt(date[0]) - 1970)*31536000000 + (parseInt(date[1])-1)*2629800000 + parseInt(date[2])*86400000;
 			}
 	    },
 	    
@@ -197,14 +198,13 @@ Vue.component('customerorders', {
 				return resultData.filter(sortedOrder => {
 				    const restaurantName = sortedOrder.restaurantName.toString().toLowerCase();
 				    const price = sortedOrder.price
-				    const date = sortedOrder.dateTime
+				    const date = Date.parse(sortedOrder.date)
 				    
 				    const restaurantNameSearchTerm = this.filterRestaurantName.toLowerCase();
 				    const priceFromSearchTerm = this.filterPriceFrom;
 				    const priceToSearchTerm = this.filterPriceTo;
-				    const DateFromSearchTerm = this.filterDateFrom;
-				    console.log(DateFromSearchTerm)
-				    const DateToSearchTerm = Date.parse(this.filterDateTo);
+				    const DateFromSearchTerm = this.convertJsonDateToRaw(this.filterDateFrom);
+				    const DateToSearchTerm = this.convertJsonDateToRaw(this.filterDateTo);
 				    return (
 				    	restaurantName.includes(restaurantNameSearchTerm) && (!priceFromSearchTerm || price >= priceFromSearchTerm) && (!priceToSearchTerm || price <= priceToSearchTerm)
 				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm)
