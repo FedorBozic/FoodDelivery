@@ -44,7 +44,11 @@ Vue.component('restaurant', {
 		    </div>
 		
 		    <div class="profile-card__cnt js-profile-cnt">
-		    	<div class="profile-card__name">{{restaurant.name}}</div>
+		    	<div class="profile-card__name">
+		    		{{restaurant.name}} 
+		    		<i class="fas fa-plus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-if="$root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager)) && !addingItem" v-on:click="addingItem = true"></i>
+		    		<i class="fas fa-minus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-if="addingItem && restaurant.items.length > 0" v-on:click="addingItem = false"></i>
+		    	</div>
 		        <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
 	    		 <div class="profile-card-loc">
 		         <span class="profile-card-loc__icon">
@@ -77,7 +81,7 @@ Vue.component('restaurant', {
 			    
 			    <div class="row" v-if="(addingItem || restaurant.items.length < 1) && $root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager))">
 				    <div class="col-sm-5">
-						<div class="row" style="margin-top:5px; margin-left:35px">
+						<div class="row" style="margin-top:5px; margin-left:80px">
 						 	<h2><input type="text" placeholder="Name" style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="itemBeingAdded.name" ></h2>
 						 	<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px"></i>
 						 	<i v-if="itemBeingAdded.type === 'FOOD'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px; color:rgba(250, 30, 20)"></i>
