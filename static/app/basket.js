@@ -4,52 +4,61 @@ Vue.component('basket', {
 			cart: {},
 			orders: [],
 			currentUser: null,
-			totalprice: 0
+			itemBorderStyle: {
+				margin: '10px', 
+				padding: '10px',
+				'border-bottom': '2px dotted rgba(250, 30, 20)'
+			},
+			itemBorderStyleNoBorder: {
+				margin: '10px', 
+				padding: '10px'
+			},
 		}
     },
     template: `
 	<div class="container">
 		<div class="row">
-		    <div class="container-fluid p-0" style="margin-top:100px">
-				<div class="row">
-					<div class="col-xl-8" v-if="cart">
-						<table class="table table-striped" style="width:100%">
-							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
-								<tr>
-									<th>Name</th>
-									<th>Amount</th>
-									<th>Price</th>
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody v-for="i in cart.cartItems">
-								<tr>
-									<td>{{i.item.name}}</td>
-									<td>{{i.count}}</td>
-									<td>{{i.item.price * i.count}}</td>
-									<td><img :src="'data:image/png;base64,' + i.item.image" style="width:100px; height: 100px"/></td>
-									<td><i class="fa fa-trash"></i></td>
-								</tr>
-							</tbody>
-						</table>
+			<div class="col-xl-8">
+				<div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px">
+		       		<div class="profile-card__cnt js-profile-cnt">
+						<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
+							<div class="row d-flex justify-content-between">
+								<div class="col-sm-2">
+			    				<div class="row">
+			    					<div class="col-sm-2"><h4 style="min-width:100px;text-align:left; margin:20px">My Basket</h4></div>
+			    				</div>
+			    			</div>
+			    		</div>
+						</div>
 					</div>
 					
-					<div class="col-xl-4">
-						<div class="card">
-							<div class="card-header">
-								<h5 class="card-title mb-0" style="text-align:left">Total</h5>
-								<h1 style="color:white; text-align:left"><strong>{{totalprice}}$</strong></h1>
-							</div>
-							<div class="card-body" style="background: -webkit-gradient(linear, left top, right top, from(darkgreen), to(forestgreen)); background: linear-gradient(to right, darkgreen, forestgreen); color:white">
-								<h4><strong>CHECKOUT</strong></h4>
-								<input type="button" value="Register" class="generic_button" v-on:click="checkout()"/>
-							</div>
+					<div class="row" v-for="(item,index) in cart.cartItems" v-bind:style="[(index < cart.cartItems.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
+						<div class="col-sm-7 mr-auto">
+							<div class="row"><h4><strong>{{item.item.name}}</strong></h4></div>
+							<div class="row" style="margin-left: 10px; text-align: left; ">{{item.item.description}}</div>
 						</div>
+						<div class="col-sm-2 my-auto">
+							<h2 style="margin-top:5px"><strong>{{item.item.price*item.count}}$</strong><i class="fas fa-times" style="color:rgba(250, 30, 20); float:right" @click="deleteCartItem(i)"></i></h2>
+							<h4 style="margin-top:5px"><input type="text" class="discrete-textbox" v-model="item.count"></h4>
+						</div>
+						<div class="col-sm-3">
+							<div class="row"><img :src="item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
+						</div>
+					</div>
+		       	</div>
+			</div>
+			<div class="col-xl-4">
+				<div class="profile-card__cnt js-profile-cnt" style="margin-top:70px; padding-bottom:0px; min-height:100px">
+					<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px; margin-bottom:0px">
+						<h5 class="card-title mb-0" style="text-align:left">Total</h5>
+						<h1 style="color:white; text-align:left; margin-bottom:0px; padding-bottom:10px"><strong>{{totalprice}}$</strong></h1>
+					</div>
+					<div class="card-body" style="background: -webkit-gradient(linear, left top, right top, from(darkgreen), to(forestgreen)); background: linear-gradient(to right, darkgreen, forestgreen); color:white" @click="checkout()">
+						<h4><strong>CHECKOUT</strong></h4>
 					</div>
 				</div>
 			</div>
-		</div>
+       	</div>
 	</div>
 	`,
 
@@ -68,7 +77,6 @@ Vue.component('basket', {
 				{
 	            	for(let ciId in this.cart.cartItems){
 	            		let ci = this.cart.cartItems[ciId];
-	            		this.totalprice += (ci.count*ci.item.price)
 	            		if(ci.image != null){
 	            			ci.image = 'data:image/png;base64,' + ci.image;
 	            		}
@@ -76,7 +84,6 @@ Vue.component('basket', {
 	            			ci.image = '';
 	            		}
 	            	}
-	            	this.totalprice = Number.parseFloat(this.totalprice).toPrecision(3);
                 }
             })
             .catch(err => {
@@ -108,6 +115,11 @@ Vue.component('basket', {
             };
         },
         
+        deleteCartItem: function(item)
+        {
+        	
+        },
+        
         checkout: function () {
             let self = this;
             axios.post('orders/checkout', JSON.stringify(this.currentUser))
@@ -119,7 +131,6 @@ Vue.component('basket', {
 						{
 			            	for(let ciId in self.cart.cartItems){
 			            		let ci = self.cart.cartItems[ciId];
-			            		self.totalprice += (ci.count*ci.item.price)
 			            		if(ci.image != null){
 			            			ci.image = 'data:image/png;base64,' + ci.image;
 			            		}
@@ -138,6 +149,16 @@ Vue.component('basket', {
                     alert(error.response.data);
                 });
         }
+    },
+    computed: {
+    	totalprice() {
+    		totalpriceResult = 0
+    		for(let ciId in this.cart.cartItems){
+	            let ci = this.cart.cartItems[ciId];
+	            totalpriceResult += (ci.count*ci.item.price)
+	        }
+    		return Number.parseFloat(totalpriceResult).toPrecision(3);
+    	}
     },
     mounted() {
     	let self = this
