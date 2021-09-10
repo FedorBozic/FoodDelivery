@@ -9,63 +9,67 @@ Vue.component('orders', {
 				priceFrom: '',
 				priceTo: '',
 				dateFrom: '',
-				dateTo: ''
+				dateTo: '',
+				itemBorderStyle: {
+				margin: '10px', 
+				padding: '10px',
+					'border-bottom': '2px dotted rgba(250, 30, 20)'
+				},
+				itemBorderStyleNoBorder: {
+					margin: '10px', 
+					padding: '10px'
+				},
        		}
         },
         template: `
         <div class="container">
-		<div>
-			<input type="text" placeholder="Restaurant Name" v-model="restaurantName">
-			<input type="text" placeholder="Price Lower" v-model="priceFrom">
-			<input type="text" placeholder="Price Upper" v-model="priceTo">
-			<input type="datetime-local" placeholder="Date From" v-model="dateFrom">
-			<input type="datetime-local" placeholder="Date To" v-model="dateTo">
-			<button type="button" v-on:click="getOrders">Search</button>
-		</div>
-		    <div class="container-fluid p-0" style="margin-top:100px">
-				<div class="row">
-					<div class="col-xl-8">
-						<table class="table table-striped" style="width:100%">
-							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
-								<tr>
-									<th>Username</th>
-									<th>Status</th>
-									<th>Upgrade</th>
-								</tr>
-							</thead>
-							<tbody v-for="order in orders">
-								<tr>
-									<td>{{order.customerName}}</td>
-									<td>{{order.status}}</td>
-									<td><button v-if="currentUser.role && (((order.status === 'PROCESSING' || order.status === 'PREPARATION') && currentUser.role === 'MANAGER') || ((order.status === 'AWAITING_DELIVERY' || order.status === 'IN_TRANSPORT') && currentUser.role === 'DELIVERY'))" v-on:click="upgradeOrderStatus(order)">Upgrade</button></td>
-								</tr>
-							</tbody>
-						</table>
+		    <div class="profile-card js-profile-card" style="margin-top:100px; padding-bottom:0px; min-height:100px" v-for="order in orders">
+        		<div class="profile-card__cnt js-profile-cnt">
+		    		<div class="profile-card__name" style="color:white; background-color: rgba(250, 30, 20); text-align:left; padding-left:10px; border-radius: 10px 10px 0px 0px">
+		    			<div class="row d-flex justify-content-between">
+		    				<div class="col-sm-2">
+			    				<div class="row">
+			    					<div class="col-sm-2"><h4 style="min-width:100px;text-align:left; margin:20px">{{order.restaurantName}}</h4></div>
+			    					<div class="col-sm-2"><h4 style="text-align:left">{{order.price}}</h4></div>
+			    				</div>
+			    			</div>
+			    			<div class="col-sm-2">
+			    				<h4 style="min-width:100px;text-align:center; margin:10px; margin-right:20px">
+			    					<i v-if="order.status === 'PROCESSING'" class="fas fa-hourglass" @click="upgradeOrderStatus(order)"></i>
+			    					<i v-if="order.status === 'PREPARATION'" class="fa fa-spinner fa-spin" @click="upgradeOrderStatus(order)"></i>
+			    					<i v-if="order.status === 'AWAITING_DELIVERY'" class="fas fa-truck-loading"></i>
+			    					<i v-if="order.status === 'IN_TRANSPORT'" class="fa fa-truck"></i>
+			    					<i v-if="order.status === 'DELIVERED'" class="fa fa-check"></i>
+			    					<i v-if="order.status === 'CANCELLED'" class="fa fa-ban"></i>
+			    				</h4>
+			    			</div>
+			    		</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="row" v-for="(item,index) in order.items" v-bind:style="[(index < order.items.length - 1) ? itemBorderStyle : itemBorderStyleNoBorder]">
+					<div class="col-sm-7 mr-auto">
+						<div class="row"><h4><strong>{{item.item.name}}</strong></h4></div>
+						<div class="row" style="margin-left: 10px; text-align: left; ">{{item.item.description}}</div>
+					</div>
+					<div class="col-sm-2"><h2 style="margin-top:5px"><strong>{{item.item.price}}$</strong></h2></div>
+					<div class="col-sm-3">
+						<div class="row"><img :src="item.item.image" alt="" style="max-width:100%; height:auto; border-radius: 10px"/></div>
 					</div>
 				</div>
 				
-				<div class="row">
-					<div class="col-xl-8">
-						<table class="table table-striped" style="width:100%">
-							<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
-								<tr>
-									<th>Customer</th>
-									<th>Requester</th>
-									<th>Approve</th>
-								</tr>
-							</thead>
-							<tbody v-for="request in requests">
-								<tr>
-									<td>{{request.order.customerName}}</td>
-									<td>{{request.requester.username}}</td>
-									<td><button v-if="currentUser.role && currentUser.role === 'MANAGER'" v-on:click="approveDeliveryRequest(request)">Approve</button></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-		
-			</div>
+				<div v-if="requests && order.status == 'AWAITING_DELIVERY'">
+			    	<h4 class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px">Delivery Requests</h4>
+				   	<div class="row" v-for="request in requests" v-if="request.order.uuid == order.uuid && !request.approved">
+			    		<div class="col-sm-5" style="margin-left:20px">
+			    			{{request.requester.username}}
+				   		</div>
+				   		<div class="col-sm-6">
+				   			<button class="generic_button" v-on:click="approveDeliveryRequest(request)">APPROVE</button>
+				   		</div>
+				   	</div>
+			    </div>
+        	</div>
 		</div>
     	`,
     	methods: {
@@ -96,7 +100,7 @@ Vue.component('orders', {
         		let self = this;
 	        	axios.post('delivery/approvedelivery/' + self.currentUser.uuid, JSON.stringify(deliveryRequest))
 	                .then(res => {
-	                    axios.get('orders/' + this.$route.params.id)
+	                    axios.get('orders/' + self.$route.params.id)
 		                .then(res => {
 		                	self.orders = res.data;
 		                	axios.get('delivery/opendeliveryrequestsforrestaurant/' + self.restaurant.uuid)
