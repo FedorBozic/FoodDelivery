@@ -144,4 +144,12 @@ public class Restaurant {
 	public void addRating(int rating) {
 		ratings[rating-1]++;
 	}
+	
+	public void recalculateRating() {
+		for (int i = 0; i < 5; i++)
+			ratings[i] = 0;
+		for (Comment c : DostavaMain.commentDao.findByRestaurantApproved(uuid)) {
+			ratings[c.getRating() - 1]++;
+		}
+	}
 }

@@ -39,6 +39,14 @@ public class CommentDao {
     			.filter(comment -> !comment.isDeleted())
     			.collect(Collectors.toList());
     }
+    
+    public List<Comment> getAllCommentsApproved() {
+    	return comments.values()
+    			.stream()
+    			.filter(comment -> comment.isApproved())
+    			.filter(comment -> !comment.isDeleted())
+    			.collect(Collectors.toList());
+    }
 	
 	public Comment findById(UUID uuid) {
         return comments.getOrDefault(uuid, null);
@@ -101,14 +109,18 @@ public class CommentDao {
         if (alreadyExisting.size() == 0) {
         	comment.setUuid(UUID.randomUUID());
             comments.put(comment.getUuid(), comment);
-            comment.getRestaurant().addRating(comment.getRating());
+            Restaurant restaurant = comment.getRestaurant();
+    		restaurant.recalculateRating();
             return comment;
         }
         return null;
     }
     
 	public boolean deleteComment(UUID id) {
-		findById(id).setDeleted(true);
+		Comment comment = findById(id);
+		comment.setDeleted(true);
+		Restaurant restaurant = comment.getRestaurant();
+		restaurant.recalculateRating();
 		return true;
 	}
 	

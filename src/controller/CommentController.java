@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 
 import model.Comment;
 import model.Order;
+import model.Restaurant;
 import model.User;
 import rest.DostavaMain;
 import spark.Request;
@@ -86,6 +87,9 @@ public class CommentController {
         
         Comment comment = DostavaMain.commentDao.findById((String) body.get("uuid"));
         comment.setApproved(true);
+        
+        Restaurant restaurant = DostavaMain.restaurantDao.findById(comment.getRestaurant().getUuid());
+        restaurant.recalculateRating();
         
         return response;
 	};
