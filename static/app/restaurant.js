@@ -48,6 +48,10 @@ Vue.component('restaurant', {
 		    		{{restaurant.name}} 
 		    		<i class="fas fa-plus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-if="$root.isSignedIn && ($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === restaurant.manager)) && !addingItem" v-on:click="addingItem = true"></i>
 		    		<i class="fas fa-minus" style="font-size: 1.5rem; color:rgba(250, 30, 20)" v-if="addingItem && restaurant.items.length > 0" v-on:click="addingItem = false"></i>
+		    		<i class="fas fa-door-open" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && ($root.currentUser.uuid === restaurant.manager)" v-on:click="openOrClose()"></i>
+		    	</div>
+		    	<div class="profile-card__name">
+		    		{{restaurant.status}} 
 		    	</div>
 		        <div class="profile-card__txt">{{restaurant.type}} from <strong>{{restaurant.location.address.townName}}</strong></div>
 	    		 <div class="profile-card-loc">
@@ -339,6 +343,17 @@ Vue.component('restaurant', {
 			window.location.href = "#/";
         },
         
+        openOrClose: function() {
+        	let self = this;
+            axios.put('restaurants/openclose', JSON.stringify(self.restaurant))
+                .then(function (response) {
+					self.loadData(self);
+                })
+                .catch(function (error) {
+                    alert(error.response.data);
+                });
+        },
+        
         activateEditMode: function(item) {
         	this.editingItem = item
         },
@@ -357,10 +372,12 @@ Vue.component('restaurant', {
         calculateAverageRating: function() {
         	let self = this
         	result = 0
-        	result = this.restaurant.ratings[0] + this.restaurant.ratings[1]*2 + this.restaurant.ratings[2]*3 + this.restaurant.ratings[3]*4 + this.restaurant.ratings[4]*5
-        	if(result != 0)
-        	{
-        		result = result / (this.restaurant.ratings[0] + this.restaurant.ratings[1] + this.restaurant.ratings[2] + this.restaurant.ratings[3] + this.restaurant.ratings[4])
+        	if(this.restaurant && this.restaurant.ratings) {
+	        	result = this.restaurant.ratings[0] + this.restaurant.ratings[1]*2 + this.restaurant.ratings[2]*3 + this.restaurant.ratings[3]*4 + this.restaurant.ratings[4]*5
+	        	if(result != 0)
+	        	{
+	        		result = result / (this.restaurant.ratings[0] + this.restaurant.ratings[1] + this.restaurant.ratings[2] + this.restaurant.ratings[3] + this.restaurant.ratings[4])
+	        	}
         	}
         	return result;
         },

@@ -118,6 +118,24 @@ public class RestaurantController {
         return response;
     };
     
+    public static Route openCloseRestaurant = (Request request, Response response) ->
+    {
+        response.status(200);
+        
+        var body = gson.fromJson((request.body()), HashMap.class);
+        
+        String id = (String) body.get("uuid");
+        System.out.println(id);
+        Restaurant r = DostavaMain.restaurantDao.findById(id);
+        RestaurantStatus rs = r.getStatus();
+        if(rs.equals(RestaurantStatus.CLOSED))
+        	r.setStatus(RestaurantStatus.OPEN);
+        else
+        	r.setStatus(RestaurantStatus.CLOSED);
+        
+        return response;
+    };
+    
     public static Route getRestaurants = (Request request, Response response) -> {
 		List<Restaurant> filtered = new ArrayList<Restaurant>();
 		String name = request.queryParams("name");
@@ -154,7 +172,6 @@ public class RestaurantController {
 		}
 		*/
 		
-		System.out.println("Open: " + open);
 		if(open != null && open.equals("true")) {
 			filtered = filtered.stream().filter(r -> r.getStatus().equals(RestaurantStatus.OPEN)).collect(Collectors.toList());
 		}
