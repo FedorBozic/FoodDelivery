@@ -158,19 +158,22 @@ public class DostavaMain {
 		RestaurantController.userDao = userDao;
 		
 		get("/api/getUsers", (request,response) -> gson.toJson(userDao.getUsers()));
-		//get("/api/users/:id", UserController.findById);
+		
 		get("/api/users/managers", (request,response) -> gson.toJson(userDao.getManagers()));
 		get("/api/users/availablemanagers", (request,response) -> gson.toJson(userDao.getAvailableManagers()));
         get("/api/users/logout", UserController.logOut);
         post("/api/users/login", UserController.logIn);
+        get("/api/users/getnextrank", UserController.getNextRank);
 		get("/api/users/currentUser", (request,response) -> gson.toJson(UserController.currentUser));
 		post("/api/users/adduser", UserController.addUser);
 		put("api/users/edit", "application/json", UserController.editUser);
 		get("/api/users/getCart", UserController.getCart);
 		post("/api/users/itemToCart", UserController.itemToCart);
 		get("/api/users/getCustomersOfRestaurant", UserController.getCustomersOfRestaurant);
+		get("/api/users/:id", UserController.findById);
 		delete("/api/users/deleteCartItem/:id", UserController.deleteCartItem);
 		delete("/api/users/deleteuser", UserController.deleteUser);
+		
 		
 		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
 		post("/api/users/overwriteItem", UserController.overwriteItem);
@@ -179,9 +182,9 @@ public class DostavaMain {
 		get("/api/orders/getorders", OrderController.getOrders);
 		get("/api/orders/getcustomerorders/:id", OrderController.getCustomerOrders);
 		get("/api/orders/awaitingdeliveryorders/:id", (request,response) -> gson.toJson(orderDao.getAvailableOpenDeliveries(request.params(":id"))));
+		get("api/orders/:id", OrderController.findByRestaurant);
 		post("/api/orders/checkout", OrderController.addOrder);
 		put("/api/orders/upgradestatus", OrderController.upgradeStatus);
-		get("api/orders/:id", OrderController.findByRestaurant);
 		put("/api/orders/cancel/:id", OrderController.cancelOrder);
 		delete("/api/orders/deleteorder", OrderController.deleteOrder);
 		
@@ -204,7 +207,7 @@ public class DostavaMain {
 		put("/api/comments/approvecomment/:id", CommentController.approveComment);
 		put("/api/comments/rejectcomment/:id", CommentController.rejectComment);
 		
-		get("/api/users/getnextrank", UserController.getNextRank);
+		
 		
 		afterAfter((request, response) -> {
             Thread t = new Thread(() -> {
