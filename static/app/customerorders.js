@@ -93,7 +93,7 @@ Vue.component('customerorders', {
 	        },
 	        
 	        setRating: function(r) {
-	        	this.rating = r
+	        	this.comment.rating = r
 	        }
 	    },
 		mounted() {
