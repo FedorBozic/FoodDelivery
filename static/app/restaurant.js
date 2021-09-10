@@ -75,9 +75,15 @@ Vue.component('restaurant', {
 		        </div>
 			    
 			    <div class="row" v-if="addingItem || restaurant.items.length < 1">
-				    <div class="col-sm-7 mr-auto">
-						<div class="col-sm-2"><h2 style="margin-top:5px; margin-left:25px"><input type="text" placeholder="Name" style="width: 200px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="itemBeingAdded.name" ></h2></div>
-						<div class="col-sm-2"><textarea style="width:250px; height:100px" v-model="itemBeingAdded.description" ></textarea></div>
+				    <div class="col-sm-5">
+						 <div class="row" style="margin-top:5px; margin-left:35px">
+						 	<h2><input type="text" placeholder="Name" style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px" v-model="itemBeingAdded.name" ></h2>
+						 	<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px"></i>
+						 	<i v-if="itemBeingAdded.type === 'FOOD'" @click="itemBeingAdded.type = 'FOOD'" class="fas fa-hamburger" style="font-size: 1.5rem; margin-left:15px; margin-right:5px; margin-top:10px; color:rgba(250, 30, 20)"></i>
+						 	<i v-if="itemBeingAdded.type === 'FOOD'" @click="itemBeingAdded.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px"></i>
+						 	<i v-if="itemBeingAdded.type === 'DRINK'" @click="itemBeingAdded.type = 'DRINK'" class="fas fa-cocktail" style="font-size: 1.5rem; margin-left:5px; margin-right:10px; margin-top:10px; color:rgba(250, 30, 20)"></i>
+						 </div>
+						<textarea style="width:250px; height:100px" v-model="itemBeingAdded.description" ></textarea>
 					</div>
 				    <div class="col-sm-2"><h2 style="margin-top:5px"><strong><input type="text" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="itemBeingAdded.price" >$</strong></h2></div>
 				    <div class="col-sm-3">
