@@ -65,6 +65,7 @@ public class OrderController {
         		newOrder.setRestaurantName(ci.getItem().getRestaurant().getName());
         		newOrder.setCustomer(user.getUuid());
         		newOrder.setCustomerName(user.getUsername());
+        		newOrder.setPrice(0);
         		newOrder.setStatus(Order.OrderStatus.PROCESSING);
         		newOrder.setDateTime(LocalDateTime.now());
         		createdOrders.add(newOrder);
@@ -78,6 +79,7 @@ public class OrderController {
         		if(ci.getItem().getRestaurant().getUuid().equals(order.getRestaurant().getUuid()))
         		{
         			order.addItem(ci);
+        			order.setPrice(order.getPrice() + (ci.getItem().getPrice() + ci.getCount()));
         		}
         	}
         }
