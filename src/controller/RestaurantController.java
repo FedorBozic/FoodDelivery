@@ -82,7 +82,7 @@ public class RestaurantController {
         String image = (String) body.get("image");
         String managerS = (String) body.get("manager");
         
-        //TODO: Dodavanje lokacije i errorcheck
+        //TODO: errorcheck
         
         Restaurant restaurant = DostavaMain.restaurantDao.findById(idS);
         User manager = DostavaMain.userDao.findById(managerS);
@@ -108,6 +108,9 @@ public class RestaurantController {
             restaurant.setType(RestaurantType.valueOf(type));
             restaurant.setStatus(RestaurantStatus.valueOf(status));
             restaurant.setLogo(image);
+            Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
+    		Location location = new Location(Float.parseFloat(((String) body.get("latitude"))), Float.parseFloat(((String) body.get("longtitude"))), address);
+        	restaurant.setLocation(location);
 
         } catch (Exception e) {
             message = "An error has occurred!";
@@ -157,20 +160,6 @@ public class RestaurantController {
 		if(name != null && !name.equals("")) {
 			filtered = filtered.stream().filter(r -> r.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
 		}
-		
-		//Ignore za sada, treba komentare prvo implementirati
-		/*
-		int ratingVal = Integer.parseInt(rating);
-		if(rating != null && !rating.equals("") && ratingVal <= 5 && ratingVal >= 0) {
-			filtered = filtered.stream().filter(r -> r.getRating().equals(name)).collect(Collectors.toList());
-		}
-		*/
-		
-		//Ne za sada
-		/*
-		if(location != null && !location.equals("")) {
-		}
-		*/
 		
 		if(open != null && open.equals("true")) {
 			filtered = filtered.stream().filter(r -> r.getStatus().equals(RestaurantStatus.OPEN)).collect(Collectors.toList());
