@@ -12,12 +12,53 @@ Vue.component('userview', {
 	      		defaultColor2: 'blue',
 	      		currentSort:'username',
   				currentSortDir:'asc',
-  				filter: ""
+  				filterUsername: '',
+  				filterFirstName: '',
+  				filterLastName: '',
+  				filterRole: '',
+  				filterType: ''
        		}
         },
         template: `
         <div class="container">
-        	<input type="text" class="form_control" placeholder="Search" v-model="filter" >
+        	<div class="row mb-3" style="margin-top: 20px">
+				<div class="col-lg-4 mx-auto">
+					<div class="bg-white p-3 rounded shadow">
+						<form action="">
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Username" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterUsername">
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="First Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterFirstName">
+								</div>
+							</div>
+							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+								<div class="input-group">
+									<input type="search" placeholder="Last Name" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterLastName">
+								</div>
+							</div>
+							<select v-model="filterRole" style="max-width:100%">
+								<option value=""></option>
+								<option value="CUSTOMER">Customer</option>
+								<option value="DELIVERY">Delivery</option>
+								<option value="MANAGER">Manager</option>
+								<option value="ADMIN">Admin</option>
+							</select>
+							<select v-model="filterType" style="max-width:100%">
+								<option value=""></option>
+								<option value="BRONZE">Bronze</option>
+								<option value="SILVER">Silver</option>
+								<option value="GOLD">Gold</option>
+								<option value="STAFF">Staff</option>
+								<option value="ADMIN">Admin</option>
+							</select>
+						</form>
+					</div>
+				</div>
+			</div>
 		    <div class="container-fluid p-0" style="margin-top:100px">
 				<div class="row">
 					<div class="col-xl-8">
@@ -33,9 +74,9 @@ Vue.component('userview', {
 							</thead>
 							<tbody v-for="u in sortedUsers" @click="changeUserEditingMode(u)">
 								<tr>
-									<td v-html="highlightMatches(u.username)"></td>
-									<td v-html="highlightMatches(u.firstName)"></td>
-									<td v-html="highlightMatches(u.lastName)"></td>
+									<td>{{u.username}}</td>
+									<td>{{u.firstName}}</td>
+									<td>{{u.lastName}}</td>
 									<td><span class="badge" v-if="u.type && u.type.name" v-bind:style="{ background: profileTierGradientSmall(u) }">{{u.type.name}}</span></td>
 									<td>{{u.role}}</td>
 								</tr>
@@ -160,18 +201,9 @@ Vue.component('userview', {
 					self.currentSortDir = self.currentSortDir==='asc'?'desc':'asc';
 				}
 			  	this.currentSort = s;
-			},
-			highlightMatches(text) {
-			    const matchExists = text
-			      .toLowerCase()
-			      .includes(this.filter.toLowerCase());
-			    if (!matchExists) return text;
-			
-			    const re = new RegExp(this.filter, "ig");
-			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
-		    }
+			}
     	},
-    	computed:{
+    	computed: {
 			sortedUsers : function() {
 				resultData =  Object.values(this.users).sort((a,b) => {
 					let direction = 1;
@@ -182,15 +214,23 @@ Vue.component('userview', {
 				});
 				return resultData.filter(sortedUser => {
 				    const username = sortedUser.username.toString().toLowerCase();
-				    const firstName = sortedUser.firstName.toString().toLowerCase();
-				    const lastName = sortedUser.lastName.toString().toLowerCase();
-					const searchTerm = this.filter.toLowerCase();
+				    const firstName = sortedUser.firstName
+				    const lastName = sortedUser.lastName
+				    const userRole = sortedUser.role
+				    const userType = sortedUser.type.name
+				    
+				    const usernameSearchTerm = this.filterUsername.toLowerCase();
+				    const firstNameSearchTerm = this.filterFirstName.toLowerCase();
+				    const lastNameSearchTerm = this.filterLastName.toLowerCase();
+				    const roleSearchTerm = this.filterRole;
+				    const typeSearchTerm = this.filterType;
 				    return (
-				      username.includes(searchTerm) || firstName.includes(searchTerm) || lastName.includes(searchTerm)
+				    	username.includes(usernameSearchTerm) && firstName.includes(firstNameSearchTerm) && lastName.includes(lastNameSearchTerm)
+				    		&& userRole.includes(roleSearchTerm) && userType.includes(typeSearchTerm) 
 				    );
 			    });
 			}
-		},
+	    },
 		mounted() {
         	let self = this;
             let tmp = '?';
