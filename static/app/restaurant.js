@@ -133,7 +133,7 @@ Vue.component('restaurant', {
 								<h4>
 									<strong>{{item.name}}</strong>
 									<i class="fas fa-pencil-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)"  v-on:click="activateEditMode(item)"></i>
-									<i class="fas fa-trash-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)"></i>
+									<i class="fas fa-trash-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)" v-on:click="deleteItem(item)"></i>
 								</h4>
 							</div>
 							<div class="row" style="margin-left:15px" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
@@ -370,6 +370,15 @@ Vue.component('restaurant', {
         
         activateEditMode: function(item) {
         	this.editingItem = item
+        },
+        
+        deleteItem: function(item)
+        {
+        	let self = this
+        	axios.delete('users/deleteRestaurantItem' + '?id=' + item.uuid)
+        	.then(res => {
+        		self.loadData(self)
+        	})
         },
         
         deactivateEditMode: function(item) {
