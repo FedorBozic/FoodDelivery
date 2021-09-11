@@ -50,7 +50,10 @@ public class CommentDao {
     }
 	
 	public Comment findById(UUID uuid) {
-        return comments.getOrDefault(uuid, null);
+        Comment comment = comments.getOrDefault(uuid, null);
+        if(!comment.isDeleted())
+        	return comment;
+        return null;
     }
 	
 	public Comment findById(String uuid) {

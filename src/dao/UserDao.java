@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import model.Cart;
 import model.Order;
+import model.Restaurant;
 import model.User;
 import rest.DostavaMain;
 
@@ -67,7 +68,7 @@ public class UserDao {
     }
     
     public User addUser(User user) {
-        var alreadyExisting = getAllUsers()
+        var alreadyExisting = users.values()
                 .stream()
                 .filter(userInBase -> userInBase.getUsername().equals(user.getUsername()))
                 .collect(Collectors.toList());
@@ -88,11 +89,14 @@ public class UserDao {
     }
     
     public User findById(String uuid) {
-        return users.getOrDefault(UUID.fromString(uuid), null);
+    	return findById(UUID.fromString(uuid));
     }
 
 	public User findById(UUID uuid) {
-		return users.getOrDefault(uuid, null);
+        User user = users.getOrDefault(uuid, null);
+        if(!user.isDeleted())
+        	return user;
+        return null;
 	}
 	
 	public boolean deleteUser(UUID id) {

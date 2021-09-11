@@ -50,7 +50,10 @@ public class OrderDao {
 	
 	public Order findById(UUID uuid) {
 		updateRestaurantNames();
-        return orders.getOrDefault(uuid, null);
+       Order order = orders.getOrDefault(uuid, null);
+        if(!order.isDeleted())
+        	return order;
+        return null;
     }
 	
 	public Order findById(String uuid) {

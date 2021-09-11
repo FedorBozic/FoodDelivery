@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import model.Comment;
 import model.Restaurant;
 
 public class RestaurantDao {
@@ -51,11 +52,14 @@ public class RestaurantDao {
     }
     
     public Restaurant findById(String id) {
-        return restaurants.getOrDefault(UUID.fromString(id), null);
+    	return findById(UUID.fromString(id));
     }
 
 	public Restaurant findById(UUID id) {
-		return restaurants.getOrDefault(id, null);
+        Restaurant restaurant = restaurants.getOrDefault(id, null);
+        if(!restaurant.isDeleted())
+        	return restaurant;
+        return null;
 	}
 	
 	public boolean deleteRestaurant(UUID id) {
