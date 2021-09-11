@@ -28,8 +28,17 @@ public class OrderController {
             .setPrettyPrinting()
             .create();
 	
-	public static Route findByRestaurant = (Request request, Response response) ->
-		gson.toJson(DostavaMain.orderDao.findByRestaurant(request.params(":id")));
+	public static Route findByRestaurant = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(DostavaMain.orderDao.findByRestaurant(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid customer!");
+		}
+		return response;
+	};
 	
 	public static Route addOrder = (Request request, Response response) -> {
         

@@ -33,8 +33,17 @@ public class RestaurantController {
             .setPrettyPrinting()
             .create();
     
-    public static Route findById = (Request request, Response response) ->
-    	gson.toJson(restaurantDao.findById(request.params(":id")));
+    public static Route findById = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(restaurantDao.findById(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid customer!");
+		}
+		return response;
+	};
     
     public static Route addRestaurant = (Request request, Response response) -> {
     	

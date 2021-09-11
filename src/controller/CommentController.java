@@ -24,14 +24,43 @@ public class CommentController {
             .setPrettyPrinting()
             .create();
 	
-	public static Route findByUser = (Request request, Response response) ->
-		gson.toJson(DostavaMain.commentDao.findByCustomer(request.params(":id")));
+	public static Route findByUser = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(DostavaMain.commentDao.findByCustomer(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid customer!");
+		}
+		return response;
+	};
 		
-	public static Route findByRestaurant = (Request request, Response response) ->
-		gson.toJson(DostavaMain.commentDao.findByRestaurant(request.params(":id")));
 		
-		public static Route findByRestaurantApproved = (Request request, Response response) ->
-		gson.toJson(DostavaMain.commentDao.findByRestaurantApproved(request.params(":id")));
+	public static Route findByRestaurant = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(DostavaMain.commentDao.findByRestaurant(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid restaurant!");
+		}
+		return response;
+	};
+		
+		public static Route findByRestaurantApproved = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(DostavaMain.commentDao.findByRestaurantApproved(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid restaurant!");
+		}
+		return response;
+	};
+
 	
 	public static Route addComment = (Request request, Response response) -> {
         

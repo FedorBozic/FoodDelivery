@@ -32,8 +32,17 @@ public class UserController {
             .setPrettyPrinting()
             .create();
     
-    public static Route findById = (Request request, Response response) ->
-		gson.toJson(DostavaMain.userDao.findById(request.params(":id")));
+    public static Route findById = (Request request, Response response) -> {
+		try {
+			response.status(200);
+			return gson.toJson(DostavaMain.userDao.findById(request.params(":id")));
+		}
+		catch (Exception e){
+			response.status(400);
+			response.body("Invalid customer!");
+		}
+		return response;
+	};
     
     public static Route addUser = (Request request, Response response) -> {
         var body = gson.fromJson((request.body()), HashMap.class);
@@ -142,13 +151,21 @@ public class UserController {
             String lastName = (String) body.get("lastName");
             String genderS = (String) body.get("gender");
             
-            //LocalDate birthdate = (LocalDate) body.get("birthday");
+            boolean updateBirthday = false; //Requires frontend support
+            if(updateBirthday) {
+            	String birthdate = (String) body.get("birthday");
+            	String date[] = birthdate.split("-");
+            	LocalDate birthdateLD = LocalDate.of(Integer.parseInt(date[0]),
+            										 Integer.parseInt(date[1]),
+            										 Integer.parseInt(date[2]));
+            	
+            	currentUser.setBirthday(birthdateLD);
+            }
             
             User.Gender gender = User.Gender.valueOf(genderS);
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
             currentUser.setGender(gender);
-            //currentUser.setBirthday(birthdate);
 
         } catch (Exception e) {
             message = "An error has occurred!";
@@ -190,7 +207,16 @@ public class UserController {
             user.setLastName((String) body.get("lastName"));
             user.setGender(User.Gender.valueOf((String) body.get("gender")));
             
-            //user.setBirthday(LocalDate.parse((String) body.get("birthdate")));
+            boolean updateBirthday = false; //Requires frontend support
+            if(updateBirthday) {
+            	String birthdate = (String) body.get("birthday");
+            	String date[] = birthdate.split("-");
+            	LocalDate birthdateLD = LocalDate.of(Integer.parseInt(date[0]),
+            										 Integer.parseInt(date[1]),
+            										 Integer.parseInt(date[2]));
+            	
+            	currentUser.setBirthday(birthdateLD);
+            }
 
         } catch (Exception e) {
             message = "An error has occurred!";

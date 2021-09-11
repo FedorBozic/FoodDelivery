@@ -270,6 +270,8 @@ public class User {
 	
 	public void givePenalty(float price) {
 		points -= (int) (((float) price) / 1000 * 133 * 4);
+		if(points < 0)
+			points = 0;
 		updateType();
 	}
 	
