@@ -171,6 +171,7 @@ public class UserController {
     public static Route deleteCartItem = (Request request, Response response) -> {
     	response.status(200);
     	String id = request.queryParams("id");
+    	System.out.println(id);
     	currentUser.getCart().removeItem(UUID.fromString(id));
     	return response;
     };

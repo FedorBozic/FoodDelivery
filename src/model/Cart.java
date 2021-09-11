@@ -65,12 +65,6 @@ public class Cart {
 	}
 	
 	public boolean removeItem(UUID id) {
-		for (CartItem ci : cartItems) {
-			if(ci.getUuid() == id) {
-				cartItems.remove(ci);
-				return true;
-			}
-		}
-		return false;
+		return cartItems.removeIf(ci -> ci.getUuid().equals(id));
 	}
 }

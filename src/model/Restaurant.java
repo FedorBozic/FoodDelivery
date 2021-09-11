@@ -154,13 +154,7 @@ public class Restaurant {
 	}
 	
 	public boolean removeItem(UUID uuid) {
-		for (Item i : items) {
-			if(i.getUuid().equals(uuid)) {
-				items.remove(i);
-				return true;
-			}
-		}
-		return false;
+		return items.removeIf(i -> i.getUuid().equals(uuid));
 	}
 	
 	public boolean removeItem(String uuid) {
