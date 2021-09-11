@@ -38,7 +38,7 @@ Vue.component('basket', {
 							<div class="row" style="margin-left: 10px; text-align: left; ">{{item.item.description}}</div>
 						</div>
 						<div class="col-sm-2 my-auto">
-							<h2 style="margin-top:5px"><strong>{{item.item.price*item.count}}$</strong><i class="fas fa-times" style="color:rgba(250, 30, 20); float:right" @click="deleteCartItem(i)"></i></h2>
+							<h2 style="margin-top:5px"><strong>{{item.item.price*item.count}}$</strong><i class="fas fa-times" style="color:rgba(250, 30, 20); float:right" @click="deleteCartItem(item)"></i></h2>
 							<h4 style="margin-top:5px"><input type="text" class="discrete-textbox" v-model="item.count"></h4>
 						</div>
 						<div class="col-sm-3">
@@ -117,7 +117,9 @@ Vue.component('basket', {
         
         deleteCartItem: function(item)
         {
-        	
+        	let self = this
+        	axios.delete('users/deleteCartItem/' + item.uuid)
+        	window.location.href = "#/basket";
         },
         
         checkout: function () {

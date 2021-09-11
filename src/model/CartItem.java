@@ -8,6 +8,7 @@ public class CartItem {
 	private UUID uuid;
 	
 	public CartItem(Item item, int count) {
+		this.uuid = UUID.randomUUID();
 		this.item = item;
 		this.count = count;
 	}
