@@ -323,7 +323,7 @@ Vue.component('restaurant', {
 			            }
 						for(let i in self.restaurant.items){
 					    	if(self.restaurant.items[i].image != null){
-					    		this.restaurant.items[i].image = 'data:image/png;base64,' + self.restaurant.items[i].image;
+					    		self.restaurant.items[i].image = 'data:image/png;base64,' + self.restaurant.items[i].image;
 					    	}
 							self.articlenumber++;
 					    }

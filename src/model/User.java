@@ -269,12 +269,12 @@ public class User {
 	}
 	
 	public void givePenalty(float price) {
-		points -= price / 1000 * 133 * 4;
+		points -= (int) (((float) price) / 1000 * 133 * 4);
 		updateType();
 	}
 	
 	public void giveLoyaltyPoints(float price) {
-		points += price / 1000 * 133;
+		points += (int) (((float) price) / 1000 * 133);
 		updateType();
 	}
 }

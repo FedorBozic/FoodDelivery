@@ -94,6 +94,7 @@ public class OrderController {
 	        	DostavaMain.orderDao.addOrder(order);
 	        }
 	        user.setCart(null);
+	        user.giveLoyaltyPoints(totalPrice);
 	        
         	response.status(200);
         	response.body("Order added successfully!");

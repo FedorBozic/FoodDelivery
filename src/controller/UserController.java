@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.SystemColor;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,6 @@ public class UserController {
 		gson.toJson(DostavaMain.userDao.findById(request.params(":id")));
     
     public static Route addUser = (Request request, Response response) -> {
-        
         var body = gson.fromJson((request.body()), HashMap.class);
         User user = null;
         boolean overwritingUserMode = false;
@@ -120,8 +120,53 @@ public class UserController {
         return response;
     };
     
+    public static Route editProfile = (Request request, Response response) -> {
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        var body = gson.fromJson((request.body()), HashMap.class);
+        var message = "Profile updated!";
+        try {
+        	System.out.println("1");
+        	if (body.get("firstName") == null || body.get("firstName").equals("")) message = "First name can't be empty!";
+            if (body.get("lastName") == null || body.get("lastName").equals("")) message = "Last name can't be empty!";
+            if (!message.equals("Profile updated!")) {
+                response.status(400);
+                response.body(message);
+                return response;
+            }
+            
+            String firstName = (String) body.get("firstName");
+            String lastName = (String) body.get("lastName");
+            String genderS = (String) body.get("gender");
+            
+            //LocalDate birthdate = (LocalDate) body.get("birthday");
+            
+            User.Gender gender = User.Gender.valueOf(genderS);
+            currentUser.setFirstName(firstName);
+            currentUser.setLastName(lastName);
+            currentUser.setGender(gender);
+            //currentUser.setBirthday(birthdate);
+
+        } catch (Exception e) {
+            message = "An error has occurred!";
+            response.body(message);
+            response.status(400);
+            return response;
+        }
+        return response;
+    };
+    
     public static Route editUser = (Request request, Response response) -> {
         if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.ADMIN) {
+            response.body("Permission denied!");
             response.status(400);
             return response;
         }
@@ -144,7 +189,8 @@ public class UserController {
             user.setFirstName((String) body.get("firstName"));
             user.setLastName((String) body.get("lastName"));
             user.setGender(User.Gender.valueOf((String) body.get("gender")));
-            user.setBirthday(LocalDate.parse((String) body.get("birthdate")));
+            
+            //user.setBirthday(LocalDate.parse((String) body.get("birthdate")));
 
         } catch (Exception e) {
             message = "An error has occurred!";
@@ -156,12 +202,27 @@ public class UserController {
     };
     
     public static Route getCart = (Request request, Response response) -> {
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.CUSTOMER) {
+            response.body("You are not a customer!");
+            response.status(400);
+            return response;
+        }
     	response.status(200);
     	response.body(gson.toJson(currentUser.getCart()));
     	return response;
     };
     
     public static Route getNextRank = (Request request, Response response) -> {
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
     	response.status(200);
     	UserTypeDao userTypeDao = DostavaMain.userTypeDao;
     	response.body(gson.toJson(userTypeDao.getNextRank(currentUser.getPoints())));
@@ -169,6 +230,16 @@ public class UserController {
     };
     
     public static Route deleteCartItem = (Request request, Response response) -> {
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.CUSTOMER) {
+            response.body("You are not a customer!");
+            response.status(400);
+            return response;
+        }
     	response.status(200);
     	String id = request.queryParams("id");
     	System.out.println(id);
@@ -177,6 +248,17 @@ public class UserController {
     };
     
     public static Route getCustomersOfRestaurant = (Request request, Response response) -> {
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.MANAGER) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+        
     	response.status(200);
     	Restaurant restaurant = currentUser.getRestaurant();
     	List<Order> ordersOfRestaurant = DostavaMain.orderDao.findByRestaurant(restaurant);
@@ -204,6 +286,11 @@ public class UserController {
     	
         if (currentUser == null) {
             response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.MANAGER) {
+            response.body("Permission denied!");
             response.status(400);
             return response;
         }
@@ -255,10 +342,22 @@ public class UserController {
             response.status(400);
             return response;
         }
+        if (currentUser.getRole() != User.Role.CUSTOMER) {
+            response.body("You are not a customer!");
+            response.status(400);
+            return response;
+        }
     	
-    	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
-    	Item itemToAdd = r.findItemByName((String) body.get("name"));
-    	
+        Item itemToAdd;
+        try {
+        	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
+        	itemToAdd = r.findItemByName((String) body.get("name"));
+        }
+        catch (Exception e) {
+        	response.body("Failed to add item to cart!");
+            response.status(400);
+        	return response;
+        }
     	String purchaseAmountS = (String) body.get("purchase_amount");
     	int amount;
     	if(purchaseAmountS == null || purchaseAmountS.equals("")) {
@@ -280,7 +379,6 @@ public class UserController {
             response.status(400);
             return response;
     	}
-    	
     	try {
 	    	CartItem cartItem = new CartItem(itemToAdd, amount);
 	    	
@@ -306,35 +404,57 @@ public class UserController {
     	
     	var body = gson.fromJson((request.body()), HashMap.class);
     	
-    	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
-    	Item itemToOverwrite = r.findItemById((String) body.get("uuid"));
-
-    	String name = (String) body.get("name");
-    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
-    	String description = (String) body.get("description");
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.MANAGER) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+    	
     	float price;
-    	try{
+    	
+    	//Disabled
+    	/*try{
     		price = (float) (double) body.get("price");
     	}
     	catch (Exception ex){
     		price = Float.parseFloat(((String) body.get("price")));
-    	}
-    	int amount = 0;
-    	String image = (String) body.get("image");
+    	}*/
     	
-    	if(r.findItemByName(name) != null && !r.findItemByName(name).getUuid().equals(itemToOverwrite.getUuid()))
-    	{
+    	try {
+    		price = (float) (double) body.get("price");
+	    	Restaurant r = DostavaMain.restaurantDao.findById((String) body.get("restaurant"));
+	    	Item itemToOverwrite = r.findItemById((String) body.get("uuid"));
+	
+	    	String name = (String) body.get("name");
+	    	Item.ItemType type = Item.ItemType.valueOf(((String) body.get("type")));
+	    	String description = (String) body.get("description");
+	    	
+	    	int amount = 0;
+	    	String image = (String) body.get("image");
+	    	
+	    	if(r.findItemByName(name) != null && !r.findItemByName(name).getUuid().equals(itemToOverwrite.getUuid()))
+	    	{
+	    		response.status(400);
+	    		response.body("Invalid name: name is already taken by another item!");
+	    		return response;
+	    	}
+	    	
+	    	itemToOverwrite.setName(name);
+	    	itemToOverwrite.setType(type);
+	    	itemToOverwrite.setAmount(amount);
+	    	itemToOverwrite.setDescription(description);
+	    	itemToOverwrite.setPrice(price);
+	    	itemToOverwrite.setImage(image);
+    	}
+    	catch (Exception ftnE) {
     		response.status(400);
-    		response.body("Invalid name: name is already taken by another item!");
-    		return response;
+    		response.body("Failed to update item!");
     	}
-    	
-    	itemToOverwrite.setName(name);
-    	itemToOverwrite.setType(type);
-    	itemToOverwrite.setAmount(amount);
-    	itemToOverwrite.setDescription(description);
-    	itemToOverwrite.setPrice(price);
-    	itemToOverwrite.setImage(image);
     	
         return response;
     };
@@ -342,17 +462,54 @@ public class UserController {
     public static Route deleteRestaurantItem = (Request request, Response response) -> {
     	response.status(200);
     	
-    	String id = request.queryParams("id");
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.MANAGER) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
     	
-    	Restaurant restaurant = currentUser.getRestaurant();
-    	restaurant.removeItem(id);
-
+    	try {
+    		String id = request.queryParams("id");
+        	Restaurant restaurant = currentUser.getRestaurant();
+        	if(!restaurant.isDeleted())
+        		restaurant.removeItem(id);
+        	else {
+        		response.status(400);
+        		response.body("Nonexistent restaurant!");
+        	}
+    	}
+    	catch(Exception e) {
+    		response.status(400);
+    		response.body("Failed to delete item from restaurant!");
+    	}
     	
         return response;
     };
     
     public static Route deleteUser = (Request request, Response response) -> {
-    	DostavaMain.userDao.deleteUser(request.queryParams("id"));
+        if (currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (currentUser.getRole() != User.Role.ADMIN) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+    	try {
+    		DostavaMain.userDao.deleteUser(request.queryParams("id"));
+    		response.status(200);
+    	}
+    	catch (Exception e) {
+    		response.status(400);
+    		response.body("Failed to delete user!");
+    	}
     	return response;
     };
 }

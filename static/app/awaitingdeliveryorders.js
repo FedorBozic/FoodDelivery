@@ -186,7 +186,7 @@ Vue.component('awaitingdeliveryorders', {
 	            	axios.get('orders/awaitingdeliveryorders/' + self.currentUser.uuid)
 	                .then(res => {
 	                	self.orders = res.data;
-	                	axios.get('delivery/userdeliveries' + self.currentUser.uuid)
+	                	axios.get('delivery/userdeliveries/' + self.currentUser.uuid)
 	                	.then(res => {
 	                		self.userdeliveries = res.data;
 	                		window.location.href = "#/awaitingdeliveryorders";

@@ -50,7 +50,7 @@ Vue.component('profile', {
 	`,
 	methods: {
         edit: function () {
-            axios.put('users/edit', JSON.stringify(this.currentUser))
+            axios.put('users/editprofile', JSON.stringify(this.currentUser))
                 .then(res => {
                     alert("Successfully updated profile!");
                 })
