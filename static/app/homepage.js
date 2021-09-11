@@ -16,7 +16,6 @@ Vue.component('homepage', {
 	      	currentSort:'status',
   			currentSortDir:'desc',
   			filterRatingFrom: '',
-			filterRatingTo: '',
 		}
     },
     template: `
@@ -49,6 +48,14 @@ Vue.component('homepage', {
 			            		</div>
 			          		</div>
 			        	</div>
+			        	<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+							<div class="input-group">
+								<input type="search" placeholder="Min rating" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterRatingFrom">
+								<div class="input-group-append">
+									<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('rating')"><i class="fa fa-sort"></i></button>
+								</div>
+							</div>
+						</div>
 		      		</form>
 		    	</div>
 		  	</div>
@@ -81,7 +88,7 @@ Vue.component('homepage', {
 				        Articles
 				      </li>
 				      <li>
-				        <strong>{{calculateAverageRating(r)}}</strong>
+				        <strong>{{r.rating}}</strong>
 				        Rating
 				      </li>
 				    </ul>
@@ -104,11 +111,13 @@ Vue.component('homepage', {
             this.$router.push({name: 'Restaurant', params: {'id': id}});
         },
         getRestaurants: function() {
+        	let self = this
             axios.get('getRestaurants')
             .then(res => {
             	this.restaurants = res.data;
             	for(let rId in this.restaurants){
             		let r = this.restaurants[rId];
+            		r.rating = self.calculateAverageRating(r)
             		if(r.location != null && r.location.address != null){
             			let address = r.location.address;
             			r.locationLabel = address.streetAddress + ' ' + address.townName + ' ' + address.zipCode;
@@ -200,11 +209,13 @@ Vue.component('homepage', {
 			    const name = sortedRestaurant.name.toString().toLowerCase();
 			    const type = sortedRestaurant.type.toString().toLowerCase();
 			    const city = sortedRestaurant.location.address.townName.toString().toLowerCase();
+			    const rating = sortedRestaurant.rating
+			    
 			    const nameSearchTerm = this.filterName.toLowerCase();
 			    const typeSearchTerm = this.filterType.toLowerCase();
 			    const citySearchTerm = this.filterCity.toLowerCase();
 			    return (
-			    	name.includes(nameSearchTerm) && type.includes(typeSearchTerm) && city.includes(citySearchTerm)
+			    	name.includes(nameSearchTerm) && type.includes(typeSearchTerm) && city.includes(citySearchTerm) && (!this.filterRatingFrom || rating >= this.filterRatingFrom)
 			    );
 		    });
 		}
