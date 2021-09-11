@@ -132,6 +132,7 @@ Vue.component('restaurant', {
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid">
 								<h4>
 									<strong>{{item.name}}</strong>
+									<i class="fas fa-cocktail" style="color: rgba(250, 30, 20)" v-if="!editingItem.uuid && item.type == 'DRINK'"></i>
 									<i class="fas fa-pencil-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)"  v-on:click="activateEditMode(item)"></i>
 									<i class="fas fa-trash-alt" style="color: rgba(250, 30, 20)" v-if="$root.isSignedIn && !editingItem.uuid && ($root.currentUser.uuid === restaurant.manager)" v-on:click="deleteItem(item)"></i>
 								</h4>
@@ -146,7 +147,10 @@ Vue.component('restaurant', {
 							<div class="row" v-if="!editingItem.uuid || editingItem.uuid != item.uuid" style="margin-left: 10px; text-align: left; ">{{item.description}}</div>
 							<div class="col-sm-2" v-if="editingItem.uuid && editingItem.uuid === item.uuid"><textarea style="width:250px; height:100px; margin-left:-25px" v-model="editingItem.description" ></textarea></div>
 						</div>
-					    <div class="col-sm-1 my-auto" v-if="!editingItem.uuid || editingItem.uuid != item.uuid"><h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2></div>
+					    <div class="col-sm-1 my-auto" v-if="!editingItem.uuid || editingItem.uuid != item.uuid">
+					    	<h2 style="margin-top:5px"><strong>{{item.price}}$</strong></h2>
+					    	<h4>{{item.amount}} {{unitOfMeasure(item)}}</h4>
+					    </div>
 					    <div class="col-sm-1 my-auto" v-if="editingItem.uuid && editingItem.uuid === item.uuid">
 					    	<h2 style="width: 170px; font-weight: bolder; font-size: 1.5rem; color: #212529; margin-left:-25px; margin-top:-5px">
 					    		<input type="number" class="discrete-textbox-black" style="font-weight: bold; max-width: 50px" v-model="editingItem.price" >$
