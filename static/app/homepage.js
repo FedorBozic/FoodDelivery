@@ -13,8 +13,10 @@ Vue.component('homepage', {
 	  		filterName: "",
 	  		filterType: "",
 	  		filterCity: "",
-	      	currentSort:'name',
-  			currentSortDir:'asc',
+	      	currentSort:'status',
+  			currentSortDir:'desc',
+  			filterRatingFrom: '',
+			filterRatingTo: '',
 		}
     },
     template: `
