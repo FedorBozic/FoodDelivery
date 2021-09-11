@@ -36,7 +36,7 @@ Vue.component('userview', {
 									<td v-html="highlightMatches(u.username)"></td>
 									<td v-html="highlightMatches(u.firstName)"></td>
 									<td v-html="highlightMatches(u.lastName)"></td>
-									<td><span class="badge" v-bind:style="{ background: profileTierGradientSmall(u) }">{{u.type.name}}</span></td>
+									<td><span class="badge" v-if="u.type && u.type.name" v-bind:style="{ background: profileTierGradientSmall(u) }">{{u.type.name}}</span></td>
 									<td>{{u.role}}</td>
 								</tr>
 							</tbody>
@@ -82,6 +82,7 @@ Vue.component('userview', {
 									 </div>
 								</div>
 								<input v-if="this.user.uuid === 'nouuid'" type="button" value="Add" class="generic_button" v-on:click="register()"/>
+								<input v-if="this.user.uuid != 'nouuid'" type="button" value="DEL" class="generic_button" v-on:click="deleteUser()"/>
 								<input v-if="this.user.uuid != 'nouuid'" type="button" value="Confirm" class="generic_button" v-on:click="register()"/>
 							</div>
 						</div>
@@ -102,6 +103,24 @@ Vue.component('userview', {
 	      	register: function () {
 	            let self = this;
 	            axios.post('users/adduser', JSON.stringify(this.user))
+	                .then(function (response) {
+	                    axios.get('getUsers')
+	                        .then(res => {
+								self.users = res.data;
+	                            window.location.href = "#/userview";
+	                        })
+	                        .catch(err => {
+	                            console.error(err);
+	                        })
+	                })
+	                .catch(function (error) {
+	                    alert(error.response.data);
+	                });
+				axios.get('getUsers');
+	        },
+	        deleteUser: function () {
+	            let self = this;
+	            axios.delete('users/deleteuser' + '?id=' + this.user.uuid)
 	                .then(function (response) {
 	                    axios.get('getUsers')
 	                        .then(res => {
