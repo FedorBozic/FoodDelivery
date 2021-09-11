@@ -187,7 +187,7 @@ Vue.component('restaurant', {
 			<h4 v-if="viewingComments" class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px">Comments</h4>
 			<div v-if="viewingComments && comments.length > 0" class="testimonial-box-container">
             <!--BOX-1-------------->
-            <div class="testimonial-box" v-for="comment in comments" v-if="($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === comment.restaurant.manager) || comment.approved) && !comment.deleted">
+            <div class="testimonial-box" v-for="comment in comments" v-if="($root.currentUser.role == 'ADMIN' || ($root.currentUser.uuid === comment.restaurant.manager) || comment.approved) && !comment.deleted && !comment.rejected">
                 <!--top------------------------->
                 <div class="box-top">
                     <!--profile----->
@@ -199,7 +199,7 @@ Vue.component('restaurant', {
                         </div>
                     </div>
                     <i class="fas fa-check" v-if="!comment.approved" style="color: rgba(250, 30, 20)" @click="approveComment(comment)"></i>
-                    <i class="fas fa-times" v-if="!comment.approved" style="color: rgba(250, 30, 20)" @click="deleteComment(comment)"></i>
+                    <i class="fas fa-times" v-if="!comment.approved" style="color: rgba(250, 30, 20)" @click="rejectComment(comment)"></i>
                     <!--Veoma lazy resenje. Sa vfor moze lakse, ali bude ruznije iz nekog razloga------>
                     <div class="reviews">
                         <i class="fa fa-star"></i>
@@ -417,6 +417,14 @@ Vue.component('restaurant', {
         approveComment: function(comment) {
         	let self = this
         	axios.put('comments/approvecomment/' + comment.uuid, JSON.stringify(comment))
+        	.then( res => {
+        		self.loadData(self);
+        	})
+        },
+        
+        rejectComment: function(comment) {
+        	let self = this
+        	axios.put('comments/rejectcomment/' + comment.uuid, JSON.stringify(comment))
         	.then( res => {
         		self.loadData(self);
         	})
