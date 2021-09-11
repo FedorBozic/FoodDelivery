@@ -72,6 +72,17 @@ Vue.component('homepage', {
 						</address>
 					  </header>
 					</div>
+					
+					<ul class="card-stats" style="margin-bottom:20px">
+				      <li v-if="r.items">
+				        <strong>{{r.items.length}}</strong>
+				        Articles
+				      </li>
+				      <li>
+				        <strong>{{calculateAverageRating(r)}}</strong>
+				        Rating
+				      </li>
+				    </ul>
 				
 					<button class="card-button" v-on:click="showRestaurant(r.uuid)">View</button>
 				  </article>
@@ -112,6 +123,18 @@ Vue.component('homepage', {
             .catch(err => {
                 console.error(err);
             })
+        },
+        calculateAverageRating: function(r) {
+        	let self = this
+        	result = 0
+        	if(r && r.ratings) {
+	        	result = r.ratings[0] + r.ratings[1]*2 + r.ratings[2]*3 + r.ratings[3]*4 + r.ratings[4]*5
+	        	if(result != 0)
+	        	{
+	        		result = result / (r.ratings[0] + r.ratings[1] + r.ratings[2] + r.ratings[3] + r.ratings[4])
+	        	}
+        	}
+        	return result;
         },
         
         convertImage: function() {
