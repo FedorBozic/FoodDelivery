@@ -171,7 +171,7 @@ public class DostavaMain {
 		post("/api/users/itemToCart", UserController.itemToCart);
 		get("/api/users/getCustomersOfRestaurant", UserController.getCustomersOfRestaurant);
 		get("/api/users/:id", UserController.findById);
-		delete("/api/users/deleteCartItem/:id", UserController.deleteCartItem);
+		delete("/api/users/deleteCartItem", UserController.deleteCartItem);
 		delete("/api/users/deleteuser", UserController.deleteUser);
 		
 		
