@@ -28,7 +28,6 @@ import spark.Route;
 public class RestaurantController {
     public static RestaurantDao restaurantDao;
     public static UserDao userDao;
-    public static User currentUser;
     
     static Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -68,7 +67,7 @@ public class RestaurantController {
     
     public static Route editRestaurant = (Request request, Response response) ->
     {
-        if (currentUser == null) {
+        if (UserController.currentUser == null) {
             response.status(400);
             return response;
         }
@@ -100,13 +99,18 @@ public class RestaurantController {
                 response.body(message);
                 return response;
             }
-            restaurant.setName(name);
+            
+            double latitude = (double) body.get("latitude");
+            double longitude  = (double) body.get("longitude");
+            
+            Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
+    		Location location = new Location((float) latitude,(float) longitude, address);
+        	
+        	restaurant.setName(name);
             restaurant.setType(RestaurantType.valueOf(type));
             restaurant.setStatus(RestaurantStatus.valueOf(status));
             restaurant.setLogo(image);
-            Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
-    		Location location = new Location(Float.parseFloat(((String) body.get("latitude"))), Float.parseFloat(((String) body.get("longtitude"))), address);
-        	restaurant.setLocation(location);
+            restaurant.setLocation(location);
 
         } catch (Exception e) {
             message = "An error has occurred!";
@@ -114,6 +118,7 @@ public class RestaurantController {
             response.status(400);
             return response;
         }
+        
         return response;
     };
     

@@ -2,7 +2,12 @@ Vue.component('editrestaurant', {
     data: function () {
 		return {
 			restaurants: {},
-			restaurant: {},
+			restaurant: {
+				location: {
+					address: {}
+				},
+				items: {}
+			},
 			currentUser: null,
 			managers: [],
 			manager: {
@@ -173,7 +178,20 @@ Vue.component('editrestaurant', {
         
         addRestaurant() {
 			let self = this
-        	axios.put('restaurants/edit', JSON.stringify(self.restaurant))
+			let sendRestaurant = {
+				address: this.restaurant.location.address.streetAddress,
+				townName: this.restaurant.location.address.townName,
+				postalCode: this.restaurant.location.address.zipCode,
+				latitude: this.restaurant.location.latitude,
+				longitude: this.restaurant.location.longitude,
+				uuid: this.restaurant.uuid,
+				name: this.restaurant.name,
+				type: this.restaurant.type,
+				manager: this.restaurant.manager.uuid,
+				logo: this.restaurant.logo,
+				status: this.restaurant.status,
+			};
+        	axios.put('restaurants/edit', JSON.stringify(sendRestaurant))
                 .then(function (response) {
 		            window.location.href = "#/restaurant/" + self.$route.params.id;
                 })
