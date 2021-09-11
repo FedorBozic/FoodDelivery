@@ -45,20 +45,6 @@ Vue.component('editrestaurant', {
 							<option value="PIZZERIA">Picerija</option>
 						</select></h6>
 	               	</div>
-	               	<div class="col-sm-4">
-	                   	<p class="m-b-10 f-w-600" style="text-align:right">Manager</p>
-	                   	<h6 class="f-w-400">
-	                   		<button class="addManager" style="height:23px" v-on:click="addManagerMode = !addManagerMode">
-								<div class="pretext">
-									<h5 v-if="!addManagerMode" style="padding-bottom:0px; margin-bottom:0px">+</h5>
-									<h5 v-if="addManagerMode" style="padding-bottom:5px; margin-bottom:0px">-</h5>
-								</div>
-							</button>
-							<select v-if="managers.length > 0 && !addManagerMode" v-model="restaurant.manager" style="width:100px; float:right; margin-right: 0px">
-								<option v-for="m of managers" :value="m">{{m.firstName}} {{m.lastName}}</option>
-							</select>
-						</h6>
-	               	</div>
 	           	</div>
 	           	<h4 v-if="addManagerMode" class="m-b-20 p-b-5 b-b-default f-w-600" style="margin-left:20px; margin-right: 20px; margin-top:20px">Manager</h4>
 	           	<div v-if="addManagerMode" class="row" style="margin-left:20px; margin-right: 20px">

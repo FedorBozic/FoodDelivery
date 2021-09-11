@@ -79,13 +79,11 @@ public class RestaurantController {
         String name = (String) body.get("name");
         String type = (String) body.get("type");
         String status = (String) body.get("status");
-        String image = (String) body.get("image");
-        String managerS = (String) body.get("manager");
+        String image = (String) body.get("logo");
         
         //TODO: errorcheck
         
         Restaurant restaurant = DostavaMain.restaurantDao.findById(idS);
-        User manager = DostavaMain.userDao.findById(managerS);
         if (restaurant == null) {
             response.status(400);
             response.body("Restaurant does not exist");
@@ -97,8 +95,6 @@ public class RestaurantController {
         		message = "Name can't be empty!";
             if (type == null || type.equals(""))
             	message = "Type can't be empty!";
-            if (manager == null || manager.getRole() != User.Role.MANAGER || manager.getRestaurant() != null)
-            	message = "Invalid manager!";
             if (!message.equals("Restaurant updated!")) {
                 response.status(400);
                 response.body(message);
