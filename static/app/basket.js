@@ -118,7 +118,7 @@ Vue.component('basket', {
         deleteCartItem: function(item)
         {
         	let self = this
-        	axios.delete('users/deleteCartItem/' + item.uuid)
+        	axios.delete('users/deleteCartItem' + '?id=' + item.uuid)
         	window.location.href = "#/basket";
         },
         
