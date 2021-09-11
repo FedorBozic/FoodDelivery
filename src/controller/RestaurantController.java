@@ -42,25 +42,25 @@ public class RestaurantController {
     	
     	response.status(200);
     	
-    	Restaurant restaurant = new Restaurant();
-    	restaurant.setName((String) body.get("name"));
-    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
-    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
-    	restaurant.setLogo((String) body.get("image"));
-    	restaurant.setManager((String) body.get("manager"));
-    	DostavaMain.userDao.findById((String) body.get("manager")).setRestaurant(restaurant);
-    	
-    	Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
-		Location location = new Location(Float.parseFloat(((String) body.get("latitude"))), Float.parseFloat(((String) body.get("longtitude"))), address);
-    	restaurant.setLocation(location);
-    	
-    	restaurantDao.newRestaurant(restaurant);
-    	
-    	System.out.println(restaurant.getUuid());
-    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getRestaurant().getUuid());
-    	
-    	System.out.println(restaurant.getManager().getUuid());
-    	System.out.println(DostavaMain.userDao.findById((String) body.get("manager")).getUuid());
+    	try {
+	    	Restaurant restaurant = new Restaurant();
+	    	restaurant.setName((String) body.get("name"));
+	    	restaurant.setType((RestaurantType.valueOf((String) body.get("type"))));
+	    	restaurant.setStatus((RestaurantStatus.valueOf((String) body.get("status"))));
+	    	restaurant.setLogo((String) body.get("image"));
+	    	restaurant.setManager((String) body.get("manager"));
+	    	DostavaMain.userDao.findById((String) body.get("manager")).setRestaurant(restaurant);
+	    	
+	    	Address address = new Address((String) body.get("address"), (String) body.get("townName"), (String) body.get("postalCode"));
+			Location location = new Location(Float.parseFloat(((String) body.get("latitude"))), Float.parseFloat(((String) body.get("longtitude"))), address);
+	    	restaurant.setLocation(location);
+	    	
+	    	restaurantDao.newRestaurant(restaurant);
+    	}
+    	catch (Exception e) {
+    		response.status(400);
+    		response.body("Failed to add restaurant!");
+    	}
     	
     	return response;
     };
@@ -74,22 +74,23 @@ public class RestaurantController {
         
         var body = gson.fromJson((request.body()), HashMap.class);
         
-        String idS = (String) body.get("uuid");
-        String name = (String) body.get("name");
-        String type = (String) body.get("type");
-        String status = (String) body.get("status");
-        String image = (String) body.get("logo");
-        
-        //TODO: errorcheck
-        
-        Restaurant restaurant = DostavaMain.restaurantDao.findById(idS);
-        if (restaurant == null) {
-            response.status(400);
-            response.body("Restaurant does not exist");
-            return response;
-        }
         var message = "Restaurant updated!";
+        
         try {
+	        String idS = (String) body.get("uuid");
+	        String name = (String) body.get("name");
+	        String type = (String) body.get("type");
+	        String status = (String) body.get("status");
+	        String image = (String) body.get("logo");
+	        
+	        
+	        Restaurant restaurant = DostavaMain.restaurantDao.findById(idS);
+	        if (restaurant == null) {
+	            response.status(400);
+	            response.body("Restaurant does not exist");
+	            return response;
+	        }
+	        
         	if (name == null || name.equals(""))
         		message = "Name can't be empty!";
             if (type == null || type.equals(""))
@@ -111,6 +112,8 @@ public class RestaurantController {
             restaurant.setStatus(RestaurantStatus.valueOf(status));
             restaurant.setLogo(image);
             restaurant.setLocation(location);
+            
+            response.status(200);
 
         } catch (Exception e) {
             message = "An error has occurred!";
@@ -128,49 +131,36 @@ public class RestaurantController {
         
         var body = gson.fromJson((request.body()), HashMap.class);
         
-        String id = (String) body.get("uuid");
-        System.out.println(id);
-        Restaurant r = DostavaMain.restaurantDao.findById(id);
-        RestaurantStatus rs = r.getStatus();
-        if(rs.equals(RestaurantStatus.CLOSED))
-        	r.setStatus(RestaurantStatus.OPEN);
-        else
-        	r.setStatus(RestaurantStatus.CLOSED);
-        
+        try {
+	        String id = (String) body.get("uuid");
+	        System.out.println(id);
+	        Restaurant r = DostavaMain.restaurantDao.findById(id);
+	        RestaurantStatus rs = r.getStatus();
+	        if(rs.equals(RestaurantStatus.CLOSED))
+	        	r.setStatus(RestaurantStatus.OPEN);
+	        else
+	        	r.setStatus(RestaurantStatus.CLOSED);
+        }
+        catch (Exception e) {
+        	response.status(400);
+        	response.body("Failed to toggle restaurant!");
+        }
         return response;
     };
     
     public static Route getRestaurants = (Request request, Response response) -> {
-		List<Restaurant> filtered = new ArrayList<Restaurant>();
-		String name = request.queryParams("name");
-		String type = request.queryParams("type");
-		String location = request.queryParams("location");
-		String rating = request.queryParams("rating");
-		String open = request.queryParams("open");
-		
-		List<Restaurant> restaurants = restaurantDao.getAllRestaurants();
-		
-		for (Restaurant r : restaurants) {
-			filtered.add(r);
-		}
-		
-		if(type != null && !type.equals("ALL") && !type.equals("")) {
-			filtered = filtered.stream().filter(r -> r.getType().equals(RestaurantType.valueOf(type))).collect(Collectors.toList());
-		}
-		
-		if(name != null && !name.equals("")) {
-			filtered = filtered.stream().filter(r -> r.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
-		}
-		
-		if(open != null && open.equals("true")) {
-			filtered = filtered.stream().filter(r -> r.getStatus().equals(RestaurantStatus.OPEN)).collect(Collectors.toList());
-		}
-		
-		return gson.toJson(filtered);
+		return gson.toJson(restaurantDao.getAllRestaurants());
     };
 
     public static Route deleteRestaurant = (Request request, Response response) -> {
-    	restaurantDao.deleteRestaurant(request.queryParams("id"));
+    	try {
+    		restaurantDao.deleteRestaurant(request.queryParams("id"));
+    		response.status(200);
+    	}
+    	catch (Exception e) {
+    		response.status(400);
+    		response.body("Failed to delete restaurant!");
+    	}
     	return response;
     };
     
