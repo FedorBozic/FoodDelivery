@@ -25,7 +25,8 @@ Vue.component('orders', {
 				filterDateFrom: '',
 				filterDateTo: '',
 				filterPriceFrom: '',
-				filterPriceTo: ''
+				filterPriceTo: '',
+				filterStatus: '',
        		}
         },
         template: `
@@ -57,7 +58,7 @@ Vue.component('orders', {
 							</div>
 							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
 								<div class="input-group">
-									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
+									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateFrom">
 									<div class="input-group-append">
 										<button id="button-addon1" type="submit" class="btn btn-link text-primary" v-on:click="sort('date')"><i class="fa fa-sort"></i></button>
 									</div>
@@ -65,9 +66,18 @@ Vue.component('orders', {
 							</div>
 							<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
 								<div class="input-group">
-									<input type="date" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
+									<input type="datetime-local" placeholder="Date from" aria-describedby="button-addon1" class="form-control border-0 bg-light" v-model="filterDateTo">
 								</div>
 							</div>
+							<select v-model="filterStatus" style="max-width:100%">
+								<option value=""></option>
+								<option value="PROCESSING">Processing</option>
+								<option value="PREPARATION">Preparation</option>
+								<option value="AWAITING_DELIVERY">Awaiting Delivery</option>
+								<option value="IN_TRANSPORT">In Transport</option>
+								<option value="DELIVERED">Delivered</option>
+								<option value="CANCELLED">Cancelled</option>
+							</select>
 						</form>
 					</div>
 				</div>
@@ -182,11 +192,6 @@ Vue.component('orders', {
 			
 			    const re = new RegExp(filter, "ig");
 			    return text.replace(re, matchedText => `<strong>${matchedText}</strong>`);
-			},
-			
-			convertJsonDateToRaw(date) {
-				date = date.split('-')
-				return (parseInt(date[0]) - 1970)*31536000000 + (parseInt(date[1])-1)*2629800000 + parseInt(date[2])*86400000;
 			}
 	    },
 	    
@@ -203,15 +208,17 @@ Vue.component('orders', {
 				    const customerName = sortedOrder.customerName.toString().toLowerCase();
 				    const price = sortedOrder.price
 				    const date = Date.parse(sortedOrder.date)
+				    const status = sortedOrder.status
 				    
 				    const customerNameSearchTerm = this.filterCustomerName.toLowerCase();
 				    const priceFromSearchTerm = this.filterPriceFrom;
 				    const priceToSearchTerm = this.filterPriceTo;
-				    const DateFromSearchTerm = this.convertJsonDateToRaw(this.filterDateFrom);
-				    const DateToSearchTerm = this.convertJsonDateToRaw(this.filterDateTo);
+				    const DateFromSearchTerm = Date.parse(this.filterDateFrom);
+				    const DateToSearchTerm = Date.parse(this.filterDateTo);
+				    const statusSearchTerm = this.filterStatus;
 				    return (
 				    	customerName.includes(customerNameSearchTerm) && (!priceFromSearchTerm || price >= priceFromSearchTerm) && (!priceToSearchTerm || price <= priceToSearchTerm)
-				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm)
+				    		&& (!DateFromSearchTerm || date >= DateFromSearchTerm) && (!DateToSearchTerm || date <= DateToSearchTerm) && status.includes(statusSearchTerm)
 				    );
 			    });
 			}
