@@ -46,7 +46,16 @@ public class RestaurantController {
 	};
     
     public static Route addRestaurant = (Request request, Response response) -> {
-    	
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.ADMIN) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
     	var body = gson.fromJson((request.body()), HashMap.class);
     	
     	response.status(200);
@@ -137,6 +146,16 @@ public class RestaurantController {
     public static Route openCloseRestaurant = (Request request, Response response) ->
     {
         response.status(200);
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.MANAGER) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
         
         var body = gson.fromJson((request.body()), HashMap.class);
         
@@ -162,6 +181,16 @@ public class RestaurantController {
     };
 
     public static Route deleteRestaurant = (Request request, Response response) -> {
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.ADMIN) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
     	try {
     		restaurantDao.deleteRestaurant(request.queryParams("id"));
     		response.status(200);

@@ -46,6 +46,17 @@ public class OrderController {
         response.body("Successful checkout!");
         response.status(200);
         
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.CUSTOMER) {
+            response.body("You are not a customer!");
+            response.status(400);
+            return response;
+        }
+        
         User user = DostavaMain.userDao.findById((String) body.get("uuid"));
         if(user == null)
         {
@@ -121,7 +132,19 @@ public class OrderController {
         response.body("Successful upgrade!");
         response.status(200);
         
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.MANAGER && UserController.currentUser.getRole() != User.Role.DELIVERY) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+        
         try {
+        	System.out.println("1");
 	        Order order = DostavaMain.orderDao.findById((String) body.get("uuid"));
 	        if(order.getStatus().equals(Order.OrderStatus.PROCESSING))
 	        	order.setStatus(Order.OrderStatus.PREPARATION);
@@ -131,6 +154,8 @@ public class OrderController {
 	        	order.setStatus(Order.OrderStatus.IN_TRANSPORT);
 	        else if(order.getStatus().equals(Order.OrderStatus.IN_TRANSPORT))
 	        	order.setStatus(Order.OrderStatus.DELIVERED);
+	        System.out.println("2");
+	        System.out.println(order.getStatus());
         }
         catch (Exception e) {
         	response.status(400);
@@ -154,6 +179,17 @@ public class OrderController {
     };
     
     public static Route cancelOrder = (request, response) ->  {
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.CUSTOMER) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+        
     	response.status(200);
     	response.body("Order canceled successfully!");
     	try {
@@ -167,6 +203,17 @@ public class OrderController {
     };
     
     public static Route deleteOrder = (request, response) ->  {
+        if (UserController.currentUser == null) {
+            response.body("Not logged in!");
+            response.status(400);
+            return response;
+        }
+        if (UserController.currentUser.getRole() != User.Role.ADMIN) {
+            response.body("Permission denied!");
+            response.status(400);
+            return response;
+        }
+    	
     	response.status(200);
     	response.body("Order canceled successfully!");
     	try {
