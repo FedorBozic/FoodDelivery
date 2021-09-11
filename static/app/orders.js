@@ -5,6 +5,7 @@ Vue.component('orders', {
 				restaurant: {},
 				orders: [],
 				requests: [],
+				customers: [],
 				restaurantName: '',
 				priceFrom: '',
 				priceTo: '',
@@ -131,6 +132,23 @@ Vue.component('orders', {
 				   	</div>
 			    </div>
         	</div>
+        	
+        	<table class="table table-striped" style="width:100%">
+				<thead style="background-image: linear-gradient(to right,rgba(236, 48, 20) 0%,rgba(250, 30, 20, 0.9) 100%); color:white">
+					<tr>
+						<th @click="sort('username')">Username</th>
+						<th @click="sort('firstName')">First Name</th>
+						<th @click="sort('lastName')">Last Name</th>
+					</tr>
+				</thead>
+				<tbody v-for="u in customers">
+					<tr>
+						<td>{{u.username}}</td>
+						<td>{{u.firstName}}</td>
+						<td>{{u.lastName}}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
     	`,
     	methods: {
@@ -236,6 +254,10 @@ Vue.component('orders', {
                 	axios.get('delivery/opendeliveryrequestsforrestaurant/' + self.restaurant.uuid)
                 	.then(res => {
                 		self.requests = res.data;
+                		axios.get('users/getCustomersOfRestaurant')
+                		.then( res => {
+                			self.customers = res.data
+                		})
                 	})
                 })
             })
