@@ -338,6 +338,18 @@ public class UserController {
         return response;
     };
     
+    public static Route deleteRestaurantItem = (Request request, Response response) -> {
+    	response.status(200);
+    	
+    	String id = request.queryParams("id");
+    	
+    	Restaurant restaurant = currentUser.getRestaurant();
+    	restaurant.removeItem(id);
+
+    	
+        return response;
+    };
+    
     public static Route deleteUser = (Request request, Response response) -> {
     	DostavaMain.userDao.deleteUser(request.queryParams("id"));
     	return response;

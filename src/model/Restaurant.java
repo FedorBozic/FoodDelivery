@@ -152,4 +152,18 @@ public class Restaurant {
 			ratings[c.getRating() - 1]++;
 		}
 	}
+	
+	public boolean removeItem(UUID uuid) {
+		for (Item i : items) {
+			if(i.getUuid().equals(uuid)) {
+				items.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean removeItem(String uuid) {
+		return removeItem(UUID.fromString(uuid));
+	}
 }

@@ -175,8 +175,9 @@ public class DostavaMain {
 		delete("/api/users/deleteuser", UserController.deleteUser);
 		
 		
-		post("/api/users/newItem", UserController.newItemToRestaurant); //Zasto je ovo u /users/ ?
+		post("/api/users/newItem", UserController.newItemToRestaurant);
 		post("/api/users/overwriteItem", UserController.overwriteItem);
+		delete("/api/users/deleteRestaurantItem", UserController.deleteRestaurantItem);
 		
 		//get("/api/orders/getorders/:id", OrderController.getOrders);
 		get("/api/orders/getorders", OrderController.getOrders);
